@@ -5,6 +5,7 @@ import {
   BookOpen, 
   FileText, 
   Image as ImageIcon,
+  Briefcase
 } from "lucide-react";
 import { getUserAction } from "@/lib/actions/auth.action";
 import { LogoutButton } from "@/components/dashboard/LogoutButton";
@@ -35,6 +36,9 @@ export default async function DashboardLayout({
           </Link>
           <Link href="/dashboard/leads" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
             <Users size={20} /> Leads
+          </Link>
+          <Link href="/dashboard/services" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
+            <Briefcase size={20} /> Services
           </Link>
           <Link href="/dashboard/courses" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
             <BookOpen size={20} /> Courses
