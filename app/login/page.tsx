@@ -1,12 +1,14 @@
 'use client'
 
 import { useState } from 'react';
-import { createBrowserClient } from '@supabase/ssr';
+import { createBrowserClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
+
+const supabase = createBrowserClient();
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -15,15 +17,16 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  );
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
+
+    if (!supabase) {
+       setError("Authentication service is not configured.");
+       setLoading(false);
+       return;
+    }
 
     const { error } = await supabase.auth.signInWithPassword({
       email,

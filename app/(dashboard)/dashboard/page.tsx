@@ -5,6 +5,8 @@ import { Users, GraduationCap, BookOpen, FileText } from "lucide-react";
 export default async function DashboardPage() {
   const supabase = await createClient();
   
+  if (!supabase) return <div className="p-4 border border-destructive text-destructive rounded-md bg-destructive/10">Supabase environment variables are missing.</div>;
+
   // Fetch summary stats
   const { count: leadsCount } = await supabase.from('leads').select('*', { count: 'exact', head: true });
   const { count: coursesCount } = await supabase.from('courses').select('*', { count: 'exact', head: true });

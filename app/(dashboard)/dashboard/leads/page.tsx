@@ -13,6 +13,8 @@ import { format } from 'date-fns';
 export default async function LeadsPage() {
   const supabase = await createClient();
   
+  if (!supabase) return <div className="p-4 border border-destructive text-destructive rounded-md bg-destructive/10">Supabase environment variables are missing.</div>;
+
   const { data: leads, error } = await supabase
     .from('leads')
     .select('*')

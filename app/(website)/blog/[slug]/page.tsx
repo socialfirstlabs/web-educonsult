@@ -6,6 +6,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const { slug } = await params;
   const supabase = await createClient();
   
+  if (!supabase) return <div className="container py-20 px-4">Supabase configuration missing.</div>;
+
   const { data: post } = await supabase
     .from('blog_posts')
     .select('*')

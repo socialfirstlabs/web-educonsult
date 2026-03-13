@@ -16,6 +16,9 @@ export async function submitLead(values: LeadFormValues) {
       error: validatedFields.error.flatten().fieldErrors 
     };
   }
+  if (!supabase) {
+    return { success: false, error: 'Service unavailble' };
+  }
 
   const { error } = await supabase.from('leads').insert(validatedFields.data);
 

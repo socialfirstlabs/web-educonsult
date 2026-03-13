@@ -12,6 +12,8 @@ export const metadata = {
 export default async function BlogPage() {
   const supabase = await createClient();
   
+  if (!supabase) return <div className="container py-20 px-4">Supabase configuration missing.</div>;
+
   const { data: posts } = await supabase
     .from('blog_posts')
     .select('*')
