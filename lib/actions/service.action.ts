@@ -38,6 +38,7 @@ export async function addService(values: ServiceValues) {
 
   revalidatePath("/dashboard/services");
   revalidatePath("/services");
+  revalidatePath("/", "layout");
 }
 
 export async function updateService(id: string, values: ServiceValues) {
@@ -60,6 +61,7 @@ export async function updateService(id: string, values: ServiceValues) {
 
   revalidatePath("/dashboard/services");
   revalidatePath("/services");
+  revalidatePath("/", "layout");
 }
 
 export async function deleteService(id: string) {
@@ -74,4 +76,5 @@ export async function deleteService(id: string) {
 
   revalidatePath("/dashboard/services");
   revalidatePath("/services");
+  revalidatePath("/", "layout");
 }

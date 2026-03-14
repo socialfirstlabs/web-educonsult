@@ -48,7 +48,7 @@ export default async function ServicesPage() {
           {activeServices.map((service) => {
             const Icon = iconMap[service.icon_name] || Briefcase;
             return (
-              <Card key={service.id} className="flex flex-col h-full">
+              <Card key={service.id} id={service.id} className="flex flex-col h-full scroll-mt-20">
                 <CardHeader>
                   <div className="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-4">
                     <Icon size={24} />
