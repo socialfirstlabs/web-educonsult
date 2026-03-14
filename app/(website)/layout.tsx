@@ -12,7 +12,7 @@ export default async function WebsiteLayout({
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-6 md:gap-10">
             <Link href="/" className="flex items-center space-x-2">
@@ -78,27 +78,44 @@ export default async function WebsiteLayout({
             <h3 className="text-lg font-bold">Services</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/study-in-japan" className="hover:underline font-medium">
+                <Link
+                  href="/study-in-japan"
+                  className="hover:underline font-medium"
+                >
                   Study in Japan
                 </Link>
               </li>
               <li>
-                <Link href="/language-classes" className="hover:underline font-medium">
+                <Link
+                  href="/language-classes"
+                  className="hover:underline font-medium"
+                >
                   Language Classes
                 </Link>
               </li>
               {activeServices.length > 0 ? (
                 activeServices.slice(0, 4).map((service) => (
                   <li key={service.id}>
-                    <Link href={`/services#${service.id}`} className="hover:underline">
+                    <Link
+                      href={`/services#${service.id}`}
+                      className="hover:underline"
+                    >
                       {service.title}
                     </Link>
                   </li>
                 ))
               ) : (
                 <>
-                  <li><Link href="/services" className="hover:underline">Study Abroad Counseling</Link></li>
-                  <li><Link href="/services" className="hover:underline">Visa Processing</Link></li>
+                  <li>
+                    <Link href="/services" className="hover:underline">
+                      Study Abroad Counseling
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/services" className="hover:underline">
+                      Visa Processing
+                    </Link>
+                  </li>
                 </>
               )}
             </ul>

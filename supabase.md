@@ -139,11 +139,45 @@ Since our dashboard is protected, you need an account to log in.
 
 1. Go to **Storage** in the sidebar.
 2. Click **"New Bucket"**.
-3. Name: `images`
-4. Toggle **"Public"** to ON (so website visitors can see the photos).
-5. Add a Policy to allow authenticated users (Admins) to upload files:
-   - Click "Policies" -> "Storage Policies".
-   - Select "Full access to authenticated users".
+3. Name: `images` (must be lowercase).
+4. Toggle **"Public"** to **ON**.
+5. Go to the **SQL Editor** and run the following to set up robust permissions:
+
+```sql
+-- 1. Ensure the bucket is public
+UPDATE storage.buckets SET public = true WHERE id = 'images';
+
+-- 2. Allow authenticated users to see the bucket (needed for client verification)
+CREATE POLICY "Allow authenticated to see buckets"
+ON storage.buckets FOR SELECT
+TO authenticated
+USING (true);
+
+-- 3. Admins can Upload images
+CREATE POLICY "Admins can upload images"
+ON storage.objects FOR INSERT
+TO authenticated
+WITH CHECK (bucket_id = 'images');
+
+-- 4. Admins can Update images
+CREATE POLICY "Admins can update images"
+ON storage.objects FOR UPDATE
+TO authenticated
+USING (bucket_id = 'images')
+WITH CHECK (bucket_id = 'images');
+
+-- 5. Admins can Delete images
+CREATE POLICY "Admins can delete images"
+ON storage.objects FOR DELETE
+TO authenticated
+USING (bucket_id = 'images');
+
+-- 6. Public can View images (needed for the website)
+CREATE POLICY "Public can view images"
+ON storage.objects FOR SELECT
+TO public
+USING (bucket_id = 'images');
+```
 
 ## Step 6: Verify the Connection
 

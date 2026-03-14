@@ -14,10 +14,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { addSuccessStory, updateSuccessStory } from "@/lib/actions/success-story.action";
-import { useState } from "react";
-import { Loader2 } from "lucide-react";
+import { uploadImage } from "@/lib/actions/storage.action";
+import { useState, useRef } from "react";
+import { Loader2, ImagePlus, X } from "lucide-react";
+import Image from "next/image";
 
 interface SuccessStoryFormProps {
   initialData?: SuccessStoryValues & { id: string };
@@ -26,6 +29,8 @@ interface SuccessStoryFormProps {
 
 export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormProps) {
   const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<SuccessStoryValues>({
     resolver: zodResolver(successStorySchema),
@@ -39,6 +44,31 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
     },
   });
 
+  const imageUrl = form.watch("image_url");
+
+  async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("folder", "success-stories");
+      
+      const publicUrl = await uploadImage(formData);
+      form.setValue("image_url", publicUrl, { 
+        shouldDirty: true, 
+        shouldValidate: true 
+      });
+    } catch (error) {
+      console.error("Upload failed:", error);
+      alert(error instanceof Error ? error.message : "Failed to upload image. Please try again.");
+    } finally {
+      setUploading(false);
+    }
+  }
+
   async function onSubmit(values: SuccessStoryValues) {
     setLoading(true);
     try {
@@ -47,9 +77,11 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
       } else {
         await addSuccessStory(values);
       }
+      form.reset();
       onSuccess?.();
     } catch (error) {
       console.error(error);
+      alert(error instanceof Error ? error.message : "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -116,19 +148,68 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="image_url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Student Photo URL</FormLabel>
-              <FormControl>
-                <Input placeholder="e.g. https://example.com/photo.jpg" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        
+        <div className="space-y-2">
+          <Label>Student Photo</Label>
+          <div className="flex items-center gap-4">
+            {imageUrl ? (
+              <div className="relative h-24 w-24 rounded-lg overflow-hidden border">
+                <Image src={imageUrl} alt="Student preview" fill className="object-cover" />
+                <button 
+                  type="button"
+                  title="Remove image"
+                  onClick={() => form.setValue("image_url", "", { shouldDirty: true, shouldValidate: true })}
+                  className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 shadow-sm"
+                >
+                  <X size={12} />
+                  <span className="sr-only">Remove image</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploading}
+                className="h-24 w-24 rounded-lg border-2 border-dashed flex flex-col items-center justify-center text-muted-foreground hover:bg-muted transition-colors"
+              >
+                {uploading ? (
+                  <Loader2 className="h-6 w-6 animate-spin" />
+                ) : (
+                  <>
+                    <ImagePlus className="h-6 w-6 mb-1" />
+                    <span className="text-[10px]">Upload Photo</span>
+                  </>
+                )}
+              </button>
+            )}
+            <input 
+              type="file" 
+              ref={fileInputRef} 
+              className="hidden" 
+              accept="image/*"
+              title="Upload photo"
+              placeholder="Upload photo"
+              onChange={handleImageUpload}
+            />
+            <div className="text-xs text-muted-foreground">
+              <p>Recommended: Square image (500x500px)</p>
+              <p>Max size: 5MB</p>
+            </div>
+          </div>
+          <FormField
+            control={form.control}
+            name="image_url"
+            render={({ field }) => (
+              <FormItem className="hidden">
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+
         <FormField
           control={form.control}
           name="is_published"
