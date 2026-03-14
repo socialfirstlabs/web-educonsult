@@ -9,14 +9,15 @@ import {
   FormField, 
   FormItem, 
   FormLabel, 
-  FormMessage 
+  FormMessage,
+  FormDescription
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { addService, updateService } from "@/lib/actions/service.action";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
@@ -40,14 +41,28 @@ export function ServiceForm({ initialData, onSuccess }: ServiceFormProps) {
 
   const form = useForm<ServiceValues>({
     resolver: zodResolver(serviceSchema),
-    defaultValues: initialData || {
+    defaultValues: {
       title: "",
       description: "",
+      features: "",
       icon_name: "Briefcase",
       is_active: true,
       order_index: 0,
     },
   });
+
+  useEffect(() => {
+    if (initialData) {
+      form.reset({
+        title: initialData.title,
+        description: initialData.description,
+        features: initialData.features || "",
+        icon_name: initialData.icon_name,
+        is_active: initialData.is_active,
+        order_index: initialData.order_index,
+      });
+    }
+  }, [initialData, form]);
 
   async function onSubmit(values: ServiceValues) {
     setLoading(true);
@@ -56,10 +71,12 @@ export function ServiceForm({ initialData, onSuccess }: ServiceFormProps) {
         await updateService(initialData.id, values);
       } else {
         await addService(values);
+        form.reset();
       }
       onSuccess?.();
     } catch (error) {
       console.error(error);
+      alert("Something went wrong. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -94,6 +111,22 @@ export function ServiceForm({ initialData, onSuccess }: ServiceFormProps) {
                   {...field} 
                 />
               </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="features"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Key Features (Comma separated)</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g. Expert Advice, Transparent Process, Quick Results" {...field} />
+              </FormControl>
+              <FormDescription>
+                Enter features separated by commas. These will be displayed as a list on the website.
+              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -136,7 +169,7 @@ export function ServiceForm({ initialData, onSuccess }: ServiceFormProps) {
                     value={Number.isNaN(field.value) ? "" : field.value}
                     onChange={e => {
                       const val = parseInt(e.target.value);
-                      field.onChange(isNaN(val) ? "" : val);
+                      field.onChange(isNaN(val) ? 0 : val);
                     }}
                   />
                 </FormControl>

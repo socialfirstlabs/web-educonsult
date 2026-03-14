@@ -57,16 +57,16 @@ export default async function ServicesPage() {
                 </CardHeader>
                 <CardContent>
                   <p className="text-muted-foreground mb-6">{service.description}</p>
-                  <ul className="space-y-2">
-                    <li className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="text-green-500" size={16} />
-                      <span>Expert Advice</span>
-                    </li>
-                    <li className="flex items-center gap-2 text-sm">
-                      <CheckCircle2 className="text-green-500" size={16} />
-                      <span>Transparent Process</span>
-                    </li>
-                  </ul>
+                  {service.features && (
+                    <ul className="space-y-2">
+                      {service.features.split(",").map((feature: string, index: number) => (
+                        <li key={index} className="flex items-center gap-2 text-sm">
+                          <CheckCircle2 className="text-green-500" size={16} />
+                          <span>{feature.trim()}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </CardContent>
               </Card>
             );

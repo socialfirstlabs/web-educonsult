@@ -64,6 +64,7 @@ CREATE TABLE public.services (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
   description TEXT NOT NULL,
+  features TEXT,
   icon_name TEXT NOT NULL,
   is_active BOOLEAN DEFAULT true,
   order_index INTEGER NOT NULL,
