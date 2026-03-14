@@ -18,7 +18,7 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { addSuccessStory, updateSuccessStory } from "@/lib/actions/success-story.action";
 import { uploadImage } from "@/lib/actions/storage.action";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Loader2, ImagePlus, X } from "lucide-react";
 import Image from "next/image";
 
@@ -34,7 +34,7 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
 
   const form = useForm<SuccessStoryValues>({
     resolver: zodResolver(successStorySchema),
-    defaultValues: initialData || {
+    defaultValues: {
       student_name: "",
       destination_country: "",
       university_name: "",
@@ -43,6 +43,20 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
       is_published: true,
     },
   });
+
+  // Update form values when initialData changes (for editing)
+  useEffect(() => {
+    if (initialData) {
+      form.reset({
+        student_name: initialData.student_name,
+        destination_country: initialData.destination_country,
+        university_name: initialData.university_name || "",
+        testimonial: initialData.testimonial,
+        image_url: initialData.image_url,
+        is_published: initialData.is_published,
+      });
+    }
+  }, [initialData, form]);
 
   const imageUrl = form.watch("image_url");
 
@@ -76,8 +90,8 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
         await updateSuccessStory(initialData.id, values);
       } else {
         await addSuccessStory(values);
+        form.reset(); // Only reset after adding a new story
       }
-      form.reset();
       onSuccess?.();
     } catch (error) {
       console.error(error);

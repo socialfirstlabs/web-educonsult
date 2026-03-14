@@ -7,8 +7,8 @@ export const courseSchema = z.object({
   schedule: z.string().min(2, "Schedule is required"),
   fees: z.string().min(2, "Fees information is required"),
   badge: z.string().optional(),
-  is_published: z.boolean().default(true),
-  order_index: z.number().int().default(0),
+  is_published: z.boolean(),
+  order_index: z.number().int(),
 });
 
 export type CourseValues = z.infer<typeof courseSchema>;
