@@ -1,64 +1,82 @@
-import { createClient } from '@/lib/supabase/server';
-import { Card, CardContent } from "@/components/ui/card";
-import { GraduationCap, MapPin, Quote } from "lucide-react";
+import { getPublishedSuccessStories } from "@/lib/actions/success-story.action";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Quote, GraduationCap, MapPin } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const metadata = {
   title: "Success Stories | EduNepal Consultancy",
-  description: "Check out our students' success stories and visa results for studying in Japan and other countries.",
+  description: "Read about our students who have successfully achieved their dreams of studying abroad.",
 };
 
 export default async function SuccessStoriesPage() {
-  const supabase = await createClient();
-  if (!supabase) return <div className="p-4 border border-destructive text-destructive rounded-md bg-destructive/10">Supabase environment variables are missing.</div>;
-
-  const { data: stories } = await supabase
-    .from('success_stories')
-    .select('*')
-    .eq('is_published', true)
-    .order('created_at', { ascending: false });
+  const stories = await getPublishedSuccessStories();
 
   return (
     <div className="container py-20 px-4">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <h1 className="text-4xl font-bold mb-4">Student Success Stories</h1>
-        <p className="text-xl text-muted-foreground">Real stories from our students who achieved their dreams of studying abroad.</p>
+        <h1 className="text-4xl font-bold mb-4">Success Stories</h1>
+        <p className="text-xl text-muted-foreground">
+          Meet our students who have successfully secured their visas and are pursuing their dreams in prestigious institutions worldwide.
+        </p>
       </div>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {stories?.map((story) => (
-          <Card key={story.id} className="overflow-hidden border-none shadow-md hover:shadow-xl transition-shadow flex flex-col">
-            <div className="aspect-square bg-muted relative">
-              {story.image_url ? (
-                <img src={story.image_url} alt={story.student_name} className="object-cover w-full h-full" />
-              ) : (
-                <div className="flex items-center justify-center h-full text-muted-foreground">
-                   <GraduationCap size={48} className="opacity-20" />
+      {stories.length === 0 ? (
+        <div className="text-center py-20">
+          <p className="text-muted-foreground italic text-lg">
+            "Your success story could be next. Start your journey with us today!"
+          </p>
+        </div>
+      ) : (
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {stories.map((story) => (
+            <Card key={story.id} className="h-full flex flex-col border-none shadow-lg hover:shadow-xl transition-shadow bg-card/50">
+              <CardHeader className="pb-4">
+                <div className="flex items-center gap-4">
+                  <Avatar className="h-16 w-16 border-2 border-primary/20">
+                    <AvatarImage src={story.image_url} alt={story.student_name} />
+                    <AvatarFallback className="bg-primary/10 text-primary">
+                      {story.student_name.substring(0, 2).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <h3 className="font-bold text-xl">{story.student_name}</h3>
+                    <div className="flex items-center gap-1 text-sm text-primary font-medium">
+                      <MapPin size={14} />
+                      {story.destination_country}
+                    </div>
+                  </div>
                 </div>
-              )}
-              <div className="absolute bottom-4 left-4 right-4 p-3 bg-white/90 backdrop-blur rounded-lg flex items-center justify-between shadow-sm">
-                 <div className="font-bold text-sm truncate">{story.student_name}</div>
-                 <div className="flex items-center gap-1 text-xs font-semibold text-primary">
-                    <MapPin size={12} /> {story.destination_country}
-                 </div>
-              </div>
-            </div>
-            <CardContent className="flex-1 p-6 space-y-4">
-              <Quote className="text-primary/20" size={32} />
-              <p className="italic text-muted-foreground leading-relaxed">
-                &quot;{story.testimonial}&quot;
-              </p>
-              <div className="pt-4 border-t text-xs text-muted-foreground">
-                <p><strong>University:</strong> {story.university_name || 'Japanese Language School'}</p>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        {(!stories || stories.length === 0) && (
-           <div className="col-span-full py-20 text-center bg-muted/30 rounded-2xl flex flex-col items-center">
-              <GraduationCap size={64} className="text-muted-foreground/30 mb-4" />
-              <p className="text-muted-foreground">Your story could be next! Start your journey with us.</p>
-           </div>
-        )}
+              </CardHeader>
+              <CardContent className="flex-1 flex flex-col">
+                {story.university_name && (
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
+                    <GraduationCap size={16} className="text-primary" />
+                    <span className="italic">{story.university_name}</span>
+                  </div>
+                )}
+                <div className="relative pt-6">
+                  <Quote className="absolute top-0 left-0 text-primary/10 h-10 w-10 -z-10" />
+                  <p className="text-muted-foreground line-clamp-6 leading-relaxed">
+                    {story.testimonial}
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-20 p-10 rounded-2xl bg-primary text-primary-foreground text-center">
+        <h2 className="text-3xl font-bold mb-4">Ready to Write Your Own Success Story?</h2>
+        <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
+          Contact us today for a free counseling session and take the first step towards your international education.
+        </p>
+        <a 
+          href="/contact" 
+          className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-background text-primary hover:bg-background/90 h-11 px-8"
+        >
+          Book Free Counseling
+        </a>
       </div>
     </div>
   );

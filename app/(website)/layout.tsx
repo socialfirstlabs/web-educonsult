@@ -38,6 +38,12 @@ export default async function WebsiteLayout({
                 Study in Japan
               </Link>
               <Link
+                href="/success-stories"
+                className="text-sm font-medium transition-colors hover:text-primary"
+              >
+                Success Stories
+              </Link>
+              <Link
                 href="/blog"
                 className="text-sm font-medium transition-colors hover:text-primary"
               >
