@@ -1,4 +1,5 @@
 import { LeadForm } from "@/components/website/LeadForm";
+import { getPublishedCourses } from "@/lib/actions/course.action";
 
 export const metadata = {
   title: "Contact Us | EduNepal Consultancy",
@@ -6,7 +7,9 @@ export const metadata = {
     "Get free counseling for your study abroad dreams. Contact us for Japanese language classes and visa processing.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const courses = await getPublishedCourses();
+
   return (
     <div className="container py-20 px-4">
       <div className="mx-auto">
@@ -26,7 +29,7 @@ export default function ContactPage() {
               back to you within 24 hours to discuss your study abroad plans or
               language course interests.
             </p>
-            <LeadForm />
+            <LeadForm courses={courses} />
           </div>
 
           <div className="space-y-8">

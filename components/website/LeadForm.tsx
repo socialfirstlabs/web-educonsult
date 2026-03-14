@@ -26,7 +26,11 @@ import {
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { CheckCircle2 } from 'lucide-react';
 
-export function LeadForm() {
+interface LeadFormProps {
+  courses?: { id: string; title: string }[];
+}
+
+export function LeadForm({ courses = [] }: LeadFormProps) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -148,6 +152,32 @@ export function LeadForm() {
             )}
           />
         </div>
+
+        <FormField
+          control={form.control}
+          name="course_interest"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Course Interest (Optional)</FormLabel>
+              <Select onValueChange={field.onChange} value={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a course" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="general">General Inquiry</SelectItem>
+                  {courses.map((course) => (
+                    <SelectItem key={course.id} value={course.title}>
+                      {course.title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={form.control}

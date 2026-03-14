@@ -20,6 +20,8 @@ Once the project is ready:
 
 ```sql
 -- 1. Create Tables
+
+-- Leads Table
 CREATE TABLE public.leads (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
@@ -32,6 +34,7 @@ CREATE TABLE public.leads (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- Blog Posts Table
 CREATE TABLE public.blog_posts (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
@@ -44,6 +47,7 @@ CREATE TABLE public.blog_posts (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- Success Stories Table
 CREATE TABLE public.success_stories (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   student_name TEXT NOT NULL,
@@ -55,12 +59,40 @@ CREATE TABLE public.success_stories (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- Services Table
+CREATE TABLE public.services (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  icon_name TEXT NOT NULL,
+  is_active BOOLEAN DEFAULT true,
+  order_index INTEGER NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Courses Table
+CREATE TABLE public.courses (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  duration TEXT NOT NULL,
+  schedule TEXT NOT NULL,
+  fees TEXT NOT NULL,
+  badge TEXT,
+  is_published BOOLEAN DEFAULT true,
+  order_index INTEGER DEFAULT 0,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
 -- 2. Enable Row Level Security (RLS)
 ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.blog_posts ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.success_stories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.courses ENABLE ROW LEVEL SECURITY;
 
 -- 3. Create Security Policies
+
 -- Leads: Anyone can submit (public), only logged-in admins can view.
 CREATE POLICY "Public can insert leads" ON public.leads FOR INSERT WITH CHECK (true);
 CREATE POLICY "Admins can view leads" ON public.leads FOR SELECT TO authenticated USING (true);
@@ -72,6 +104,14 @@ CREATE POLICY "Admins manage blogs" ON public.blog_posts FOR ALL TO authenticate
 -- Success Stories: Anyone can read published stories, admins manage.
 CREATE POLICY "Public can view published success stories" ON public.success_stories FOR SELECT USING (is_published = true);
 CREATE POLICY "Admins manage success stories" ON public.success_stories FOR ALL TO authenticated USING (true);
+
+-- Services: Public can view active services, admins manage.
+CREATE POLICY "Public can view active services" ON public.services FOR SELECT USING (is_active = true);
+CREATE POLICY "Admins manage services" ON public.services FOR ALL TO authenticated USING (true);
+
+-- Courses: Public can view published courses, admins manage.
+CREATE POLICY "Public can view published courses" ON public.courses FOR SELECT USING (is_published = true);
+CREATE POLICY "Admins manage courses" ON public.courses FOR ALL TO authenticated USING (true);
 ```
 
 ## Step 3: Get Your API Keys
