@@ -1,21 +1,13 @@
-import { createClient } from '@/lib/supabase/server';
+import { getBlogPostBySlug } from '@/lib/actions/blog.action';
 import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import Image from 'next/image';
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const supabase = await createClient();
-  
-  if (!supabase) return <div className="container py-20 px-4">Supabase configuration missing.</div>;
+  const post = await getBlogPostBySlug(slug);
 
-  const { data: post } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .eq('slug', slug)
-    .single();
-
-  if (!post) notFound();
+  if (!post || !post.is_published) notFound();
 
   return (
     <article className="container py-20 px-4 max-w-4xl mx-auto">

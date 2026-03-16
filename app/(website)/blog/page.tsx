@@ -1,4 +1,4 @@
-import { createClient } from '@/lib/supabase/server';
+import { getBlogPosts } from '@/lib/actions/blog.action';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { format } from 'date-fns';
@@ -10,15 +10,7 @@ export const metadata = {
 };
 
 export default async function BlogPage() {
-  const supabase = await createClient();
-  
-  if (!supabase) return <div className="container py-20 px-4">Supabase configuration missing.</div>;
-
-  const { data: posts } = await supabase
-    .from('blog_posts')
-    .select('*')
-    .eq('is_published', true)
-    .order('published_at', { ascending: false });
+  const posts = await getBlogPosts(true);
 
   return (
     <div className="container py-20 px-4">
