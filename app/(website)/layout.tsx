@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getServices } from "@/lib/actions/service.action";
+import { FEATURE_FLAGS } from "@/lib/constants";
 
 export default async function WebsiteLayout({
   children,
@@ -43,12 +44,14 @@ export default async function WebsiteLayout({
               >
                 Success Stories
               </Link>
-              <Link
-                href="/blog"
-                className="text-sm font-medium transition-colors hover:text-primary"
-              >
-                Blog
-              </Link>
+              {FEATURE_FLAGS.ENABLE_BLOG && (
+                <Link
+                  href="/blog"
+                  className="text-sm font-medium transition-colors hover:text-primary"
+                >
+                  Blog
+                </Link>
+              )}
               <Link
                 href="/contact"
                 className="text-sm font-medium transition-colors hover:text-primary"
@@ -124,11 +127,13 @@ export default async function WebsiteLayout({
           <div className="space-y-4">
             <h3 className="text-lg font-bold">Quick Links</h3>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/blog" className="hover:underline">
-                  Blog
-                </Link>
-              </li>
+              {FEATURE_FLAGS.ENABLE_BLOG && (
+                <li>
+                  <Link href="/blog" className="hover:underline">
+                    Blog
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link href="/success-stories" className="hover:underline">
                   Success Stories

@@ -36,3 +36,7 @@ export const NAV_LINKS = {
     { label: "Success Stories", href: "/dashboard/success-stories" },
   ],
 };
+
+export const FEATURE_FLAGS = {
+  ENABLE_BLOG: process.env.NEXT_PUBLIC_ENABLE_BLOG === "true", // Configured via .env
+};

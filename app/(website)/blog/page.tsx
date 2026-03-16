@@ -3,6 +3,8 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import Link from "next/link";
 import { format } from 'date-fns';
 import Image from 'next/image';
+import { FEATURE_FLAGS } from '@/lib/constants';
+import { notFound } from 'next/navigation';
 
 export const metadata = {
   title: "Blog & Updates | EduNepal Consultancy",
@@ -10,6 +12,10 @@ export const metadata = {
 };
 
 export default async function BlogPage() {
+  if (!FEATURE_FLAGS.ENABLE_BLOG) {
+    notFound();
+  }
+
   const posts = await getBlogPosts(true);
 
   return (

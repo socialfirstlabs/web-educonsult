@@ -2,8 +2,13 @@ import { getBlogPostBySlug } from '@/lib/actions/blog.action';
 import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import Image from 'next/image';
+import { FEATURE_FLAGS } from '@/lib/constants';
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
+  if (!FEATURE_FLAGS.ENABLE_BLOG) {
+    notFound();
+  }
+
   const { slug } = await params;
   const post = await getBlogPostBySlug(slug);
 

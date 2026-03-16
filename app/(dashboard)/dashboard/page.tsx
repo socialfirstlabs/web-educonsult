@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Users, GraduationCap, BookOpen, FileText } from "lucide-react";
+import { FEATURE_FLAGS } from "@/lib/constants";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -16,7 +17,7 @@ export default async function DashboardPage() {
   const stats = [
     { title: "Total Leads", value: leadsCount || 0, icon: Users, color: "text-blue-600" },
     { title: "Active Courses", value: coursesCount || 0, icon: BookOpen, color: "text-green-600" },
-    { title: "Blog Posts", value: postsCount || 0, icon: FileText, color: "text-purple-600" },
+    ...(FEATURE_FLAGS.ENABLE_BLOG ? [{ title: "Blog Posts", value: postsCount || 0, icon: FileText, color: "text-purple-600" }] : []),
     { title: "Success Stories", value: successCount || 0, icon: GraduationCap, color: "text-orange-600" },
   ];
 
@@ -47,10 +48,12 @@ export default async function DashboardPage() {
                      <p className="font-semibold">Add Course</p>
                      <p className="text-sm text-muted-foreground">Create a new language class</p>
                   </button>
-                  <button className="p-4 border rounded-lg hover:bg-muted/50 transition-colors text-left">
-                     <p className="font-semibold">Write Blog</p>
-                     <p className="text-sm text-muted-foreground">Post a new SEO article</p>
-                  </button>
+                  {FEATURE_FLAGS.ENABLE_BLOG && (
+                    <button className="p-4 border rounded-lg hover:bg-muted/50 transition-colors text-left">
+                       <p className="font-semibold">Write Blog</p>
+                       <p className="text-sm text-muted-foreground">Post a new SEO article</p>
+                    </button>
+                  )}
                </div>
             </CardContent>
          </Card>
