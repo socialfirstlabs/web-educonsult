@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
+import Image from 'next/image';
 
 export default async function BlogPostPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -28,8 +29,14 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       </div>
 
       {post.image_url && (
-        <div className="aspect-video mb-12 rounded-3xl overflow-hidden border shadow-sm">
-           <img src={post.image_url} alt={post.title} className="w-full h-full object-cover" />
+        <div className="aspect-video mb-12 rounded-3xl overflow-hidden border shadow-sm relative">
+           <Image 
+             src={post.image_url} 
+             alt={post.title} 
+             fill 
+             className="object-cover" 
+             priority
+           />
         </div>
       )}
 

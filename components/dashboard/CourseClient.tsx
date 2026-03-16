@@ -12,8 +12,13 @@ import {
 import { useState } from "react";
 import { CourseForm } from "./CourseForm";
 import { CourseList } from "./CourseList";
+import { type CourseValues } from "@/lib/validations/course.schema";
 
-export function CourseClient({ courses }: { courses: any[] }) {
+interface Course extends CourseValues {
+  id: string;
+}
+
+export function CourseClient({ courses }: { courses: Course[] }) {
   const [open, setOpen] = useState(false);
 
   return (

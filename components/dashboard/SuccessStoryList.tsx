@@ -31,11 +31,18 @@ import {
   DialogTitle 
 } from "@/components/ui/dialog";
 import { useState } from "react";
+import Image from "next/image";
 import { SuccessStoryForm } from "./SuccessStoryForm";
 import { deleteSuccessStory } from "@/lib/actions/success-story.action";
+import { SuccessStoryValues } from "@/lib/validations/success-story.schema";
 
-export function SuccessStoryList({ stories }: { stories: any[] }) {
-  const [editingStory, setEditingStory] = useState<any>(null);
+interface SuccessStory extends SuccessStoryValues {
+  id: string;
+  created_at: string;
+}
+
+export function SuccessStoryList({ stories }: { stories: SuccessStory[] }) {
+  const [editingStory, setEditingStory] = useState<SuccessStory | null>(null);
 
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this success story?")) {
@@ -74,7 +81,13 @@ export function SuccessStoryList({ stories }: { stories: any[] }) {
                     <div className="flex items-center gap-2">
                       <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center overflow-hidden">
                         {story.image_url ? (
-                          <img src={story.image_url} alt={story.student_name} className="h-full w-full object-cover" />
+                          <Image 
+                            src={story.image_url} 
+                            alt={story.student_name} 
+                            width={32} 
+                            height={32} 
+                            className="h-full w-full object-cover" 
+                          />
                         ) : (
                           <User size={16} />
                         )}

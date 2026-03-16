@@ -25,7 +25,8 @@ import {
   FileText, 
   Users, 
   BookOpen, 
-  ShieldCheck 
+  ShieldCheck,
+  LucideIcon
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { 
@@ -37,8 +38,13 @@ import {
 import { useState } from "react";
 import { ServiceForm } from "./ServiceForm";
 import { deleteService } from "@/lib/actions/service.action";
+import { type ServiceValues } from "@/lib/validations/service.schema";
 
-const iconMap: Record<string, any> = {
+interface Service extends ServiceValues {
+  id: string;
+}
+
+const iconMap: Record<string, LucideIcon> = {
   Briefcase,
   Globe,
   GraduationCap,
@@ -48,8 +54,8 @@ const iconMap: Record<string, any> = {
   ShieldCheck,
 };
 
-export function ServiceList({ services }: { services: any[] }) {
-  const [editingService, setEditingService] = useState<any>(null);
+export function ServiceList({ services }: { services: Service[] }) {
+  const [editingService, setEditingService] = useState<Service | null>(null);
 
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this service?")) {

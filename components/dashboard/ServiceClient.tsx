@@ -12,8 +12,13 @@ import {
 } from "@/components/ui/dialog";
 import { ServiceForm } from "./ServiceForm";
 import { ServiceList } from "./ServiceList";
+import { type ServiceValues } from "@/lib/validations/service.schema";
 
-export function ServiceClient({ services }: { services: any[] }) {
+interface Service extends ServiceValues {
+  id: string;
+}
+
+export function ServiceClient({ services }: { services: Service[] }) {
   const [open, setOpen] = useState(false);
 
   return (

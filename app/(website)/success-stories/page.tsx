@@ -23,7 +23,7 @@ export default async function SuccessStoriesPage() {
       {stories.length === 0 ? (
         <div className="text-center py-20">
           <p className="text-muted-foreground italic text-lg">
-            "Your success story could be next. Start your journey with us today!"
+            &quot;Your success story could be next. Start your journey with us today!&quot;
           </p>
         </div>
       ) : (

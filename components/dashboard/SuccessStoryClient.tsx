@@ -10,10 +10,16 @@ import {
   DialogTrigger 
 } from "@/components/ui/dialog";
 import { useState } from "react";
+import { SuccessStoryValues } from "@/lib/validations/success-story.schema";
 import { SuccessStoryForm } from "./SuccessStoryForm";
 import { SuccessStoryList } from "./SuccessStoryList";
 
-export function SuccessStoryClient({ stories }: { stories: any[] }) {
+interface SuccessStory extends SuccessStoryValues {
+  id: string;
+  created_at: string;
+}
+
+export function SuccessStoryClient({ stories }: { stories: SuccessStory[] }) {
   const [open, setOpen] = useState(false);
 
   return (

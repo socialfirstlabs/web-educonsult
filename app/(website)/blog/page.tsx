@@ -1,8 +1,8 @@
 import { createClient } from '@/lib/supabase/server';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { format } from 'date-fns';
+import Image from 'next/image';
 
 export const metadata = {
   title: "Blog & Updates | EduNepal Consultancy",
@@ -33,7 +33,12 @@ export default async function BlogPage() {
             <Card className="h-full overflow-hidden transition-all group-hover:shadow-lg">
               <div className="aspect-video bg-muted relative overflow-hidden">
                 {post.image_url ? (
-                  <img src={post.image_url} alt={post.title} className="object-cover w-full h-full transition-transform group-hover:scale-105" />
+                  <Image 
+                    src={post.image_url} 
+                    alt={post.title} 
+                    fill 
+                    className="object-cover transition-transform group-hover:scale-105" 
+                  />
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground italic">No Image</div>
                 )}

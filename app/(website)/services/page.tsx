@@ -7,7 +7,8 @@ import {
   GraduationCap, 
   Briefcase, 
   BookOpen, 
-  ShieldCheck 
+  ShieldCheck,
+  LucideIcon
 } from "lucide-react";
 import { getServices } from "@/lib/actions/service.action";
 
@@ -16,7 +17,7 @@ export const metadata = {
   description: "Comprehensive study abroad counseling, visa processing, and documentation support.",
 };
 
-const iconMap: Record<string, any> = {
+const iconMap: Record<string, LucideIcon> = {
   Briefcase,
   Globe,
   GraduationCap,

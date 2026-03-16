@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# EduNepal Consultancy Lead System
 
-## Getting Started
+EduNepal Consultancy Lead System is a comprehensive platform for educational consultancies to manage leads, courses, services, blog posts, and success stories. It features a modern, high-performance public website for lead generation and a powerful admin dashboard for back-office management.
 
-First, run the development server:
+## 🚀 Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### Public Website
+- **Modern Landing Page:** Highlight services, courses, and success stories.
+- **Lead Generation:** Interactive forms for student inquiries and language class registrations.
+- **Service Pages:** Dedicated pages for study abroad programs (e.g., Study in Japan).
+- **Blog & Success Stories:** Dynamic content to engage potential leads and showcase success.
+- **Responsive Design:** Optimized for mobile, tablet, and desktop devices.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Admin Dashboard
+- **Lead Management:** View and manage incoming inquiries from potential students.
+- **Content Management System (CMS):** Easy management of blog posts, success stories, services, and courses.
+- **Image Uploads:** Built-in support for managing images via Supabase Storage.
+- **Authentication:** Secure login for admin users powered by Supabase Auth.
+- **Real-time Updates:** Seamless data management with Server Actions and revalidation.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🛠️ Tech Stack
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Framework:** [Next.js 16](https://nextjs.org/) (App Router, Server Components)
+- **Frontend:** [React 19](https://react.dev/), [Tailwind CSS 4](https://tailwindcss.com/)
+- **UI Components:** [shadcn/ui](https://ui.shadcn.com/) (Radix UI)
+- **Backend:** [Supabase](https://supabase.com/) (Auth, DB, Storage)
+- **Form Handling:** [React Hook Form](https://react-hook-form.com/) & [Zod](https://zod.dev/)
+- **Icons:** [Lucide React](https://lucide.dev/)
 
-## Learn More
+## ⚙️ Getting Started
 
-To learn more about Next.js, take a look at the following resources:
+### Prerequisites
+- Node.js (Latest LTS recommended)
+- A Supabase account and project
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Installation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/edu-web.git
+    cd edu-web
+    ```
 
-## Deploy on Vercel
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3.  **Environment Setup:**
+    -   Copy `.env.example` to `.env.local`:
+        ```bash
+        cp .env.example .env.local
+        ```
+    -   Fill in your Supabase credentials in `.env.local`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+4.  **Database Setup:**
+    -   Run the SQL schema provided in `supabase.md` in your Supabase SQL Editor.
+    -   Ensure the `images` bucket is created in Supabase Storage with public access.
+
+5.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
+
+6.  **Build for production:**
+    ```bash
+    npm run build
+    ```
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 📧 Contact
+
+For inquiries, please contact EduNepal Consultancy.

@@ -30,7 +30,7 @@ export async function uploadImage(formData: FormData) {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  const { data, error } = await supabase.storage
+  const { error } = await supabase.storage
     .from("images")
     .upload(filePath, buffer, {
       contentType: file.type,
@@ -39,7 +39,7 @@ export async function uploadImage(formData: FormData) {
 
   if (error) {
     console.error("Supabase Storage Error:", error);
-    if (error.message.includes("row-level security") || (error as any).status === 403) {
+    if (error.message.includes("row-level security") || ('status' in error && error.status === 403)) {
       throw new Error("Permission denied. Please ensure the 'images' bucket exists and has correct RLS policies.");
     }
     throw new Error(error.message);

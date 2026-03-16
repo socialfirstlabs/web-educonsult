@@ -20,7 +20,6 @@ import {
   Pencil, 
   Trash,
   Clock,
-  Calendar,
   Wallet
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -33,9 +32,14 @@ import {
 import { useState } from "react";
 import { CourseForm } from "./CourseForm";
 import { deleteCourse } from "@/lib/actions/course.action";
+import { type CourseValues } from "@/lib/validations/course.schema";
 
-export function CourseList({ courses }: { courses: any[] }) {
-  const [editingCourse, setEditingCourse] = useState<any>(null);
+interface Course extends CourseValues {
+  id: string;
+}
+
+export function CourseList({ courses }: { courses: Course[] }) {
+  const [editingCourse, setEditingCourse] = useState<Course | null>(null);
 
   const handleDelete = async (id: string) => {
     if (confirm("Are you sure you want to delete this course?")) {
