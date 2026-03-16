@@ -13,13 +13,20 @@ import { useState } from "react";
 import { BlogForm } from "./BlogForm";
 import { BlogList } from "./BlogList";
 import { BlogValues } from "@/lib/validations/blog.schema";
+import { User } from "@supabase/supabase-js";
 
 interface BlogPost extends BlogValues {
   id: string;
   created_at: string;
 }
 
-export function BlogClient({ posts }: { posts: BlogPost[] }) {
+export function BlogClient({ 
+  posts,
+  currentUser 
+}: { 
+  posts: BlogPost[];
+  currentUser?: User | null;
+}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -43,7 +50,10 @@ export function BlogClient({ posts }: { posts: BlogPost[] }) {
             <DialogHeader>
               <DialogTitle>Create New Blog Post</DialogTitle>
             </DialogHeader>
-            <BlogForm onSuccess={() => setOpen(false)} />
+            <BlogForm 
+              onSuccess={() => setOpen(false)} 
+              currentUser={currentUser}
+            />
           </DialogContent>
         </Dialog>
       </div>

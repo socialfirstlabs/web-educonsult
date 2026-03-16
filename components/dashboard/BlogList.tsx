@@ -35,7 +35,6 @@ import { format } from "date-fns";
 import { BlogForm } from "./BlogForm";
 import { deleteBlogPost } from "@/lib/actions/blog.action";
 import { BlogValues } from "@/lib/validations/blog.schema";
-import Link from "next/link";
 
 interface BlogPost extends BlogValues {
   id: string;

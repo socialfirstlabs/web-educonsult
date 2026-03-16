@@ -22,13 +22,15 @@ import { uploadImage } from "@/lib/actions/storage.action";
 import { useState, useRef, useEffect } from "react";
 import { Loader2, ImagePlus, X, Wand2 } from "lucide-react";
 import Image from "next/image";
+import { User } from "@supabase/supabase-js";
 
 interface BlogFormProps {
   initialData?: BlogValues & { id: string };
   onSuccess?: () => void;
+  currentUser?: User | null;
 }
 
-export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
+export function BlogForm({ initialData, onSuccess, currentUser }: BlogFormProps) {
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -38,6 +40,7 @@ export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
     defaultValues: {
       title: "",
       slug: "",
+      author_name: currentUser?.user_metadata?.full_name || currentUser?.email || "EduNepal Team",
       excerpt: "",
       content: "",
       image_url: "",
@@ -50,6 +53,7 @@ export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
       form.reset({
         title: initialData.title,
         slug: initialData.slug,
+        author_name: initialData.author_name || "EduNepal Team",
         excerpt: initialData.excerpt || "",
         content: initialData.content,
         image_url: initialData.image_url || "",
@@ -122,6 +126,20 @@ export function BlogForm({ initialData, onSuccess }: BlogFormProps) {
               <FormLabel>Post Title</FormLabel>
               <FormControl>
                 <Input placeholder="e.g. How to Study in Japan" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <FormField
+          control={form.control}
+          name="author_name"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Author Name</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g. EduNepal Team" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
