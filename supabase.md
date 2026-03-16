@@ -39,6 +39,7 @@ CREATE TABLE public.blog_posts (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
+  author_name TEXT NOT NULL DEFAULT 'EduNepal Team',
   excerpt TEXT,
   content TEXT NOT NULL,
   image_url TEXT,
