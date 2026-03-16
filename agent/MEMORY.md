@@ -9,10 +9,18 @@ This file tracks the "Education Consultancy" domain knowledge and technical cont
 - **Key Dates:** Intake months for Japan (April, July, October, January).
 
 ## 2. Technical Context
-- **Deployment:** Vercel (Edge-ready Next.js).
-- **Backend-as-a-Service:** Supabase (Auth, DB, Storage).
-- **Style System:** Tailwind CSS + shadcn/ui.
-- **Form Handling:** react-hook-form + zod.
+- **Framework:** Next.js 16 (App Router) + React 19.
+- **Styling:** Tailwind CSS 4 + shadcn/ui.
+- **Backend:** Supabase (Postgres, Auth, Storage).
+- **Validation:** Zod + react-hook-form.
+
+## 3. Database Schema (Key Tables)
+- `leads`: Inquiries from the website.
+- `blog_posts`: Content for the blog section.
+- `success_stories`: Student testimonials and destination details.
+- `services`: Consultancy offerings (Study in Japan, etc.).
+- `courses`: Language class details (N5, N4, N3).
+- `storage.objects`: (Bucket: `images`) for all media.
 
 ## 3. Persistent Business Logic
 - **Lead Statuses:** New, Contacted, Counseling, Converted.

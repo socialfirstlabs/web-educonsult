@@ -8,10 +8,15 @@ The following workflows must be strictly followed for all changes.
 3. **Execution:** Apply surgical changes. Use `shadcn/ui` for components.
 4. **Validation:** Manually verify UI/UX and test data flows (Supabase).
 
-## 2. Lead Capture Workflow
-1. **UI:** Update `LeadForm.tsx` with new fields (with Zod validation).
-2. **Action:** Update `lib/actions/lead.action.ts` for database sync.
-3. **Admin:** Ensure new fields appear correctly in `app/(dashboard)/dashboard/leads/page.tsx`.
+## 2. Database & Schema Workflow
+1. **Schema:** Check `supabase.md` before adding new tables or columns.
+2. **Types:** Run `npx supabase gen types typescript --project-id "..." > types/supabase.ts` after schema changes.
+3. **Actions:** Create/Update Server Actions in `lib/actions/` ensuring Zod validation in `lib/validations/`.
+
+## 3. Tailwind 4 & UI Workflow
+1. **Styling:** Use Tailwind 4 utility classes.
+2. **Components:** Use `npx shadcn@latest add [component]` to add new UI elements.
+3. **Icons:** Use `lucide-react` for all system icons.
 
 ## 3. SEO Content Workflow
 1. **CMS:** Create a blog post via Dashboard (Admin only).

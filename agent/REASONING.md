@@ -2,10 +2,13 @@
 
 Documenting the "Why" behind the project's technical choices.
 
-## 1. Why Next.js App Router?
-- **Decision:** Use Next.js 14+ App Router with RSC.
-- **Rationale:** Public consultancy pages require SEO. RSC sends zero JS for static content, improving PageSpeed scores and SEO rank.
-- **Trade-off:** Slightly steeper learning curve for `createClient` vs the old `pages/api` pattern.
+## 1. Why Next.js 16 App Router?
+- **Decision:** Use Next.js 16 App Router with RSC and React 19.
+- **Rationale:** Public consultancy pages require high-performance SEO. RSC and the improved React 19 features (like Actions and better Suspense) ensure the fastest possible time-to-interactive for students.
+
+## 2. Why Tailwind CSS 4?
+- **Decision:** Use the latest Tailwind CSS 4 engine.
+- **Rationale:** Faster build times and simplified configuration using the new CSS-first approach, which aligns with our "Vanilla CSS" preference for complex animations while maintaining utility-first speed.
 
 ## 2. Why Supabase?
 - **Decision:** Backend-as-a-Service (Postgres + Auth + Storage).
