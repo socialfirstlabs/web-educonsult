@@ -11,6 +11,7 @@ import {
   LucideIcon
 } from "lucide-react";
 import { getServices } from "@/lib/actions/service.action";
+import { getT, type Locale } from "@/lib/i18n";
 
 export const metadata = {
   title: "Our Services | EduNepal Consultancy",
@@ -27,22 +28,28 @@ const iconMap: Record<string, LucideIcon> = {
   ShieldCheck,
 };
 
-export default async function ServicesPage() {
-  const services = await getServices();
+export default async function ServicesPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  const t = getT(locale);
+  const services = await getServices(locale);
   const activeServices = services.filter(s => s.is_active);
 
   return (
     <div className="container py-20 px-4">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <h1 className="text-4xl font-bold mb-4">Our Services</h1>
+        <h1 className="text-4xl font-bold mb-4">{t("nav.services")}</h1>
         <p className="text-xl text-muted-foreground">
-          We provide end-to-end support for students aspiring to gain international education and global exposure.
+          {t("home.heroSubtitle")}
         </p>
       </div>
 
       {activeServices.length === 0 ? (
         <div className="text-center py-20">
-          <p className="text-muted-foreground">No services listed at the moment. Please check back later.</p>
+          <p className="text-muted-foreground">{t("nav.services")}</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-8">

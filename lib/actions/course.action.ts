@@ -3,14 +3,15 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { courseSchema, type CourseValues } from "../validations/course.schema";
+import type { Locale } from "@/lib/i18n";
 
-export async function getCourses() {
+export async function getCourses(locale: Locale = "en") {
   const supabase = await createClient();
   if (!supabase) return [];
 
   const { data, error } = await supabase
     .from("courses")
-    .select("*")
+    .select("*, translations:course_translations(locale,title,description,duration,schedule,fees,badge)")
     .order("order_index", { ascending: true });
 
   if (error) {
@@ -18,16 +19,26 @@ export async function getCourses() {
     return [];
   }
 
-  return data;
+  return (data ?? []).map((course) => {
+    const translation = course.translations?.find(
+      (item: { locale: string }) => item.locale === locale
+    );
+    const { translations: _translations, ...base } = course;
+    void _translations;
+    if (!translation) return base;
+    const { locale: __locale, ...translatedFields } = translation;
+    void __locale;
+    return { ...base, ...translatedFields };
+  });
 }
 
-export async function getPublishedCourses() {
+export async function getPublishedCourses(locale: Locale = "en") {
   const supabase = await createClient();
   if (!supabase) return [];
 
   const { data, error } = await supabase
     .from("courses")
-    .select("*")
+    .select("*, translations:course_translations(locale,title,description,duration,schedule,fees,badge)")
     .eq("is_published", true)
     .order("order_index", { ascending: true });
 
@@ -36,7 +47,17 @@ export async function getPublishedCourses() {
     return [];
   }
 
-  return data;
+  return (data ?? []).map((course) => {
+    const translation = course.translations?.find(
+      (item: { locale: string }) => item.locale === locale
+    );
+    const { translations: _translations, ...base } = course;
+    void _translations;
+    if (!translation) return base;
+    const { locale: __locale, ...translatedFields } = translation;
+    void __locale;
+    return { ...base, ...translatedFields };
+  });
 }
 
 export async function addCourse(values: CourseValues) {

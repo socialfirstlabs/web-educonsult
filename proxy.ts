@@ -1,12 +1,31 @@
 import { createServerClient, type CookieOptions } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
+const locales = ['en', 'ja'] as const
+const defaultLocale = 'en'
+
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({
     request: {
       headers: request.headers,
     },
   })
+
+  const { pathname } = request.nextUrl
+
+  if (pathname === '/') {
+    return NextResponse.redirect(new URL(`/${defaultLocale}`, request.url))
+  }
+
+  if (!pathname.startsWith('/dashboard') && !pathname.startsWith('/login')) {
+    const hasLocale = locales.some(
+      (locale) => pathname === `/${locale}` || pathname.startsWith(`/${locale}/`)
+    )
+
+    if (!hasLocale) {
+      return NextResponse.redirect(new URL(`/${defaultLocale}${pathname}`, request.url))
+    }
+  }
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -64,12 +83,12 @@ export async function proxy(request: NextRequest) {
   const { data: { user } } = await supabase.auth.getUser()
 
   // Protect dashboard routes
-  if (request.nextUrl.pathname.startsWith('/dashboard') && !user) {
+  if (pathname.startsWith('/dashboard') && !user) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
   // Redirect to dashboard if logged in and trying to access login page
-  if (request.nextUrl.pathname === '/login' && user) {
+  if (pathname === '/login' && user) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 

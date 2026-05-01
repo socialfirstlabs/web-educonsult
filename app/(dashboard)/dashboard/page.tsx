@@ -7,11 +7,18 @@ export default async function DashboardPage() {
   
   if (!supabase) return <div className="p-4 border border-destructive text-destructive rounded-md bg-destructive/10">Supabase environment variables are missing.</div>;
 
-  // Fetch summary stats
-  const { count: leadsCount } = await supabase.from('leads').select('*', { count: 'exact', head: true });
-  const { count: coursesCount } = await supabase.from('courses').select('*', { count: 'exact', head: true });
-  const { count: postsCount } = await supabase.from('blog_posts').select('*', { count: 'exact', head: true });
-  const { count: successCount } = await supabase.from('success_stories').select('*', { count: 'exact', head: true });
+  // Fetch summary stats in parallel
+  const [
+    { count: leadsCount },
+    { count: coursesCount },
+    { count: postsCount },
+    { count: successCount }
+  ] = await Promise.all([
+    supabase.from('leads').select('*', { count: 'exact', head: true }),
+    supabase.from('courses').select('*', { count: 'exact', head: true }),
+    supabase.from('blog_posts').select('*', { count: 'exact', head: true }),
+    supabase.from('success_stories').select('*', { count: 'exact', head: true })
+  ]);
 
   const stats = [
     { title: "Total Leads", value: leadsCount || 0, icon: Users, color: "text-blue-600" },

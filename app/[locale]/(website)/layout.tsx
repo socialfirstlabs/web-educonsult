@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 import { getServices } from "@/lib/actions/service.action";
 
 export default async function WebsiteLayout({
@@ -58,6 +59,7 @@ export default async function WebsiteLayout({
             </nav>
           </div>
           <div className="flex items-center gap-4">
+            <LanguageSwitcher />
             <Link href="/contact">
               <Button>Apply Now</Button>
             </Link>

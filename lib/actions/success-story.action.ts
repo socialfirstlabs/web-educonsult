@@ -3,14 +3,15 @@
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import { successStorySchema, type SuccessStoryValues } from "../validations/success-story.schema";
+import type { Locale } from "@/lib/i18n";
 
-export async function getSuccessStories() {
+export async function getSuccessStories(locale: Locale = "en") {
   const supabase = await createClient();
   if (!supabase) return [];
 
   const { data, error } = await supabase
     .from("success_stories")
-    .select("*")
+    .select("*, translations:success_story_translations(locale,student_name,destination_country,university_name,testimonial)")
     .order("created_at", { ascending: false });
 
   if (error) {
@@ -18,16 +19,26 @@ export async function getSuccessStories() {
     return [];
   }
 
-  return data;
+  return (data ?? []).map((story) => {
+    const translation = story.translations?.find(
+      (item: { locale: string }) => item.locale === locale
+    );
+    const { translations: _translations, ...base } = story;
+    void _translations;
+    if (!translation) return base;
+    const { locale: __locale, ...translatedFields } = translation;
+    void __locale;
+    return { ...base, ...translatedFields };
+  });
 }
 
-export async function getPublishedSuccessStories() {
+export async function getPublishedSuccessStories(locale: Locale = "en") {
   const supabase = await createClient();
   if (!supabase) return [];
 
   const { data, error } = await supabase
     .from("success_stories")
-    .select("*")
+    .select("*, translations:success_story_translations(locale,student_name,destination_country,university_name,testimonial)")
     .eq("is_published", true)
     .order("created_at", { ascending: false });
 
@@ -36,7 +47,17 @@ export async function getPublishedSuccessStories() {
     return [];
   }
 
-  return data;
+  return (data ?? []).map((story) => {
+    const translation = story.translations?.find(
+      (item: { locale: string }) => item.locale === locale
+    );
+    const { translations: _translations, ...base } = story;
+    void _translations;
+    if (!translation) return base;
+    const { locale: __locale, ...translatedFields } = translation;
+    void __locale;
+    return { ...base, ...translatedFields };
+  });
 }
 
 export async function addSuccessStory(values: SuccessStoryValues) {

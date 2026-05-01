@@ -13,16 +13,24 @@ export default function HomePage() {
             Your Journey to Japan <br /> Starts Here
           </h1>
           <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-blue-100">
-            Leading Education Consultancy in Nepal specializing in Study Abroad services and Japanese Language Classes.
+            Leading Education Consultancy in Nepal specializing in Study Abroad
+            services and Japanese Language Classes.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/contact">
-              <Button size="lg" className="bg-white text-blue-900 hover:bg-blue-50 text-lg px-8 py-6">
+              <Button
+                size="lg"
+                className="bg-white text-blue-900 hover:bg-blue-50 text-lg px-8 py-6"
+              >
                 Free Counseling
               </Button>
             </Link>
             <Link href="/language-classes">
-              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10 text-lg px-8 py-6">
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-white border-white hover:bg-white/10 text-lg px-8 py-6"
+              >
                 View Courses
               </Button>
             </Link>
@@ -44,7 +52,8 @@ export default function HomePage() {
                 <CardTitle>Study in Japan</CardTitle>
               </CardHeader>
               <CardContent>
-                Comprehensive counseling for Japanese universities, language schools, and vocational colleges.
+                Comprehensive counseling for Japanese universities, language
+                schools, and vocational colleges.
               </CardContent>
             </Card>
             <Card>
@@ -53,7 +62,8 @@ export default function HomePage() {
                 <CardTitle>Language Classes</CardTitle>
               </CardHeader>
               <CardContent>
-                High-quality Japanese language training (N5, N4, N3 levels) by experienced instructors.
+                High-quality Japanese language training (N5, N4, N3 levels) by
+                experienced instructors.
               </CardContent>
             </Card>
             <Card>
@@ -62,7 +72,8 @@ export default function HomePage() {
                 <CardTitle>Visa Documentation</CardTitle>
               </CardHeader>
               <CardContent>
-                Expert guidance on visa application, documentation, and interview preparation for a 100% success rate.
+                Expert guidance on visa application, documentation, and
+                interview preparation for a 100% success rate.
               </CardContent>
             </Card>
           </div>
@@ -81,7 +92,7 @@ export default function HomePage() {
                 "Safe and clean environment",
                 "Part-time work opportunities",
                 "Rich culture and heritage",
-                "Post-study work pathways"
+                "Post-study work pathways",
               ].map((item, i) => (
                 <li key={i} className="flex items-center gap-3">
                   <CheckCircle className="text-green-500" size={20} />
@@ -96,7 +107,9 @@ export default function HomePage() {
             </Link>
           </div>
           <div className="aspect-video bg-blue-100 rounded-2xl overflow-hidden flex items-center justify-center border-4 border-white shadow-xl">
-             <span className="text-blue-400 font-bold italic">Japan Cultural & Educational Placeholder</span>
+            <span className="text-blue-400 font-bold italic">
+              Japan Cultural & Educational Placeholder
+            </span>
           </div>
         </div>
       </section>
@@ -104,12 +117,19 @@ export default function HomePage() {
       {/* CTA Section */}
       <section className="py-20 bg-primary text-primary-foreground text-center">
         <div className="container px-4">
-          <h2 className="text-3xl md:text-4xl font-bold mb-6">Ready to take the first step?</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-6">
+            Ready to take the first step?
+          </h2>
           <p className="text-xl mb-10 opacity-90 max-w-2xl mx-auto">
-            Our expert counselors are ready to guide you through the entire process.
+            Our expert counselors are ready to guide you through the entire
+            process.
           </p>
           <Link href="/contact">
-            <Button size="lg" variant="secondary" className="px-10 py-6 text-lg">
+            <Button
+              size="lg"
+              variant="secondary"
+              className="px-10 py-6 text-lg"
+            >
               Book Your Free Counseling Today
             </Button>
           </Link>

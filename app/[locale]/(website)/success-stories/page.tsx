@@ -1,6 +1,7 @@
 import { getPublishedSuccessStories } from "@/lib/actions/success-story.action";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Quote, GraduationCap, MapPin } from "lucide-react";
+import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export const metadata = {
@@ -71,12 +72,12 @@ export default async function SuccessStoriesPage() {
         <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
           Contact us today for a free counseling session and take the first step towards your international education.
         </p>
-        <a 
-          href="/contact" 
+        <Link
+          href="/contact"
           className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-background text-primary hover:bg-background/90 h-11 px-8"
         >
           Book Free Counseling
-        </a>
+        </Link>
       </div>
     </div>
   );
