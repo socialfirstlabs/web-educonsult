@@ -67,6 +67,149 @@ EduNepal Consultancy Lead System is a comprehensive platform for educational con
     npm run build
     ```
 
+## 📁 Project Structure
+
+```text
+edu-web/
+├─ .env.example
+├─ .env.local
+├─ .gitignore
+├─ AGENTS.md
+├─ CHANGELOG.md
+├─ GEMINI.md
+├─ README.md
+├─ build-log.txt
+├─ components.json
+├─ eslint.config.mjs
+├─ fetch-form.mjs
+├─ next-env.d.ts
+├─ next.config.ts
+├─ package.json
+├─ package-lock.json
+├─ postcss.config.mjs
+├─ proxy.ts
+├─ supabase.md
+├─ tsconfig.json
+├─ tsconfig.tsbuildinfo
+├─ agent/
+│  ├─ MEMORY.md
+│  ├─ REASONING.md
+│  ├─ SAFETY.md
+│  ├─ SKILL.md
+│  └─ WORKFLOWS.md
+├─ app/
+│  ├─ (dashboard)/
+│  │  └─ dashboard/
+│  │     ├─ blog/
+│  │     │  └─ page.tsx
+│  │     ├─ courses/
+│  │     │  └─ page.tsx
+│  │     ├─ leads/
+│  │     │  └─ page.tsx
+│  │     ├─ services/
+│  │     │  └─ page.tsx
+│  │     ├─ success-stories/
+│  │     │  └─ page.tsx
+│  │     ├─ layout.tsx
+│  │     └─ page.tsx
+│  ├─ (website)/
+│  │  ├─ blog/
+│  │  │  ├─ [slug]/
+│  │  │  │  └─ page.tsx
+│  │  │  └─ page.tsx
+│  │  ├─ contact/
+│  │  │  └─ page.tsx
+│  │  ├─ language-classes/
+│  │  │  └─ page.tsx
+│  │  ├─ services/
+│  │  │  └─ page.tsx
+│  │  ├─ study-in-japan/
+│  │  │  └─ page.tsx
+│  │  ├─ success-stories/
+│  │  │  └─ page.tsx
+│  │  ├─ layout.tsx
+│  │  └─ page.tsx
+│  ├─ login/
+│  │  └─ page.tsx
+│  ├─ favicon.ico
+│  ├─ favicon.png
+│  ├─ globals.css
+│  └─ layout.tsx
+├─ components/
+│  ├─ dashboard/
+│  │  ├─ CourseClient.tsx
+│  │  ├─ CourseForm.tsx
+│  │  ├─ CourseList.tsx
+│  │  ├─ LogoutButton.tsx
+│  │  ├─ ServiceClient.tsx
+│  │  ├─ ServiceForm.tsx
+│  │  ├─ ServiceList.tsx
+│  │  ├─ SuccessStoryClient.tsx
+│  │  ├─ SuccessStoryForm.tsx
+│  │  └─ SuccessStoryList.tsx
+│  ├─ shared/
+│  ├─ ui/
+│  │  ├─ alert.tsx
+│  │  ├─ avatar.tsx
+│  │  ├─ badge.tsx
+│  │  ├─ button.tsx
+│  │  ├─ card.tsx
+│  │  ├─ dialog.tsx
+│  │  ├─ dropdown-menu.tsx
+│  │  ├─ form.tsx
+│  │  ├─ input.tsx
+│  │  ├─ label.tsx
+│  │  ├─ select.tsx
+│  │  ├─ switch.tsx
+│  │  ├─ table.tsx
+│  │  └─ textarea.tsx
+│  └─ website/
+│     └─ LeadForm.tsx
+├─ docs/
+│  └─ superpowers/
+│     └─ plans/
+│        └─ 2026-03-16-first-version-release.md
+├─ error/
+│  ├─ errors.txt
+│  └─ errors2.txt
+├─ lib/
+│  ├─ actions/
+│  │  ├─ auth.action.ts
+│  │  ├─ course.action.ts
+│  │  ├─ lead.action.ts
+│  │  ├─ service.action.ts
+│  │  ├─ storage.action.ts
+│  │  └─ success-story.action.ts
+│  ├─ prisma/
+│  ├─ services/
+│  ├─ supabase/
+│  │  ├─ client.ts
+│  │  └─ server.ts
+│  ├─ validations/
+│  │  ├─ course.schema.ts
+│  │  ├─ lead.schema.ts
+│  │  ├─ service.schema.ts
+│  │  └─ success-story.schema.ts
+│  ├─ constants.ts
+│  └─ utils.ts
+├─ prisma/
+│  └─ migrations/
+│     └─ 20260425160000_init/
+├─ public/
+│  ├─ file.svg
+│  ├─ globe.svg
+│  ├─ next.svg
+│  ├─ vercel.svg
+│  └─ window.svg
+├─ supabase/
+│  ├─ .gitignore
+│  ├─ config.toml
+│  └─ migrations/
+└─ types/
+```
+
+Note: Generated/local folders like `.git/`, `node_modules/`, and `.next/` exist but are intentionally not expanded here.
+
 ## 📄 License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
