@@ -39,14 +39,22 @@ EduNepal Consultancy Lead System is a comprehensive platform for an educational 
 
 ## Development Conventions
 ### Directory Structure
-- `app/(website)`: Public-facing routes (Home, Blog, Contact, Services).
-- `app/(dashboard)`: Protected admin dashboard routes.
+- `app/[locale]/(website)`: Public-facing routes (Home, Blog, Contact, Services) — locale-prefixed.
+- `app/(dashboard)/dashboard`: Protected admin dashboard routes.
+- `app/login`: Login page (outside locale system — no multilingual layout).
 - `components/ui`: Base UI components from shadcn.
 - `components/website`: Public-facing feature components.
 - `components/dashboard`: Admin-facing feature components.
+- `components/shared`: Components shared between website and dashboard.
+- `components/layout`: Layout-level components (Navbar, Footer, LanguageSwitcher).
 - `lib/actions`: Server Actions for database mutations.
 - `lib/validations`: Zod schemas for form and data validation.
 - `lib/supabase`: Supabase client initializers (client/server).
+- `lib/i18n`: i18n config, dictionary lookup, and translation hook.
+- `locales/`: Translation dictionaries (`en.ts`, `ja.ts`, `ne.ts`).
+- `types/`: TypeScript type definitions (Supabase types + custom domain types).
+- `scripts/`: One-off development/test utility scripts (not part of the app bundle).
+- `docs/`: Developer-facing documentation.
 
 ### Coding Standards
 - **TypeScript:** Use strict typing for all components and functions.
@@ -63,4 +71,5 @@ For specialized instructions, refer to the following files in the `/agent` direc
 - `REASONING.md`: Guidance on problem-solving and architectural decision-making.
 - `SAFETY.md`: Specific security protocols and data handling rules.
 - `WORKFLOWS.md`: Step-by-step procedures for common development tasks.
+- `SKILL.md`: Specialized engineering patterns used in this project.
 - `MEMORY.md`: Persistent project-specific facts and context.

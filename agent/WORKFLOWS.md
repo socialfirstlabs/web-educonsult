@@ -24,5 +24,8 @@ The following workflows must be strictly followed for all changes.
 3. **Validation:** Check `app/(website)/blog/[slug]/page.tsx` for metadata and visual layout.
 
 ## 4. Authentication Workflow
-- Middleware `middleware.ts` handles all protection logic.
+- `middleware.ts` at the project root handles both locale routing and auth protection.
+- It redirects unauthenticated requests to `/dashboard/*` → `/login`.
+- It redirects authenticated users at `/login` → `/dashboard`.
 - Protected routes MUST be inside `app/(dashboard)/dashboard/`.
+- `lib/supabase/server.ts` provides the authenticated server client for use in layouts and actions.

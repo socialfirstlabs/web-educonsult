@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
-
-const locales = ["en", "ja"] as const;
+import { isValidLocale } from "@/lib/i18n/config";
 
 export default async function LocaleLayout({
   children,
@@ -11,7 +10,7 @@ export default async function LocaleLayout({
 }) {
   const { locale } = await params;
 
-  if (!locales.includes(locale as (typeof locales)[number])) {
+  if (!isValidLocale(locale)) {
     notFound();
   }
 
