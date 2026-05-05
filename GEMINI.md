@@ -18,6 +18,8 @@ EduNepal Consultancy Lead System is a comprehensive platform for an educational 
   - **Fetching:** Server Components (RSC) with Supabase Server Client.
   - **Mutations:** Server Actions (`lib/actions`) with Zod validation.
   - **Caching:** `revalidatePath` and `revalidateTag` for on-demand revalidation.
+  - **Multilingual Content:** Base tables hold English content; `*_translations` tables hold locale-specific versions (`blog_translations`, `service_translations`, `course_translations`, `success_story_translations`).
+  - **Settings:** `site_config` table stores global key/value configuration (public read, admin write).
 
 ## Core Directives
 1. **Surgical Precision:** All code changes must be targeted. Avoid "just-in-case" refactoring.

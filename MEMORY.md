@@ -39,8 +39,17 @@ High-signal project notes for future sessions.
 
 - Schema and RLS policies are documented in `supabase.md`.
 - Storage bucket: `images` (public); upload logic in `lib/actions/storage.action.ts`.
-- `types/supabase.ts` contains hand-authored DB types matching the schema. Regenerate via:
-  `npx supabase gen types typescript --project-id "YOUR_REF" > types/supabase.ts`
+- **Translation table pattern:** Every content type has a base table (EN) and a `*_translations` table per locale.
+  - `blog_posts` + `blog_translations`
+  - `services` + `service_translations`
+  - `courses` + `course_translations`
+  - `success_stories` + `success_story_translations`
+- `site_config` is a `key/value` settings store (public SELECT, admin manage).
+- `types/supabase.ts` is **auto-generated** by the Supabase CLI. Regenerate after schema changes:
+  ```bash
+  npx supabase gen types typescript --project-id svecpkgbhyteupsmtvvl > types/supabase.ts
+  ```
+- Use `Tables<T>`, `TablesInsert<T>`, `TablesUpdate<T>` from `@/types` (not `InsertDto`/`UpdateDto`).
 
 ## Data flow conventions
 

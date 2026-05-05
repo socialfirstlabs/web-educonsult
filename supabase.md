@@ -34,16 +34,29 @@ CREATE TABLE public.leads (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- Blog Posts Table
+-- Blog Posts Table (English base content)
 CREATE TABLE public.blog_posts (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
   slug TEXT UNIQUE NOT NULL,
   excerpt TEXT,
   content TEXT NOT NULL,
+  author_name TEXT NOT NULL DEFAULT 'Admin',
   image_url TEXT,
   is_published BOOLEAN DEFAULT false,
   published_at TIMESTAMPTZ DEFAULT now(),
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Blog Translations Table (per-locale content)
+CREATE TABLE public.blog_translations (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  blog_id UUID NOT NULL REFERENCES public.blog_posts(id) ON DELETE CASCADE,
+  locale TEXT NOT NULL,
+  title TEXT NOT NULL,
+  slug TEXT NOT NULL,
+  excerpt TEXT,
+  content TEXT NOT NULL,
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
@@ -59,7 +72,7 @@ CREATE TABLE public.success_stories (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- Services Table
+-- Services Table (English base content)
 CREATE TABLE public.services (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
@@ -71,7 +84,18 @@ CREATE TABLE public.services (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
--- Courses Table
+-- Service Translations Table (per-locale content)
+CREATE TABLE public.service_translations (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  service_id UUID NOT NULL REFERENCES public.services(id) ON DELETE CASCADE,
+  locale TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  features TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Courses Table (English base content)
 CREATE TABLE public.courses (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
@@ -85,12 +109,49 @@ CREATE TABLE public.courses (
   created_at TIMESTAMPTZ DEFAULT now()
 );
 
+-- Course Translations Table (per-locale content)
+CREATE TABLE public.course_translations (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  course_id UUID NOT NULL REFERENCES public.courses(id) ON DELETE CASCADE,
+  locale TEXT NOT NULL,
+  title TEXT NOT NULL,
+  description TEXT NOT NULL,
+  duration TEXT,
+  schedule TEXT,
+  fees TEXT,
+  badge TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Success Story Translations Table (per-locale content)
+CREATE TABLE public.success_story_translations (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  success_story_id UUID NOT NULL REFERENCES public.success_stories(id) ON DELETE CASCADE,
+  locale TEXT NOT NULL,
+  student_name TEXT NOT NULL,
+  destination_country TEXT NOT NULL,
+  university_name TEXT,
+  testimonial TEXT,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- Site Config Table (key/value settings store)
+CREATE TABLE public.site_config (
+  key TEXT PRIMARY KEY,
+  value TEXT NOT NULL
+);
+
 -- 2. Enable Row Level Security (RLS)
 ALTER TABLE public.leads ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.blog_posts ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.blog_translations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.success_stories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.success_story_translations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.service_translations ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.courses ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.course_translations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.site_config ENABLE ROW LEVEL SECURITY;
 
 -- 3. Create Security Policies
 
@@ -113,7 +174,39 @@ CREATE POLICY "Admins manage services" ON public.services FOR ALL TO authenticat
 -- Courses: Public can view published courses, admins manage.
 CREATE POLICY "Public can view published courses" ON public.courses FOR SELECT USING (is_published = true);
 CREATE POLICY "Admins manage courses" ON public.courses FOR ALL TO authenticated USING (true);
+
+-- Translation tables: Public read-all, admins manage.
+CREATE POLICY "Public can read blog translations" ON public.blog_translations FOR SELECT USING (true);
+CREATE POLICY "Admins manage blog translations" ON public.blog_translations FOR ALL TO authenticated USING (true);
+
+CREATE POLICY "Public can read service translations" ON public.service_translations FOR SELECT USING (true);
+CREATE POLICY "Admins manage service translations" ON public.service_translations FOR ALL TO authenticated USING (true);
+
+CREATE POLICY "Public can read course translations" ON public.course_translations FOR SELECT USING (true);
+CREATE POLICY "Admins manage course translations" ON public.course_translations FOR ALL TO authenticated USING (true);
+
+CREATE POLICY "Public can read success story translations" ON public.success_story_translations FOR SELECT USING (true);
+CREATE POLICY "Admins manage success story translations" ON public.success_story_translations FOR ALL TO authenticated USING (true);
+
+-- Site Config: Public read, admins manage.
+CREATE POLICY "Public can read site config" ON public.site_config FOR SELECT USING (true);
+CREATE POLICY "Admins manage site config" ON public.site_config FOR ALL TO authenticated USING (true);
 ```
+
+## Live Database Schema Summary
+
+| Table | Purpose | Access |
+|---|---|---|
+| `leads` | Public inquiry submissions | Public INSERT, Admin SELECT |
+| `blog_posts` | Blog content (EN base) | Public SELECT (published), Admin ALL |
+| `blog_translations` | Blog content per locale | Public SELECT, Admin ALL |
+| `services` | Service listings (EN base) | Public SELECT (active), Admin ALL |
+| `service_translations` | Service content per locale | Public SELECT, Admin ALL |
+| `courses` | Course listings (EN base) | Public SELECT (published), Admin ALL |
+| `course_translations` | Course content per locale | Public SELECT, Admin ALL |
+| `success_stories` | Student stories (EN base) | Public SELECT (published), Admin ALL |
+| `success_story_translations` | Story content per locale | Public SELECT, Admin ALL |
+| `site_config` | Key/value settings | Public SELECT, Admin ALL |
 
 ## Step 3: Get Your API Keys
 

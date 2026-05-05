@@ -10,8 +10,12 @@ The following workflows must be strictly followed for all changes.
 
 ## 2. Database & Schema Workflow
 1. **Schema:** Check `supabase.md` before adding new tables or columns.
-2. **Types:** Run `npx supabase gen types typescript --project-id "..." > types/supabase.ts` after schema changes.
-3. **Actions:** Create/Update Server Actions in `lib/actions/` ensuring Zod validation in `lib/validations/`.
+2. **Types:** Run after schema changes — regenerates `types/supabase.ts`:
+   ```bash
+   npx supabase gen types typescript --project-id svecpkgbhyteupsmtvvl > types/supabase.ts
+   ```
+3. **Type usage:** Use `Tables<T>`, `TablesInsert<T>`, `TablesUpdate<T>` from `@/types`.
+4. **Actions:** Create/Update Server Actions in `lib/actions/` ensuring Zod validation in `lib/validations/`.
 
 ## 3. Tailwind 4 & UI Workflow
 1. **Styling:** Use Tailwind 4 utility classes.
