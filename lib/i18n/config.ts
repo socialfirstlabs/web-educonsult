@@ -9,7 +9,7 @@
  */
 
 /** All locales the application supports. */
-export const locales = ["en", "ja", "ne"] as const;
+export const locales = ["en", "ja"] as const;
 
 /** The fallback locale used when no match is found. */
 export const defaultLocale = "en" as const;
@@ -31,11 +31,6 @@ export const localeConfig: Record<
     label: "Japanese",
     nativeLabel: "日本語",
     flag: "🇯🇵",
-  },
-  ne: {
-    label: "Nepali",
-    nativeLabel: "नेपाली",
-    flag: "🇳🇵",
   },
 };
 

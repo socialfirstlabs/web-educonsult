@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Clock, Calendar, Wallet } from "lucide-react";
 import { getPublishedCourses } from "@/lib/actions/course.action";
-import type { Locale } from "@/lib/i18n";
+import { getT, type Locale } from "@/lib/i18n";
 
 export const metadata = {
   title: "Japanese Language Classes | EduNepal Consultancy",
@@ -17,20 +17,21 @@ export default async function LanguageClassesPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  const t = getT(locale);
   const courses = await getPublishedCourses(locale);
 
   return (
     <div className="container py-20 px-4">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <h1 className="text-4xl font-bold mb-4">Japanese Language Classes</h1>
+        <h1 className="text-4xl font-bold mb-4">{t("languageClasses.title")}</h1>
         <p className="text-xl text-muted-foreground">
-          Master the Japanese language with our JLPT-certified instructors and interactive learning environment.
+          {t("languageClasses.subtitle")}
         </p>
       </div>
 
       {courses.length === 0 ? (
         <div className="text-center py-20 border rounded-xl bg-muted/50">
-          <p className="text-muted-foreground">No courses are currently available. Please check back later.</p>
+          <p className="text-muted-foreground">{t("languageClasses.empty")}</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-3 gap-8">
@@ -46,20 +47,20 @@ export default async function LanguageClassesPage({
               <CardContent className="flex-1 space-y-4">
                 <div className="flex items-center gap-3 text-sm">
                   <Clock className="text-primary" size={18} />
-                  <span><strong>Duration:</strong> {course.duration}</span>
+                  <span><strong>{t("languageClasses.duration")}:</strong> {course.duration}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Calendar className="text-primary" size={18} />
-                  <span><strong>Schedule:</strong> {course.schedule}</span>
+                  <span><strong>{t("languageClasses.schedule")}:</strong> {course.schedule}</span>
                 </div>
                 <div className="flex items-center gap-3 text-sm">
                   <Wallet className="text-primary" size={18} />
-                  <span><strong>Fees:</strong> {course.fees}</span>
+                  <span><strong>{t("languageClasses.fees")}:</strong> {course.fees}</span>
                 </div>
               </CardContent>
               <CardFooter>
                 <Link href={`/${locale}/contact`} className="w-full">
-                  <Button className="w-full" size="lg">Enroll Now</Button>
+                  <Button className="w-full" size="lg">{t("cta.enrollNow")}</Button>
                 </Link>
               </CardFooter>
             </Card>

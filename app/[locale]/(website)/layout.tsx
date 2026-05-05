@@ -2,13 +2,19 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 import { getServices } from "@/lib/actions/service.action";
+import type { Locale } from "@/lib/i18n";
+import { getT } from "@/lib/i18n";
 
 export default async function WebsiteLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ locale: Locale }>;
 }) {
-  const services = await getServices();
+  const { locale } = await params;
+  const t = getT(locale);
+  const services = await getServices(locale);
   const activeServices = services?.filter((s) => s.is_active) || [];
 
   return (
@@ -16,52 +22,52 @@ export default async function WebsiteLayout({
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="container flex h-16 items-center justify-between">
           <div className="flex items-center gap-6 md:gap-10">
-            <Link href="/" className="flex items-center space-x-2">
+            <Link href={`/${locale}`} className="flex items-center space-x-2">
               <span className="inline-block font-bold text-xl">EduNepal</span>
             </Link>
             <nav className="hidden md:flex gap-6">
               <Link
-                href="/services"
+                href={`/${locale}/services`}
                 className="text-sm font-medium transition-colors hover:text-primary"
               >
-                Services
+                {t("nav.services")}
               </Link>
               <Link
-                href="/language-classes"
+                href={`/${locale}/language-classes`}
                 className="text-sm font-medium transition-colors hover:text-primary"
               >
-                Language Classes
+                {t("nav.languageClasses")}
               </Link>
               <Link
-                href="/study-in-japan"
+                href={`/${locale}/study-in-japan`}
                 className="text-sm font-medium transition-colors hover:text-primary"
               >
-                Study in Japan
+                {t("nav.studyInJapan")}
               </Link>
               <Link
-                href="/success-stories"
+                href={`/${locale}/success-stories`}
                 className="text-sm font-medium transition-colors hover:text-primary"
               >
-                Success Stories
+                {t("nav.successStories")}
               </Link>
               <Link
-                href="/blog"
+                href={`/${locale}/blog`}
                 className="text-sm font-medium transition-colors hover:text-primary"
               >
-                Blog
+                {t("nav.blog")}
               </Link>
               <Link
-                href="/contact"
+                href={`/${locale}/contact`}
                 className="text-sm font-medium transition-colors hover:text-primary"
               >
-                Contact
+                {t("nav.contact")}
               </Link>
             </nav>
           </div>
           <div className="flex items-center gap-4">
             <LanguageSwitcher />
-            <Link href="/contact">
-              <Button>Apply Now</Button>
+            <Link href={`/${locale}/contact`}>
+              <Button>{t("cta.applyNow")}</Button>
             </Link>
           </div>
         </div>
@@ -77,29 +83,29 @@ export default async function WebsiteLayout({
             </p>
           </div>
           <div className="space-y-4">
-            <h3 className="text-lg font-bold">Services</h3>
+            <h3 className="text-lg font-bold">{t("nav.services")}</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link
-                  href="/study-in-japan"
+                  href={`/${locale}/study-in-japan`}
                   className="hover:underline font-medium"
                 >
-                  Study in Japan
+                  {t("nav.studyInJapan")}
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/language-classes"
+                  href={`/${locale}/language-classes`}
                   className="hover:underline font-medium"
                 >
-                  Language Classes
+                  {t("nav.languageClasses")}
                 </Link>
               </li>
               {activeServices.length > 0 ? (
                 activeServices.slice(0, 4).map((service) => (
                   <li key={service.id}>
                     <Link
-                      href={`/services#${service.id}`}
+                      href={`/${locale}/services#${service.id}`}
                       className="hover:underline"
                     >
                       {service.title}
@@ -109,13 +115,13 @@ export default async function WebsiteLayout({
               ) : (
                 <>
                   <li>
-                    <Link href="/services" className="hover:underline">
-                      Study Abroad Counseling
+                    <Link href={`/${locale}/services`} className="hover:underline">
+                      {t("nav.services")}
                     </Link>
                   </li>
                   <li>
-                    <Link href="/services" className="hover:underline">
-                      Visa Processing
+                    <Link href={`/${locale}/services`} className="hover:underline">
+                      {t("nav.services")}
                     </Link>
                   </li>
                 </>
@@ -124,21 +130,21 @@ export default async function WebsiteLayout({
           </div>
 
           <div className="space-y-4">
-            <h3 className="text-lg font-bold">Quick Links</h3>
+            <h3 className="text-lg font-bold">{t("nav.home")}</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/blog" className="hover:underline">
-                  Blog
+                <Link href={`/${locale}/blog`} className="hover:underline">
+                  {t("nav.blog")}
                 </Link>
               </li>
               <li>
-                <Link href="/success-stories" className="hover:underline">
-                  Success Stories
+                <Link href={`/${locale}/success-stories`} className="hover:underline">
+                  {t("nav.successStories")}
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="hover:underline">
-                  Contact Us
+                <Link href={`/${locale}/contact`} className="hover:underline">
+                  {t("nav.contact")}
                 </Link>
               </li>
               <li>

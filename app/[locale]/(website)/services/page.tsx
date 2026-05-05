@@ -49,7 +49,7 @@ export default async function ServicesPage({
 
       {activeServices.length === 0 ? (
         <div className="text-center py-20">
-          <p className="text-muted-foreground">{t("nav.services")}</p>
+          <p className="text-muted-foreground">{t("languageClasses.empty")}</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-8">

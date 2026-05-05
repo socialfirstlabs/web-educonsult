@@ -3,7 +3,7 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import Link from "next/link";
 import { format } from 'date-fns';
 import Image from 'next/image';
-import type { Locale } from "@/lib/i18n";
+import { getT, type Locale } from "@/lib/i18n";
 
 export const metadata = {
   title: "Blog & Updates | EduNepal Consultancy",
@@ -16,6 +16,7 @@ export default async function BlogPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  const t = getT(locale);
   const supabase = await createClient();
   
   if (!supabase) return <div className="container py-20 px-4">Supabase configuration missing.</div>;
@@ -45,8 +46,8 @@ export default async function BlogPage({
   return (
     <div className="container py-20 px-4">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <h1 className="text-4xl font-bold mb-4">Latest Blog & News</h1>
-        <p className="text-xl text-muted-foreground">Expert insights and guides for your education journey.</p>
+        <h1 className="text-4xl font-bold mb-4">{t("blog.title")}</h1>
+        <p className="text-xl text-muted-foreground">{t("blog.subtitle")}</p>
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -75,14 +76,14 @@ export default async function BlogPage({
                 <p className="text-sm text-muted-foreground line-clamp-3">{post.excerpt}</p>
               </CardContent>
               <CardFooter>
-                 <span className="text-sm font-bold text-primary">Read More →</span>
+                 <span className="text-sm font-bold text-primary">{t("blog.readMore")}</span>
               </CardFooter>
             </Card>
           </Link>
         ))}
         {posts.length === 0 && (
           <div className="col-span-full py-20 text-center bg-muted/30 rounded-2xl">
-             <p className="text-muted-foreground">Stay tuned! Our experts are writing insightful articles for you.</p>
+             <p className="text-muted-foreground">{t("blog.empty")}</p>
           </div>
         )}
       </div>

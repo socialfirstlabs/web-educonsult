@@ -1,13 +1,13 @@
 "use client";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-
-const locales = ["en", "ja"] as const;
-type Locale = (typeof locales)[number];
+import { locales, defaultLocale, type Locale } from "@/lib/i18n";
 
 function getLocaleFromPathname(pathname: string): Locale {
   const segment = pathname.split("/")[1];
-  return locales.includes(segment as Locale) ? (segment as Locale) : "en";
+  return locales.includes(segment as Locale)
+    ? (segment as Locale)
+    : defaultLocale;
 }
 
 function buildLocalizedPath(pathname: string, locale: Locale) {

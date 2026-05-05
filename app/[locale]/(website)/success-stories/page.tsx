@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Quote, GraduationCap, MapPin } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import type { Locale } from "@/lib/i18n";
+import { getT, type Locale } from "@/lib/i18n";
 
 export const metadata = {
   title: "Success Stories | EduNepal Consultancy",
@@ -16,21 +16,22 @@ export default async function SuccessStoriesPage({
   params: Promise<{ locale: Locale }>;
 }) {
   const { locale } = await params;
+  const t = getT(locale);
   const stories = await getPublishedSuccessStories(locale);
 
   return (
     <div className="container py-20 px-4">
       <div className="text-center max-w-3xl mx-auto mb-16">
-        <h1 className="text-4xl font-bold mb-4">Success Stories</h1>
+        <h1 className="text-4xl font-bold mb-4">{t("successStories.title")}</h1>
         <p className="text-xl text-muted-foreground">
-          Meet our students who have successfully secured their visas and are pursuing their dreams in prestigious institutions worldwide.
+          {t("successStories.subtitle")}
         </p>
       </div>
 
       {stories.length === 0 ? (
         <div className="text-center py-20">
           <p className="text-muted-foreground italic text-lg">
-            &quot;Your success story could be next. Start your journey with us today!&quot;
+            {t("successStories.empty")}
           </p>
         </div>
       ) : (
@@ -74,15 +75,15 @@ export default async function SuccessStoriesPage({
       )}
 
       <div className="mt-20 p-10 rounded-2xl bg-primary text-primary-foreground text-center">
-        <h2 className="text-3xl font-bold mb-4">Ready to Write Your Own Success Story?</h2>
+        <h2 className="text-3xl font-bold mb-4">{t("cta.readyToWriteStory")}</h2>
         <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">
-          Contact us today for a free counseling session and take the first step towards your international education.
+          {t("cta.contactForCounseling")}
         </p>
         <Link
           href={`/${locale}/contact`}
           className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-background text-primary hover:bg-background/90 h-11 px-8"
         >
-          Book Free Counseling
+          {t("cta.bookFreeCounseling")}
         </Link>
       </div>
     </div>
