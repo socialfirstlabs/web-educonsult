@@ -5,6 +5,7 @@ EduNepal Consultancy Lead System is a comprehensive platform for educational con
 ## 🚀 Key Features
 
 ### Public Website
+
 - **Modern Landing Page:** Highlight services, courses, and success stories.
 - **Lead Generation:** Interactive forms for student inquiries and language class registrations.
 - **Service Pages:** Dedicated pages for study abroad programs (e.g., Study in Japan).
@@ -12,6 +13,7 @@ EduNepal Consultancy Lead System is a comprehensive platform for educational con
 - **Responsive Design:** Optimized for mobile, tablet, and desktop devices.
 
 ### Admin Dashboard
+
 - **Lead Management:** View and manage incoming inquiries from potential students.
 - **Content Management System (CMS):** Easy management of blog posts, success stories, services, and courses.
 - **Image Uploads:** Built-in support for managing images via Supabase Storage.
@@ -30,39 +32,46 @@ EduNepal Consultancy Lead System is a comprehensive platform for educational con
 ## ⚙️ Getting Started
 
 ### Prerequisites
+
 - Node.js (Latest LTS recommended)
 - A Supabase account and project
 
 ### Installation
 
-1.  **Clone the repository:**
+1. **Clone the repository:**
+
     ```bash
     git clone https://github.com/your-username/edu-web.git
     cd edu-web
     ```
 
-2.  **Install dependencies:**
+2. **Install dependencies:**
+
     ```bash
     npm install
     ```
 
-3.  **Environment Setup:**
-    -   Copy `.env.example` to `.env.local`:
+3. **Environment Setup:**
+    - Copy `.env.example` to `.env.local`:
+
         ```bash
         cp .env.example .env.local
         ```
-    -   Fill in your Supabase credentials in `.env.local`.
 
-4.  **Database Setup:**
-    -   Run the SQL schema provided in `supabase.md` in your Supabase SQL Editor.
-    -   Ensure the `images` bucket is created in Supabase Storage with public access.
+    - Fill in your Supabase credentials in `.env.local`.
 
-5.  **Run the development server:**
+4. **Database Setup:**
+    - Run the SQL schema provided in `supabase.md` in your Supabase SQL Editor.
+    - Ensure the `images` bucket is created in Supabase Storage with public access.
+
+5. **Run the development server:**
+
     ```bash
     npm run dev
     ```
 
-6.  **Build for production:**
+6. **Build for production:**
+
     ```bash
     npm run build
     ```
@@ -75,8 +84,8 @@ edu-web/
 ├─ .env.local
 ├─ .gitignore
 ├─ AGENTS.md
-├─ CHANGELOG.md
 ├─ GEMINI.md
+├─ MEMORY.md
 ├─ README.md
 ├─ build-log.txt
 ├─ components.json
@@ -92,7 +101,6 @@ edu-web/
 ├─ tsconfig.json
 ├─ tsconfig.tsbuildinfo
 ├─ agent/
-│  ├─ MEMORY.md
 │  ├─ REASONING.md
 │  ├─ SAFETY.md
 │  ├─ SKILL.md

@@ -45,4 +45,4 @@ High-signal project notes for future sessions.
 
 ## Repo guidance
 
-- Follow `GEMINI.md` and `agent/*.md` (WORKFLOWS/SAFETY/REASONING/MEMORY) for project mandates.
+- Follow `GEMINI.md`, `AGENTS.md` and `agent/*.md` (WORKFLOWS/SAFETY/REASONING/MEMORY) for project mandates.
