@@ -4,14 +4,20 @@ import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { Clock, Calendar, Wallet } from "lucide-react";
 import { getPublishedCourses } from "@/lib/actions/course.action";
+import type { Locale } from "@/lib/i18n";
 
 export const metadata = {
   title: "Japanese Language Classes | EduNepal Consultancy",
   description: "Join our expert-led Japanese language courses (N5, N4, N3) in Kathmandu. Flexible schedules and affordable fees.",
 };
 
-export default async function LanguageClassesPage() {
-  const courses = await getPublishedCourses();
+export default async function LanguageClassesPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  const courses = await getPublishedCourses(locale);
 
   return (
     <div className="container py-20 px-4">
@@ -52,7 +58,7 @@ export default async function LanguageClassesPage() {
                 </div>
               </CardContent>
               <CardFooter>
-                <Link href="/contact" className="w-full">
+                <Link href={`/${locale}/contact`} className="w-full">
                   <Button className="w-full" size="lg">Enroll Now</Button>
                 </Link>
               </CardFooter>

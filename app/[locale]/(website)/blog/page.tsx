@@ -3,22 +3,44 @@ import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/componen
 import Link from "next/link";
 import { format } from 'date-fns';
 import Image from 'next/image';
+import type { Locale } from "@/lib/i18n";
 
 export const metadata = {
   title: "Blog & Updates | EduNepal Consultancy",
   description: "Read the latest news, guides, and tips about studying abroad and Japanese language learning.",
 };
 
-export default async function BlogPage() {
+export default async function BlogPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
   const supabase = await createClient();
   
   if (!supabase) return <div className="container py-20 px-4">Supabase configuration missing.</div>;
 
-  const { data: posts } = await supabase
+  const { data, error } = await supabase
     .from('blog_posts')
-    .select('*')
+    .select('*, translations:blog_translations(locale,title,slug,excerpt,content)')
     .eq('is_published', true)
     .order('published_at', { ascending: false });
+
+  if (error) {
+    return <div className="container py-20 px-4">Failed to load posts.</div>;
+  }
+
+  const posts = (data ?? []).map((post) => {
+    const translation = post.translations?.find(
+      (item: { locale: string }) => item.locale === locale
+    );
+    const { translations: _translations, ...base } = post;
+    void _translations;
+    if (!translation) return base;
+    const { locale: __locale, ...translatedFields } = translation;
+    void __locale;
+    return { ...base, ...translatedFields };
+  });
 
   return (
     <div className="container py-20 px-4">
@@ -29,7 +51,7 @@ export default async function BlogPage() {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts?.map((post) => (
-          <Link href={`/blog/${post.slug}`} key={post.id} className="group">
+          <Link href={`/${locale}/blog/${post.slug}`} key={post.id} className="group">
             <Card className="h-full overflow-hidden transition-all group-hover:shadow-lg">
               <div className="aspect-video bg-muted relative overflow-hidden">
                 {post.image_url ? (
@@ -58,7 +80,7 @@ export default async function BlogPage() {
             </Card>
           </Link>
         ))}
-        {(!posts || posts.length === 0) && (
+        {posts.length === 0 && (
           <div className="col-span-full py-20 text-center bg-muted/30 rounded-2xl">
              <p className="text-muted-foreground">Stay tuned! Our experts are writing insightful articles for you.</p>
           </div>

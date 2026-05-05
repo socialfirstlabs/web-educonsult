@@ -3,14 +3,20 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Quote, GraduationCap, MapPin } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import type { Locale } from "@/lib/i18n";
 
 export const metadata = {
   title: "Success Stories | EduNepal Consultancy",
   description: "Read about our students who have successfully achieved their dreams of studying abroad.",
 };
 
-export default async function SuccessStoriesPage() {
-  const stories = await getPublishedSuccessStories();
+export default async function SuccessStoriesPage({
+  params,
+}: {
+  params: Promise<{ locale: Locale }>;
+}) {
+  const { locale } = await params;
+  const stories = await getPublishedSuccessStories(locale);
 
   return (
     <div className="container py-20 px-4">
@@ -73,7 +79,7 @@ export default async function SuccessStoriesPage() {
           Contact us today for a free counseling session and take the first step towards your international education.
         </p>
         <Link
-          href="/contact"
+          href={`/${locale}/contact`}
           className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-background text-primary hover:bg-background/90 h-11 px-8"
         >
           Book Free Counseling
