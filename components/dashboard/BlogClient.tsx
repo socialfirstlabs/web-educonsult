@@ -18,6 +18,13 @@ import { User } from "@supabase/supabase-js";
 interface BlogPost extends BlogValues {
   id: string;
   created_at: string;
+  translations?: {
+    locale: string;
+    title: string;
+    slug: string;
+    excerpt?: string | null;
+    content: string;
+  }[];
 }
 
 export function BlogClient({ 

@@ -25,7 +25,16 @@ import Image from "next/image";
 import { User } from "@supabase/supabase-js";
 
 interface BlogFormProps {
-  initialData?: BlogValues & { id: string };
+  initialData?: BlogValues & {
+    id: string;
+    translations?: {
+      locale: string;
+      title: string;
+      slug: string;
+      excerpt?: string | null;
+      content: string;
+    }[];
+  };
   onSuccess?: () => void;
   currentUser?: User | null;
 }
@@ -48,6 +57,20 @@ export function BlogForm({ initialData, onSuccess, currentUser }: BlogFormProps)
     },
   });
 
+  const jaForm = useForm<{
+    title: string;
+    slug: string;
+    excerpt: string;
+    content: string;
+  }>({
+    defaultValues: {
+      title: "",
+      slug: "",
+      excerpt: "",
+      content: "",
+    },
+  });
+
   useEffect(() => {
     if (initialData) {
       form.reset({
@@ -60,8 +83,18 @@ export function BlogForm({ initialData, onSuccess, currentUser }: BlogFormProps)
         is_published: initialData.is_published,
         published_at: initialData.published_at || "",
       });
+
+      const ja = initialData.translations?.find((t) => t.locale === "ja");
+      if (ja) {
+        jaForm.reset({
+          title: ja.title || "",
+          slug: ja.slug || "",
+          excerpt: ja.excerpt || "",
+          content: ja.content || "",
+        });
+      }
     }
-  }, [initialData, form]);
+  }, [initialData, form, jaForm]);
 
   const imageUrl = form.watch("image_url");
 
@@ -100,11 +133,13 @@ export function BlogForm({ initialData, onSuccess, currentUser }: BlogFormProps)
   async function onSubmit(values: BlogValues) {
     setLoading(true);
     try {
+      const jaValues = jaForm.getValues();
       if (initialData?.id) {
-        await updateBlogPost(initialData.id, values);
+        await updateBlogPost(initialData.id, values, jaValues);
       } else {
-        await createBlogPost(values);
+        await createBlogPost(values, jaValues);
         form.reset();
+        jaForm.reset();
       }
       onSuccess?.();
     } catch (error) {
@@ -207,6 +242,75 @@ export function BlogForm({ initialData, onSuccess, currentUser }: BlogFormProps)
             </FormItem>
           )}
         />
+
+        <Form {...jaForm}>
+          <div className="rounded-lg border p-4 space-y-4">
+            <div className="text-sm font-semibold">Japanese Translation (JA)</div>
+            <FormField
+              control={jaForm.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Post Title (JA)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. Nihon ryugaku no hajimekata" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={jaForm.control}
+              name="slug"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Slug (JA)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g. nihon-ryugaku-start" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    The localized URL will be: /blog/{"{slug}"}
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={jaForm.control}
+              name="excerpt"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Excerpt (JA)</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Short summary in Japanese..."
+                      className="h-20 resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={jaForm.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Content (JA)</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Full content in Japanese..."
+                      className="h-60"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </Form>
         
         <div className="space-y-2">
           <Label>Featured Image</Label>

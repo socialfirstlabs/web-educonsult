@@ -4,13 +4,20 @@ import { createClient } from "@/lib/supabase/server";
 import { blogSchema, BlogValues } from "@/lib/validations/blog.schema";
 import { revalidatePath } from "next/cache";
 
+type BlogTranslationInput = {
+  title: string;
+  slug: string;
+  excerpt?: string;
+  content: string;
+};
+
 export async function getBlogPosts(onlyPublished = false) {
   const supabase = await createClient();
   if (!supabase) return [];
 
   let query = supabase
     .from("blog_posts")
-    .select("*")
+    .select("*, translations:blog_translations(locale,title,slug,excerpt,content)")
     .order("created_at", { ascending: false });
 
   if (onlyPublished) {
@@ -24,6 +31,10 @@ export async function getBlogPosts(onlyPublished = false) {
   }
 
   return data;
+}
+
+export async function getBlogPostsForDashboard() {
+  return getBlogPosts();
 }
 
 export async function getBlogPostBySlug(slug: string) {
@@ -44,7 +55,10 @@ export async function getBlogPostBySlug(slug: string) {
   return data;
 }
 
-export async function createBlogPost(values: BlogValues) {
+export async function createBlogPost(
+  values: BlogValues,
+  translation?: BlogTranslationInput
+) {
   const validatedFields = blogSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -54,16 +68,46 @@ export async function createBlogPost(values: BlogValues) {
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
 
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from("blog_posts")
     .insert([{
       ...validatedFields.data,
       published_at: validatedFields.data.is_published ? new Date().toISOString() : null
-    }]);
+    }])
+    .select("id")
+    .single();
 
   if (error) {
     console.error("Create blog post error:", error);
     throw new Error(error.message);
+  }
+
+  if (
+    translation &&
+    translation.title.trim() &&
+    translation.slug.trim() &&
+    translation.content.trim() &&
+    data?.id
+  ) {
+    const { error: translationError } = await supabase
+      .from("blog_translations")
+      .upsert(
+        [
+          {
+            blog_id: data.id,
+            locale: "ja",
+            title: translation.title.trim(),
+            slug: translation.slug.trim(),
+            excerpt: translation.excerpt?.trim() || null,
+            content: translation.content.trim(),
+          },
+        ],
+        { onConflict: "blog_id,locale" }
+      );
+
+    if (translationError) {
+      throw new Error(translationError.message);
+    }
   }
 
   revalidatePath("/blog");
@@ -71,7 +115,11 @@ export async function createBlogPost(values: BlogValues) {
   return { success: true };
 }
 
-export async function updateBlogPost(id: string, values: BlogValues) {
+export async function updateBlogPost(
+  id: string,
+  values: BlogValues,
+  translation?: BlogTranslationInput
+) {
   const validatedFields = blogSchema.safeParse(values);
 
   if (!validatedFields.success) {
@@ -92,6 +140,33 @@ export async function updateBlogPost(id: string, values: BlogValues) {
   if (error) {
     console.error("Update blog post error:", error);
     throw new Error(error.message);
+  }
+
+  if (
+    translation &&
+    translation.title.trim() &&
+    translation.slug.trim() &&
+    translation.content.trim()
+  ) {
+    const { error: translationError } = await supabase
+      .from("blog_translations")
+      .upsert(
+        [
+          {
+            blog_id: id,
+            locale: "ja",
+            title: translation.title.trim(),
+            slug: translation.slug.trim(),
+            excerpt: translation.excerpt?.trim() || null,
+            content: translation.content.trim(),
+          },
+        ],
+        { onConflict: "blog_id,locale" }
+      );
+
+    if (translationError) {
+      throw new Error(translationError.message);
+    }
   }
 
   revalidatePath("/blog");

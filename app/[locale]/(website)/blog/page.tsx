@@ -1,5 +1,4 @@
 import { getBlogPosts } from "@/lib/actions/blog.action";
-import { createClient } from "@/lib/supabase/server";
 import {
   Card,
   CardContent,
@@ -31,28 +30,8 @@ export default async function BlogPage({
   const { locale } = await params;
   const safeLocale = locale as Locale;
   const t = getT(safeLocale);
-  const supabase = await createClient();
-
-  if (!supabase)
-    return (
-      <div className="container py-20 px-4">
-        Supabase configuration missing.
-      </div>
-    );
-
-  const { data, error } = await supabase
-    .from("blog_posts")
-    .select(
-      "*, translations:blog_translations(locale,title,slug,excerpt,content)",
-    )
-    .eq("is_published", true)
-    .order("published_at", { ascending: false });
-
-  if (error) {
-    return <div className="container py-20 px-4">Failed to load posts.</div>;
-  }
-
-  const posts = (data ?? []).map((post) => {
+  const posts = await getBlogPosts(true);
+  const localizedPosts = (posts ?? []).map((post) => {
     const translation = post.translations?.find(
       (item: { locale: string }) => item.locale === safeLocale,
     );
@@ -72,7 +51,7 @@ export default async function BlogPage({
       </div>
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {posts?.map((post) => (
+        {localizedPosts?.map((post) => (
           <Link
             href={`/${safeLocale}/blog/${post.slug}`}
             key={post.id}
@@ -120,7 +99,7 @@ export default async function BlogPage({
             </Card>
           </Link>
         ))}
-        {posts.length === 0 && (
+        {localizedPosts.length === 0 && (
           <div className="col-span-full py-20 text-center bg-muted/30 rounded-2xl">
             <p className="text-muted-foreground">{t("blog.empty")}</p>
           </div>

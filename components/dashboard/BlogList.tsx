@@ -35,10 +35,18 @@ import { format } from "date-fns";
 import { BlogForm } from "./BlogForm";
 import { deleteBlogPost } from "@/lib/actions/blog.action";
 import { BlogValues } from "@/lib/validations/blog.schema";
+import { defaultLocale } from "@/lib/i18n/config";
 
 interface BlogPost extends BlogValues {
   id: string;
   created_at: string;
+  translations?: {
+    locale: string;
+    title: string;
+    slug: string;
+    excerpt?: string | null;
+    content: string;
+  }[];
 }
 
 export function BlogList({ posts }: { posts: BlogPost[] }) {
@@ -119,7 +127,11 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
                         }
                       />
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => window.open(`/blog/${post.slug}`, '_blank')}>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            window.open(`/${defaultLocale}/blog/${post.slug}`, "_blank")
+                          }
+                        >
                           <ExternalLink className="mr-2 h-4 w-4" /> View Live
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={() => setEditingPost(post)}>
