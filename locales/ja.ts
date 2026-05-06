@@ -36,6 +36,7 @@ export const ja: Record<TranslationKey, string> = {
   "home.whyJapan.items.6": "卒業後のキャリアパス",
   "home.cta.title": "最初の一歩を踏み出しましょう",
   "home.cta.subtitle": "経験豊富なカウンセラーが全行程をサポートします。",
+  "services.empty": "現在掲載中のサービスはありません。",
   "languageClasses.title": "日本語クラス",
   "languageClasses.subtitle": "JLPT認定講師による実践的な学習環境で日本語を習得しましょう。",
   "languageClasses.empty": "現在開講中のコースはありません。",
@@ -121,5 +122,14 @@ export const ja: Record<TranslationKey, string> = {
   "form.message": "ご相談内容",
   "form.messagePlaceholder": "日本語を学びたいのですが...",
   "form.submit": "送信",
-  "form.submitting": "送信中..."
+  "form.submitting": "送信中...",
+  "footer.brandTitle": "エデュネパール・コンサルティング",
+  "footer.brandDesc": "日本留学と日本語学習の夢を叶えるお手伝いをします。",
+  "footer.quickLinks": "クイックリンク",
+  "footer.contactInfoTitle": "連絡先",
+  "footer.contactInfoValue": "カトマンズ、ネパール\n電話: +977-1-4XXXXXX\nメール: info@edunepal.com",
+  "footer.contactUs": "お問い合わせ",
+  "footer.adminLogin": "管理者ログイン",
+  "footer.servicesFallback1": "留学カウンセリング",
+  "footer.servicesFallback2": "ビザ手続き"
 };

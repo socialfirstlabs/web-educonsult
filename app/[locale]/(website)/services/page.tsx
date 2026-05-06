@@ -31,11 +31,12 @@ const iconMap: Record<string, LucideIcon> = {
 export default async function ServicesPage({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = getT(locale);
-  const services = await getServices(locale);
+  const safeLocale = locale as Locale;
+  const t = getT(safeLocale);
+  const services = await getServices(safeLocale);
   const activeServices = services.filter(s => s.is_active);
 
   return (
@@ -49,7 +50,7 @@ export default async function ServicesPage({
 
       {activeServices.length === 0 ? (
         <div className="text-center py-20">
-          <p className="text-muted-foreground">{t("languageClasses.empty")}</p>
+          <p className="text-muted-foreground">{t("services.empty")}</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-8">

@@ -16,6 +16,15 @@ import { type CourseValues } from "@/lib/validations/course.schema";
 
 interface Course extends CourseValues {
   id: string;
+  translations?: {
+    locale: string;
+    title: string;
+    description: string;
+    duration?: string | null;
+    schedule?: string | null;
+    fees?: string | null;
+    badge?: string | null;
+  }[];
 }
 
 export function CourseClient({ courses }: { courses: Course[] }) {
@@ -38,7 +47,7 @@ export function CourseClient({ courses }: { courses: Course[] }) {
               </Button>
             }
           />
-          <DialogContent className="sm:max-w-[600px]">
+          <DialogContent className="w-full max-h-[85vh] overflow-y-auto sm:max-w-[720px]">
             <DialogHeader>
               <DialogTitle>Add New Course</DialogTitle>
             </DialogHeader>

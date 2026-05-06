@@ -1,4 +1,4 @@
-import { getSuccessStories } from "@/lib/actions/success-story.action";
+import { getSuccessStoriesForDashboard } from "@/lib/actions/success-story.action";
 import { SuccessStoryClient } from "@/components/dashboard/SuccessStoryClient";
 
 export const metadata = {
@@ -6,7 +6,7 @@ export const metadata = {
 };
 
 export default async function SuccessStoriesPage() {
-  const stories = await getSuccessStories();
+  const stories = await getSuccessStoriesForDashboard();
 
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">

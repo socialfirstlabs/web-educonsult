@@ -11,11 +11,12 @@ export const metadata = {
 export default async function ContactPage({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = getT(locale);
-  const courses = await getPublishedCourses(locale);
+  const safeLocale = locale as Locale;
+  const t = getT(safeLocale);
+  const courses = await getPublishedCourses(safeLocale);
 
   return (
     <div className="container py-20 px-4">
@@ -29,7 +30,7 @@ export default async function ContactPage({
           <div>
             <h2 className="text-2xl font-bold mb-6">{t("contact.freeCounselingTitle")}</h2>
             <p className="mb-8 text-muted-foreground">{t("contact.freeCounselingDesc")}</p>
-            <LeadForm courses={courses} locale={locale} />
+            <LeadForm courses={courses} locale={safeLocale} />
           </div>
 
           <div className="space-y-8">

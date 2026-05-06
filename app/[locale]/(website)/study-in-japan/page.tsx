@@ -12,10 +12,11 @@ export const metadata = {
 export default async function StudyInJapanPage({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = getT(locale);
+  const safeLocale = locale as Locale;
+  const t = getT(safeLocale);
   return (
     <div className="container py-20 px-4 space-y-20">
       {/* Hero Section */}
@@ -27,7 +28,7 @@ export default async function StudyInJapanPage({
           </h1>
           <p className="text-xl text-muted-foreground">{t("studyJapan.heroSubtitle")}</p>
           <div className="flex gap-4">
-            <Link href={`/${locale}/contact`}>
+            <Link href={`/${safeLocale}/contact`}>
                <Button size="lg" className="px-8">{t("cta.freeCounseling")}</Button>
             </Link>
           </div>
@@ -102,7 +103,7 @@ export default async function StudyInJapanPage({
         <div className="bg-white/10 p-8 rounded-2xl backdrop-blur-sm border border-white/20">
            <h3 className="text-xl font-bold mb-4">{t("studyJapan.ctaTitle")}</h3>
            <p className="mb-8 opacity-90">{t("studyJapan.ctaSubtitle")}</p>
-           <Link href={`/${locale}/contact`}>
+           <Link href={`/${safeLocale}/contact`}>
               <Button variant="secondary" size="lg" className="w-full">{t("cta.bookFreeCounseling")}</Button>
            </Link>
         </div>

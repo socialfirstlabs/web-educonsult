@@ -7,9 +7,10 @@ import type { Locale } from "@/lib/i18n";
 export default async function BlogPostPage({
   params,
 }: {
-  params: Promise<{ slug: string; locale: Locale }>;
+  params: Promise<{ slug: string; locale: string }>;
 }) {
   const { slug, locale } = await params;
+  const safeLocale = locale as Locale;
   const supabase = await createClient();
   
   if (!supabase) return <div className="container py-20 px-4">Supabase configuration missing.</div>;
@@ -23,7 +24,7 @@ export default async function BlogPostPage({
   if (!post) notFound();
 
   const translation = post.translations?.find(
-    (item: { locale: string }) => item.locale === locale
+    (item: { locale: string }) => item.locale === safeLocale
   );
   const { translations: _translations, ...base } = post;
   void _translations;

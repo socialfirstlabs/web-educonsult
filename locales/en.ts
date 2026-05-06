@@ -34,6 +34,7 @@ export const en = {
   "home.whyJapan.items.6": "Post-study work pathways",
   "home.cta.title": "Ready to take the first step?",
   "home.cta.subtitle": "Our expert counselors are ready to guide you through the entire process.",
+  "services.empty": "No services listed at the moment. Please check back later.",
   "languageClasses.title": "Japanese Language Classes",
   "languageClasses.subtitle": "Master the Japanese language with our JLPT-certified instructors and interactive learning environment.",
   "languageClasses.empty": "No courses are currently available. Please check back later.",
@@ -120,6 +121,15 @@ export const en = {
   "form.messagePlaceholder": "I am interested in studying Japanese and...",
   "form.submit": "Submit Inquiry",
   "form.submitting": "Sending..."
+  ,"footer.brandTitle": "EduNepal Consultancy"
+  ,"footer.brandDesc": "Helping students achieve their dreams of studying in Japan and mastering the Japanese language."
+  ,"footer.quickLinks": "Quick Links"
+  ,"footer.contactInfoTitle": "Contact Info"
+  ,"footer.contactInfoValue": "Kathmandu, Nepal\nPhone: +977-1-4XXXXXX\nEmail: info@edunepal.com"
+  ,"footer.contactUs": "Contact Us"
+  ,"footer.adminLogin": "Admin Login"
+  ,"footer.servicesFallback1": "Study Abroad Counseling"
+  ,"footer.servicesFallback2": "Visa Processing"
 } as const;
 
 export type TranslationKey = keyof typeof en;

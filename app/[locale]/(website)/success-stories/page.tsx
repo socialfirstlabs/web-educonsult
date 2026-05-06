@@ -13,11 +13,12 @@ export const metadata = {
 export default async function SuccessStoriesPage({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = getT(locale);
-  const stories = await getPublishedSuccessStories(locale);
+  const safeLocale = locale as Locale;
+  const t = getT(safeLocale);
+  const stories = await getPublishedSuccessStories(safeLocale);
 
   return (
     <div className="container py-20 px-4">
@@ -80,7 +81,7 @@ export default async function SuccessStoriesPage({
           {t("cta.contactForCounseling")}
         </p>
         <Link
-          href={`/${locale}/contact`}
+          href={`/${safeLocale}/contact`}
           className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-background text-primary hover:bg-background/90 h-11 px-8"
         >
           {t("cta.bookFreeCounseling")}

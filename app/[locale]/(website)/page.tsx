@@ -7,10 +7,11 @@ import { getT, type Locale } from "@/lib/i18n";
 export default async function HomePage({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = getT(locale);
+  const safeLocale = locale as Locale;
+  const t = getT(safeLocale);
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
@@ -23,7 +24,7 @@ export default async function HomePage({
             {t("home.heroSubtitle")}
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href={`/${locale}/contact`}>
+            <Link href={`/${safeLocale}/contact`}>
               <Button
                 size="lg"
                 className="bg-white text-blue-900 hover:bg-blue-50 text-lg px-8 py-6"
@@ -31,7 +32,7 @@ export default async function HomePage({
                 {t("cta.freeCounseling")}
               </Button>
             </Link>
-            <Link href={`/${locale}/language-classes`}>
+            <Link href={`/${safeLocale}/language-classes`}>
               <Button
                 size="lg"
                 variant="outline"
@@ -103,7 +104,7 @@ export default async function HomePage({
                 </li>
               ))}
             </ul>
-            <Link href={`/${locale}/study-in-japan`} className="inline-block mt-8">
+            <Link href={`/${safeLocale}/study-in-japan`} className="inline-block mt-8">
               <Button variant="link" className="p-0 text-primary font-bold">
                 {t("cta.learnMoreJapan")}
               </Button>
@@ -126,7 +127,7 @@ export default async function HomePage({
           <p className="text-xl mb-10 opacity-90 max-w-2xl mx-auto">
             {t("home.cta.subtitle")}
           </p>
-          <Link href={`/${locale}/contact`}>
+          <Link href={`/${safeLocale}/contact`}>
             <Button
               size="lg"
               variant="secondary"

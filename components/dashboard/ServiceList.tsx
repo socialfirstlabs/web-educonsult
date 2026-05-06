@@ -42,6 +42,7 @@ import { type ServiceValues } from "@/lib/validations/service.schema";
 
 interface Service extends ServiceValues {
   id: string;
+  translations?: { locale: string; title: string; description: string; features?: string | null }[];
 }
 
 const iconMap: Record<string, LucideIcon> = {
@@ -128,17 +129,17 @@ export function ServiceList({ services }: { services: Service[] }) {
         open={!!editingService} 
         onOpenChange={(open) => !open && setEditingService(null)}
       >
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Edit Service</DialogTitle>
-          </DialogHeader>
-          {editingService && (
-            <ServiceForm 
-              initialData={editingService} 
-              onSuccess={() => setEditingService(null)} 
-            />
-          )}
-        </DialogContent>
+      <DialogContent className="w-full max-h-[85vh] overflow-y-auto sm:max-w-[720px]">
+        <DialogHeader>
+          <DialogTitle>Edit Service</DialogTitle>
+        </DialogHeader>
+        {editingService && (
+          <ServiceForm 
+            initialData={editingService} 
+            onSuccess={() => setEditingService(null)} 
+          />
+        )}
+      </DialogContent>
       </Dialog>
     </>
   );

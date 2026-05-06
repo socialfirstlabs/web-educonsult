@@ -13,10 +13,11 @@ export const metadata = {
 export default async function BlogPage({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = getT(locale);
+  const safeLocale = locale as Locale;
+  const t = getT(safeLocale);
   const supabase = await createClient();
   
   if (!supabase) return <div className="container py-20 px-4">Supabase configuration missing.</div>;
@@ -33,7 +34,7 @@ export default async function BlogPage({
 
   const posts = (data ?? []).map((post) => {
     const translation = post.translations?.find(
-      (item: { locale: string }) => item.locale === locale
+      (item: { locale: string }) => item.locale === safeLocale
     );
     const { translations: _translations, ...base } = post;
     void _translations;
@@ -52,7 +53,7 @@ export default async function BlogPage({
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
         {posts?.map((post) => (
-          <Link href={`/${locale}/blog/${post.slug}`} key={post.id} className="group">
+          <Link href={`/${safeLocale}/blog/${post.slug}`} key={post.id} className="group">
             <Card className="h-full overflow-hidden transition-all group-hover:shadow-lg">
               <div className="aspect-video bg-muted relative overflow-hidden">
                 {post.image_url ? (

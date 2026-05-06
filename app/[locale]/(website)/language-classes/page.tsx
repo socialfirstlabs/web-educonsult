@@ -14,11 +14,12 @@ export const metadata = {
 export default async function LanguageClassesPage({
   params,
 }: {
-  params: Promise<{ locale: Locale }>;
+  params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const t = getT(locale);
-  const courses = await getPublishedCourses(locale);
+  const safeLocale = locale as Locale;
+  const t = getT(safeLocale);
+  const courses = await getPublishedCourses(safeLocale);
 
   return (
     <div className="container py-20 px-4">
@@ -59,7 +60,7 @@ export default async function LanguageClassesPage({
                 </div>
               </CardContent>
               <CardFooter>
-                <Link href={`/${locale}/contact`} className="w-full">
+                <Link href={`/${safeLocale}/contact`} className="w-full">
                   <Button className="w-full" size="lg">{t("cta.enrollNow")}</Button>
                 </Link>
               </CardFooter>

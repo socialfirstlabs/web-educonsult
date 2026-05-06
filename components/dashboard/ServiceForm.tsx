@@ -22,7 +22,10 @@ import { Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 interface ServiceFormProps {
-  initialData?: ServiceValues & { id: string };
+  initialData?: ServiceValues & {
+    id: string;
+    translations?: { locale: string; title: string; description: string; features?: string | null }[];
+  };
   onSuccess?: () => void;
 }
 
@@ -51,6 +54,16 @@ export function ServiceForm({ initialData, onSuccess }: ServiceFormProps) {
     },
   });
 
+  const jaForm = useForm<{ title: string; description: string; features: string }>(
+    {
+      defaultValues: {
+        title: "",
+        description: "",
+        features: "",
+      },
+    }
+  );
+
   useEffect(() => {
     if (initialData) {
       form.reset({
@@ -61,17 +74,28 @@ export function ServiceForm({ initialData, onSuccess }: ServiceFormProps) {
         is_active: initialData.is_active,
         order_index: initialData.order_index,
       });
+
+      const ja = initialData.translations?.find((t) => t.locale === "ja");
+      if (ja) {
+        jaForm.reset({
+          title: ja.title || "",
+          description: ja.description || "",
+          features: ja.features || "",
+        });
+      }
     }
-  }, [initialData, form]);
+  }, [initialData, form, jaForm]);
 
   async function onSubmit(values: ServiceValues) {
     setLoading(true);
     try {
+      const jaValues = jaForm.getValues();
       if (initialData?.id) {
-        await updateService(initialData.id, values);
+        await updateService(initialData.id, values, jaValues);
       } else {
-        await addService(values);
+        await addService(values, jaValues);
         form.reset();
+        jaForm.reset();
       }
       onSuccess?.();
     } catch (error) {
@@ -131,6 +155,57 @@ export function ServiceForm({ initialData, onSuccess }: ServiceFormProps) {
             </FormItem>
           )}
         />
+        <Form {...jaForm}>
+          <div className="rounded-lg border p-4 space-y-4">
+            <div className="text-sm font-semibold">Japanese Translation (JA)</div>
+            <FormField
+              control={jaForm.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Service Title (JA)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="例: ビザ手続き" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={jaForm.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description (JA)</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="サービス内容を日本語で入力..."
+                      className="resize-none"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={jaForm.control}
+              name="features"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Key Features (JA)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="例: 専門相談,迅速対応" {...field} />
+                  </FormControl>
+                  <FormDescription>
+                    Enter features separated by commas.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </Form>
         <div className="grid grid-cols-2 gap-4">
           <FormField
             control={form.control}

@@ -16,11 +16,22 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { addCourse, updateCourse } from "@/lib/actions/course.action";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 
 interface CourseFormProps {
-  initialData?: CourseValues & { id: string };
+  initialData?: CourseValues & {
+    id: string;
+    translations?: {
+      locale: string;
+      title: string;
+      description: string;
+      duration?: string | null;
+      schedule?: string | null;
+      fees?: string | null;
+      badge?: string | null;
+    }[];
+  };
   onSuccess?: () => void;
 }
 
@@ -41,13 +52,33 @@ export function CourseForm({ initialData, onSuccess }: CourseFormProps) {
     },
   });
 
+  const jaForm = useForm<{
+    title: string;
+    description: string;
+    duration: string;
+    schedule: string;
+    fees: string;
+    badge: string;
+  }>({
+    defaultValues: {
+      title: "",
+      description: "",
+      duration: "",
+      schedule: "",
+      fees: "",
+      badge: "",
+    },
+  });
+
   async function onSubmit(values: CourseValues) {
     setLoading(true);
     try {
+      const jaValues = jaForm.getValues();
       if (initialData?.id) {
-        await updateCourse(initialData.id, values);
+        await updateCourse(initialData.id, values, jaValues);
       } else {
-        await addCourse(values);
+        await addCourse(values, jaValues);
+        jaForm.reset();
       }
       onSuccess?.();
     } catch (error) {
@@ -56,6 +87,22 @@ export function CourseForm({ initialData, onSuccess }: CourseFormProps) {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    if (initialData && initialData.translations) {
+      const ja = initialData.translations.find((t) => t.locale === "ja");
+      if (ja) {
+        jaForm.reset({
+          title: ja.title || "",
+          description: ja.description || "",
+          duration: ja.duration || "",
+          schedule: ja.schedule || "",
+          fees: ja.fees || "",
+          badge: ja.badge || "",
+        });
+      }
+    }
+  }, [initialData, jaForm]);
 
   return (
     <Form {...form}>
@@ -187,6 +234,93 @@ export function CourseForm({ initialData, onSuccess }: CourseFormProps) {
             </FormItem>
           )}
         />
+        <Form {...jaForm}>
+          <div className="rounded-lg border p-4 space-y-4">
+            <div className="text-sm font-semibold">Japanese Translation (JA)</div>
+            <FormField
+              control={jaForm.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Course Title (JA)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="例: 日本語N5" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={jaForm.control}
+              name="description"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Description (JA)</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="コース内容..." className="resize-none" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={jaForm.control}
+                name="duration"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Duration (JA)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="例: 6か月" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={jaForm.control}
+                name="schedule"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Schedule (JA)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="例: 朝 7:00 - 9:00" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={jaForm.control}
+                name="fees"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Fees (JA)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="例: NPR 20,000" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={jaForm.control}
+                name="badge"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Badge (JA)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="例: 人気" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+          </div>
+        </Form>
         <Button type="submit" className="w-full" disabled={loading}>
           {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
           {initialData ? "Update Course" : "Add Course"}

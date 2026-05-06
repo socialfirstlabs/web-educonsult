@@ -36,6 +36,15 @@ import { type CourseValues } from "@/lib/validations/course.schema";
 
 interface Course extends CourseValues {
   id: string;
+  translations?: {
+    locale: string;
+    title: string;
+    description: string;
+    duration?: string | null;
+    schedule?: string | null;
+    fees?: string | null;
+    badge?: string | null;
+  }[];
 }
 
 export function CourseList({ courses }: { courses: Course[] }) {
@@ -136,17 +145,17 @@ export function CourseList({ courses }: { courses: Course[] }) {
         open={!!editingCourse} 
         onOpenChange={(open) => !open && setEditingCourse(null)}
       >
-        <DialogContent className="sm:max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle>Edit Course</DialogTitle>
-          </DialogHeader>
-          {editingCourse && (
-            <CourseForm 
-              initialData={editingCourse} 
-              onSuccess={() => setEditingCourse(null)} 
-            />
-          )}
-        </DialogContent>
+      <DialogContent className="w-full max-h-[85vh] overflow-y-auto sm:max-w-[720px]">
+        <DialogHeader>
+          <DialogTitle>Edit Course</DialogTitle>
+        </DialogHeader>
+        {editingCourse && (
+          <CourseForm 
+            initialData={editingCourse} 
+            onSuccess={() => setEditingCourse(null)} 
+          />
+        )}
+      </DialogContent>
       </Dialog>
     </>
   );
