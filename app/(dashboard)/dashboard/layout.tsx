@@ -11,6 +11,7 @@ import { getUserAction } from "@/lib/actions/auth.action";
 import { LogoutButton } from "@/components/dashboard/LogoutButton";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { redirect } from "next/navigation";
+import { FEATURE_FLAGS } from "@/lib/constants";
 
 export default async function DashboardLayout({
   children,
@@ -43,9 +44,11 @@ export default async function DashboardLayout({
           <Link href="/dashboard/courses" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
             <BookOpen size={20} /> Courses
           </Link>
-          <Link href="/dashboard/blog" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
-            <FileText size={20} /> Blog
-          </Link>
+          {FEATURE_FLAGS.ENABLE_BLOG && (
+            <Link href="/dashboard/blog" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
+              <FileText size={20} /> Blog
+            </Link>
+          )}
           <Link href="/dashboard/success-stories" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
             <ImageIcon size={20} /> Success Stories
           </Link>

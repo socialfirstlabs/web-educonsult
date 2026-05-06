@@ -1,13 +1,32 @@
-export default function DashboardBlogPage() {
+import { BlogClient } from "@/components/dashboard/BlogClient";
+import { getBlogPosts } from "@/lib/actions/blog.action";
+import { BlogValues } from "@/lib/validations/blog.schema";
+import { FEATURE_FLAGS } from "@/lib/constants";
+import { notFound } from "next/navigation";
+import { getUserAction } from "@/lib/actions/auth.action";
+import { User } from "@supabase/supabase-js";
+
+interface BlogPost extends BlogValues {
+  id: string;
+  created_at: string;
+}
+
+export default async function DashboardBlogPage() {
+  if (!FEATURE_FLAGS.ENABLE_BLOG) {
+    notFound();
+  }
+
+  const [posts, user] = await Promise.all([
+    getBlogPosts(),
+    getUserAction()
+  ]);
+
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Blog Management</h1>
-        <button className="px-4 py-2 bg-primary text-primary-foreground rounded-md font-medium">New Post</button>
-      </div>
-      <div className="p-20 border-2 border-dashed rounded-xl flex items-center justify-center text-muted-foreground">
-         <p>Blog CMS functionality coming soon.</p>
-      </div>
+    <div className="container mx-auto">
+      <BlogClient 
+        posts={posts as BlogPost[]} 
+        currentUser={user as User | null}
+      />
     </div>
   );
 }
