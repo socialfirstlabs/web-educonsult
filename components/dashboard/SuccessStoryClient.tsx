@@ -17,6 +17,13 @@ import { SuccessStoryList } from "./SuccessStoryList";
 interface SuccessStory extends SuccessStoryValues {
   id: string;
   created_at: string;
+  translations?: {
+    locale: string;
+    student_name: string;
+    destination_country: string;
+    university_name?: string | null;
+    testimonial?: string | null;
+  }[];
 }
 
 export function SuccessStoryClient({ stories }: { stories: SuccessStory[] }) {
@@ -39,7 +46,7 @@ export function SuccessStoryClient({ stories }: { stories: SuccessStory[] }) {
               </Button>
             }
           />
-          <DialogContent className="sm:max-w-[600px]">
+          <DialogContent className="w-full max-h-[85vh] overflow-y-auto sm:max-w-[720px]">
             <DialogHeader>
               <DialogTitle>Add Success Story</DialogTitle>
             </DialogHeader>

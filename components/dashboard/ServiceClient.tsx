@@ -16,6 +16,7 @@ import { type ServiceValues } from "@/lib/validations/service.schema";
 
 interface Service extends ServiceValues {
   id: string;
+  translations?: { locale: string; title: string; description: string; features?: string | null }[];
 }
 
 export function ServiceClient({ services }: { services: Service[] }) {
@@ -33,7 +34,7 @@ export function ServiceClient({ services }: { services: Service[] }) {
               </Button>
             }
           />
-          <DialogContent>
+          <DialogContent className="w-full max-h-[85vh] overflow-y-auto sm:max-w-[720px]">
             <DialogHeader>
               <DialogTitle>Add New Service</DialogTitle>
             </DialogHeader>

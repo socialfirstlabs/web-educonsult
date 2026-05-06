@@ -39,6 +39,13 @@ import { SuccessStoryValues } from "@/lib/validations/success-story.schema";
 interface SuccessStory extends SuccessStoryValues {
   id: string;
   created_at: string;
+  translations?: {
+    locale: string;
+    student_name: string;
+    destination_country: string;
+    university_name?: string | null;
+    testimonial?: string | null;
+  }[];
 }
 
 export function SuccessStoryList({ stories }: { stories: SuccessStory[] }) {
@@ -145,17 +152,17 @@ export function SuccessStoryList({ stories }: { stories: SuccessStory[] }) {
         open={!!editingStory} 
         onOpenChange={(open) => !open && setEditingStory(null)}
       >
-        <DialogContent className="sm:max-w-[600px]">
-          <DialogHeader>
-            <DialogTitle>Edit Success Story</DialogTitle>
-          </DialogHeader>
-          {editingStory && (
-            <SuccessStoryForm 
-              initialData={editingStory} 
-              onSuccess={() => setEditingStory(null)} 
-            />
-          )}
-        </DialogContent>
+      <DialogContent className="w-full max-h-[85vh] overflow-y-auto sm:max-w-[720px]">
+        <DialogHeader>
+          <DialogTitle>Edit Success Story</DialogTitle>
+        </DialogHeader>
+        {editingStory && (
+          <SuccessStoryForm 
+            initialData={editingStory} 
+            onSuccess={() => setEditingStory(null)} 
+          />
+        )}
+      </DialogContent>
       </Dialog>
     </>
   );

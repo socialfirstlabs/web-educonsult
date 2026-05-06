@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { submitLead } from '@/lib/actions/lead.action';
 import { leadSchema, type LeadFormValues } from '@/lib/validations/lead.schema';
+import { useTranslation } from '@/lib/i18n/useTranslation';
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -28,11 +29,13 @@ import { CheckCircle2 } from 'lucide-react';
 
 interface LeadFormProps {
   courses?: { id: string; title: string }[];
+  locale?: "en" | "ja";
 }
 
-export function LeadForm({ courses = [] }: LeadFormProps) {
+export function LeadForm({ courses = [], locale = "en" }: LeadFormProps) {
   const [isSuccess, setIsSuccess] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation(locale);
 
   const form = useForm<LeadFormValues>({
     resolver: zodResolver(leadSchema),
@@ -63,14 +66,14 @@ export function LeadForm({ courses = [] }: LeadFormProps) {
       <Alert className="bg-green-50 border-green-200">
         <CheckCircle2 className="h-4 w-4 text-green-600" />
         <AlertDescription className="text-green-800">
-          Thank you for your inquiry! One of our counselors will contact you shortly.
+          {t("form.success")}
         </AlertDescription>
         <Button 
           variant="outline" 
           className="mt-4" 
           onClick={() => setIsSuccess(false)}
         >
-          Send another inquiry
+          {t("form.sendAnother")}
         </Button>
       </Alert>
     );
@@ -90,10 +93,10 @@ export function LeadForm({ courses = [] }: LeadFormProps) {
             control={form.control}
             name="name"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel>Full Name</FormLabel>
+                <FormItem>
+                <FormLabel>{t("form.fullName")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="John Doe" {...field} />
+                  <Input placeholder={t("form.fullNamePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -104,9 +107,9 @@ export function LeadForm({ courses = [] }: LeadFormProps) {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email Address</FormLabel>
+                <FormLabel>{t("form.email")}</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="john@example.com" {...field} />
+                  <Input type="email" placeholder={t("form.emailPlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -120,9 +123,9 @@ export function LeadForm({ courses = [] }: LeadFormProps) {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone Number</FormLabel>
+                <FormLabel>{t("form.phone")}</FormLabel>
                 <FormControl>
-                  <Input placeholder="+977-98XXXXXXXX" {...field} />
+                  <Input placeholder={t("form.phonePlaceholder")} {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -133,18 +136,18 @@ export function LeadForm({ courses = [] }: LeadFormProps) {
             name="interested_country"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Interested Country</FormLabel>
+                <FormLabel>{t("form.country")}</FormLabel>
                 <Select onValueChange={field.onChange} value={field.value}>
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a country" />
+                      <SelectValue placeholder={t("form.countryPlaceholder")} />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Japan">Japan</SelectItem>
-                    <SelectItem value="Australia">Australia</SelectItem>
-                    <SelectItem value="USA">USA</SelectItem>
-                    <SelectItem value="UK">UK</SelectItem>
+                    <SelectItem value="Japan">{t("form.country.japan")}</SelectItem>
+                    <SelectItem value="Australia">{t("form.country.australia")}</SelectItem>
+                    <SelectItem value="USA">{t("form.country.usa")}</SelectItem>
+                    <SelectItem value="UK">{t("form.country.uk")}</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -158,15 +161,15 @@ export function LeadForm({ courses = [] }: LeadFormProps) {
           name="course_interest"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Course Interest (Optional)</FormLabel>
+              <FormLabel>{t("form.courseInterest")}</FormLabel>
               <Select onValueChange={field.onChange} value={field.value}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a course" />
+                    <SelectValue placeholder={t("form.coursePlaceholder")} />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="general">General Inquiry</SelectItem>
+                  <SelectItem value="general">{t("form.courseGeneral")}</SelectItem>
                   {courses.map((course) => (
                     <SelectItem key={course.id} value={course.title}>
                       {course.title}
@@ -184,10 +187,10 @@ export function LeadForm({ courses = [] }: LeadFormProps) {
           name="message"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tell us about your plans</FormLabel>
+              <FormLabel>{t("form.message")}</FormLabel>
               <FormControl>
                 <Textarea 
-                  placeholder="I am interested in studying Japanese and..." 
+                  placeholder={t("form.messagePlaceholder")} 
                   className="min-h-[120px]"
                   {...field} 
                 />
@@ -198,7 +201,7 @@ export function LeadForm({ courses = [] }: LeadFormProps) {
         />
 
         <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Sending..." : "Submit Inquiry"}
+          {form.formState.isSubmitting ? t("form.submitting") : t("form.submit")}
         </Button>
       </form>
     </Form>

@@ -10,8 +10,12 @@ The following workflows must be strictly followed for all changes.
 
 ## 2. Database & Schema Workflow
 1. **Schema:** Check `supabase.md` before adding new tables or columns.
-2. **Types:** Run `npx supabase gen types typescript --project-id "..." > types/supabase.ts` after schema changes.
-3. **Actions:** Create/Update Server Actions in `lib/actions/` ensuring Zod validation in `lib/validations/`.
+2. **Types:** Run after schema changes — regenerates `types/supabase.ts`:
+   ```bash
+   npx supabase gen types typescript --project-id svecpkgbhyteupsmtvvl > types/supabase.ts
+   ```
+3. **Type usage:** Use `Tables<T>`, `TablesInsert<T>`, `TablesUpdate<T>` from `@/types`.
+4. **Actions:** Create/Update Server Actions in `lib/actions/` ensuring Zod validation in `lib/validations/`.
 
 ## 3. Tailwind 4 & UI Workflow
 1. **Styling:** Use Tailwind 4 utility classes.
@@ -24,5 +28,8 @@ The following workflows must be strictly followed for all changes.
 3. **Validation:** Check `app/(website)/blog/[slug]/page.tsx` for metadata and visual layout.
 
 ## 4. Authentication Workflow
-- Middleware `middleware.ts` handles all protection logic.
+- `middleware.ts` at the project root handles both locale routing and auth protection.
+- It redirects unauthenticated requests to `/dashboard/*` → `/login`.
+- It redirects authenticated users at `/login` → `/dashboard`.
 - Protected routes MUST be inside `app/(dashboard)/dashboard/`.
+- `lib/supabase/server.ts` provides the authenticated server client for use in layouts and actions.

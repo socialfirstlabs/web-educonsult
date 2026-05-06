@@ -1,5 +1,8 @@
 # MEMORY.md
 
+> **Append-only session log.** After each significant work session, append new facts below.
+> Source-of-truth specs live in `GEMINI.md`. This file captures live project state.
+
 High-signal project notes for future sessions.
 
 ## Stack
@@ -13,14 +16,17 @@ High-signal project notes for future sessions.
 
 ## App structure
 
-- Public site routes live in `app/(website)`.
+- Public site routes live in `app/[locale]/(website)` (locale-prefixed).
 - Admin dashboard routes live in `app/(dashboard)/dashboard`.
-- Login page is `app/login/page.tsx`.
+- Login page is `app/login/page.tsx` — intentionally outside the locale system.
 
 ## Auth + Supabase
 
-- Dashboard auth is enforced in `app/(dashboard)/dashboard/layout.tsx` using `lib/actions/auth.action.ts`.
-- No `middleware.ts` exists; do not assume middleware-based auth.
+- `middleware.ts` exists at the project root and handles:
+  1. Locale routing: `/` → `/en`, and bare paths → `/{defaultLocale}/{path}`
+  2. Supabase session refresh on every request
+  3. Dashboard route protection (redirect to `/login` if unauthenticated)
+  4. Login page redirect if already authenticated → `/dashboard`
 - Supabase clients return `null` when env vars are missing; many server actions handle this by returning `null` or errors.
 - Supabase server client: `lib/supabase/server.ts`; browser client: `lib/supabase/client.ts`.
 
@@ -33,6 +39,17 @@ High-signal project notes for future sessions.
 
 - Schema and RLS policies are documented in `supabase.md`.
 - Storage bucket: `images` (public); upload logic in `lib/actions/storage.action.ts`.
+- **Translation table pattern:** Every content type has a base table (EN) and a `*_translations` table per locale.
+  - `blog_posts` + `blog_translations`
+  - `services` + `service_translations`
+  - `courses` + `course_translations`
+  - `success_stories` + `success_story_translations`
+- `site_config` is a `key/value` settings store (public SELECT, admin manage).
+- `types/supabase.ts` is **auto-generated** by the Supabase CLI. Regenerate after schema changes:
+  ```bash
+  npx supabase gen types typescript --project-id svecpkgbhyteupsmtvvl > types/supabase.ts
+  ```
+- Use `Tables<T>`, `TablesInsert<T>`, `TablesUpdate<T>` from `@/types` (not `InsertDto`/`UpdateDto`).
 
 ## Data flow conventions
 
@@ -43,6 +60,14 @@ High-signal project notes for future sessions.
 
 - shadcn/ui config in `components.json`; Tailwind variables in `app/globals.css`.
 
+## i18n conventions
+
+- Supported locales: `en`, `ja`, `ne` (see `lib/i18n/config.ts`).
+- Translation dictionaries in `locales/en.ts`, `locales/ja.ts`, `locales/ne.ts`.
+- `getT(locale)` from `lib/i18n/index.ts` is the server-side translation function.
+- `useTranslation(locale)` from `lib/i18n/useTranslation.ts` is the client-side hook.
+- `isValidLocale(string)` from `lib/i18n/config.ts` validates `[locale]` route params.
+
 ## Repo guidance
 
-- Follow `GEMINI.md` and `agent/*.md` (WORKFLOWS/SAFETY/REASONING/MEMORY) for project mandates.
+- Follow `GEMINI.md`, `AGENTS.md` and `agent/*.md` (WORKFLOWS/SAFETY/REASONING/SKILL/MEMORY) for project mandates.

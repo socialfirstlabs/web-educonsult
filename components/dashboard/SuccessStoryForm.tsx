@@ -23,7 +23,16 @@ import { Loader2, ImagePlus, X } from "lucide-react";
 import Image from "next/image";
 
 interface SuccessStoryFormProps {
-  initialData?: SuccessStoryValues & { id: string };
+  initialData?: SuccessStoryValues & {
+    id: string;
+    translations?: {
+      locale: string;
+      student_name: string;
+      destination_country: string;
+      university_name?: string | null;
+      testimonial?: string | null;
+    }[];
+  };
   onSuccess?: () => void;
 }
 
@@ -44,6 +53,20 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
     },
   });
 
+  const jaForm = useForm<{
+    student_name: string;
+    destination_country: string;
+    university_name: string;
+    testimonial: string;
+  }>({
+    defaultValues: {
+      student_name: "",
+      destination_country: "",
+      university_name: "",
+      testimonial: "",
+    },
+  });
+
   // Update form values when initialData changes (for editing)
   useEffect(() => {
     if (initialData) {
@@ -55,8 +78,18 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
         image_url: initialData.image_url,
         is_published: initialData.is_published,
       });
+
+      const ja = initialData.translations?.find((t) => t.locale === "ja");
+      if (ja) {
+        jaForm.reset({
+          student_name: ja.student_name || "",
+          destination_country: ja.destination_country || "",
+          university_name: ja.university_name || "",
+          testimonial: ja.testimonial || "",
+        });
+      }
     }
-  }, [initialData, form]);
+  }, [initialData, form, jaForm]);
 
   const imageUrl = form.watch("image_url");
 
@@ -86,11 +119,13 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
   async function onSubmit(values: SuccessStoryValues) {
     setLoading(true);
     try {
+      const jaValues = jaForm.getValues();
       if (initialData?.id) {
-        await updateSuccessStory(initialData.id, values);
+        await updateSuccessStory(initialData.id, values, jaValues);
       } else {
-        await addSuccessStory(values);
+        await addSuccessStory(values, jaValues);
         form.reset(); // Only reset after adding a new story
+        jaForm.reset();
       }
       onSuccess?.();
     } catch (error) {
@@ -162,6 +197,65 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
             </FormItem>
           )}
         />
+        <Form {...jaForm}>
+          <div className="rounded-lg border p-4 space-y-4">
+            <div className="text-sm font-semibold">Japanese Translation (JA)</div>
+            <FormField
+              control={jaForm.control}
+              name="student_name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Student Name (JA)</FormLabel>
+                  <FormControl>
+                    <Input placeholder="例: 山田 太郎" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={jaForm.control}
+                name="destination_country"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Destination Country (JA)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="例: 日本" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={jaForm.control}
+                name="university_name"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>University Name (JA)</FormLabel>
+                    <FormControl>
+                      <Input placeholder="例: 東京大学" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <FormField
+              control={jaForm.control}
+              name="testimonial"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Testimonial (JA)</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="体験談..." className="resize-none" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+        </Form>
         
         <div className="space-y-2">
           <Label>Student Photo</Label>
