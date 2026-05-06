@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import type { Locale } from "@/lib/i18n";
+import sanitizeHtml from 'sanitize-html';
 
 export default async function BlogPostPage({
   params,
@@ -63,7 +64,16 @@ export default async function BlogPostPage({
 
       <div className="prose prose-lg max-w-none prose-slate">
         {/* Render content - assuming HTML stored in Supabase. For security, sanitize in production. */}
-        <div dangerouslySetInnerHTML={{ __html: localizedPost.content }} />
+        <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(localizedPost.content, {
+          allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'iframe' ]),
+          allowedAttributes: {
+            ...sanitizeHtml.defaults.allowedAttributes,
+            '*': ['class'],
+            'img': ['src', 'alt', 'title', 'width', 'height'],
+            'iframe': ['src', 'width', 'height', 'frameborder', 'allow', 'allowfullscreen']
+          },
+          allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com']
+        }) }} />
       </div>
 
       <footer className="mt-16 pt-8 border-t border-slate-100">
