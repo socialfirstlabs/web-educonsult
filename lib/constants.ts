@@ -37,6 +37,9 @@ export const NAV_LINKS = {
   ],
 };
 
+const isEnabled = (value: string | undefined) =>
+  ["true", "1", "yes", "on"].includes((value ?? "").trim().toLowerCase());
+
 export const FEATURE_FLAGS = {
-  ENABLE_BLOG: process.env.NEXT_PUBLIC_ENABLE_BLOG === "true", // Configured via .env
+  ENABLE_BLOG: isEnabled(process.env.NEXT_PUBLIC_ENABLE_BLOG),
 };

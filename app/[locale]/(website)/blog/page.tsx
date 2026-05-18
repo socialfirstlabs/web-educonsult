@@ -10,6 +10,8 @@ import Link from "next/link";
 import { format } from "date-fns";
 import Image from "next/image";
 import { getT, type Locale } from "@/lib/i18n";
+import { FEATURE_FLAGS } from "@/lib/constants";
+import { notFound } from "next/navigation";
 
 export const metadata = {
   title: "Blog & Expert Guides | EduNepal Consultancy",
@@ -30,6 +32,11 @@ export default async function BlogPage({
   const { locale } = await params;
   const safeLocale = locale as Locale;
   const t = getT(safeLocale);
+
+  if (!FEATURE_FLAGS.ENABLE_BLOG) {
+    notFound();
+  }
+
   const posts = await getBlogPosts(true);
   const localizedPosts = (posts ?? []).map((post) => {
     const translation = post.translations?.find(

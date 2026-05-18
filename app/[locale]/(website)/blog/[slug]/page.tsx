@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import Image from "next/image";
 import { getT, type Locale } from "@/lib/i18n";
+import { FEATURE_FLAGS } from "@/lib/constants";
 
 export default async function BlogPostPage({
   params,
@@ -12,6 +13,11 @@ export default async function BlogPostPage({
   const { slug, locale } = await params;
   const safeLocale = locale as Locale;
   const t = getT(safeLocale);
+
+  if (!FEATURE_FLAGS.ENABLE_BLOG) {
+    notFound();
+  }
+
   const supabase = await createClient();
   
   if (!supabase)

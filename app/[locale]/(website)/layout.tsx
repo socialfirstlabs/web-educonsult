@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 import { getServices } from "@/lib/actions/service.action";
+import { FEATURE_FLAGS } from "@/lib/constants";
 import type { Locale } from "@/lib/i18n";
 import { getT } from "@/lib/i18n";
 
@@ -54,12 +55,14 @@ export default async function WebsiteLayout({
               >
                 {t("nav.successStories")}
               </Link>
-              <Link
-                href={`/${safeLocale}/blog`}
-                className="text-sm font-medium transition-colors hover:text-primary"
-              >
-                {t("nav.blog")}
-              </Link>
+              {FEATURE_FLAGS.ENABLE_BLOG && (
+                <Link
+                  href={`/${safeLocale}/blog`}
+                  className="text-sm font-medium transition-colors hover:text-primary"
+                >
+                  {t("nav.blog")}
+                </Link>
+              )}
               <Link
                 href={`/${safeLocale}/contact`}
                 className="text-sm font-medium transition-colors hover:text-primary"
@@ -141,11 +144,13 @@ export default async function WebsiteLayout({
           <div className="space-y-4">
             <h3 className="text-lg font-bold">{t("footer.quickLinks")}</h3>
             <ul className="space-y-2 text-sm">
-              <li>
-                <Link href={`/${safeLocale}/blog`} className="hover:underline">
-                  {t("nav.blog")}
-                </Link>
-              </li>
+              {FEATURE_FLAGS.ENABLE_BLOG && (
+                <li>
+                  <Link href={`/${safeLocale}/blog`} className="hover:underline">
+                    {t("nav.blog")}
+                  </Link>
+                </li>
+              )}
               <li>
                 <Link
                   href={`/${safeLocale}/success-stories`}
