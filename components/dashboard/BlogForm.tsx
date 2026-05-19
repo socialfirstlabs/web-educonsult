@@ -317,7 +317,7 @@ export function BlogForm({ initialData, onSuccess, currentUser }: BlogFormProps)
           <div className="flex items-center gap-4">
             {imageUrl ? (
               <div className="relative h-24 w-40 rounded-lg overflow-hidden border">
-                <Image src={imageUrl} alt="Featured image preview" fill className="object-cover" />
+                <Image src={imageUrl} alt="Featured image preview" fill sizes="160px" className="object-cover" />
                 <button 
                   type="button"
                   title="Remove image"

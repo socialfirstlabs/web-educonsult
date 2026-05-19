@@ -93,7 +93,8 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
                           <Image 
                             src={post.image_url} 
                             alt={post.title} 
-                            fill 
+                            fill
+                            sizes="64px"
                             className="object-cover" 
                           />
                         ) : (

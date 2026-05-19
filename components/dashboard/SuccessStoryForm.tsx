@@ -262,7 +262,7 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
           <div className="flex items-center gap-4">
             {imageUrl ? (
               <div className="relative h-24 w-24 rounded-lg overflow-hidden border">
-                <Image src={imageUrl} alt="Student preview" fill className="object-cover" />
+                <Image src={imageUrl} alt="Student preview" fill sizes="96px" className="object-cover" />
                 <button 
                   type="button"
                   title="Remove image"
