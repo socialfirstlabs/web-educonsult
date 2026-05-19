@@ -74,6 +74,11 @@ export async function addSuccessStory(
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
 
+  // --- P1 FIX: Explicit auth guard ---
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
+  // ------------------------------------
+
   const validatedFields = successStorySchema.safeParse(values);
   if (!validatedFields.success) {
     throw new Error("Invalid fields");
@@ -123,6 +128,11 @@ export async function updateSuccessStory(
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
 
+  // --- P1 FIX: Explicit auth guard ---
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
+  // ------------------------------------
+
   const validatedFields = successStorySchema.safeParse(values);
   if (!validatedFields.success) {
     throw new Error("Invalid fields");
@@ -166,6 +176,11 @@ export async function updateSuccessStory(
 export async function deleteSuccessStory(id: string) {
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
+
+  // --- P1 FIX: Explicit auth guard ---
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
+  // ------------------------------------
 
   const { error } = await supabase.from("success_stories").delete().eq("id", id);
 

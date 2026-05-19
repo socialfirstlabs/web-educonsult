@@ -13,7 +13,7 @@
 ## App structure + auth
 
 - App Router with route groups: public pages in `app/[locale]/(website)`, admin in `app/(dashboard)/dashboard`.
-- Dashboard auth is enforced in `app/(dashboard)/dashboard/layout.tsx` via `lib/actions/auth.action.ts` (no `middleware.ts` in repo).
+- Dashboard auth is enforced in layers: `proxy.ts` (edge, outermost — Next.js 16 convention) → `app/(dashboard)/dashboard/layout.tsx` via `lib/actions/auth.action.ts` → explicit `getUser()` guards in all mutation Server Actions → Supabase RLS.
 - Server Actions live in `lib/actions` and validate with Zod schemas in `lib/validations`.
 
 ## UI + component conventions

@@ -22,12 +22,19 @@ High-signal project notes for future sessions.
 
 ## Auth + Supabase
 
-- `middleware.ts` exists at the project root and handles:
-  1. Locale routing: `/` → `/en`, and bare paths → `/{defaultLocale}/{path}`
-  2. Supabase session refresh on every request
-  3. Dashboard route protection (redirect to `/login` if unauthenticated)
-  4. Login page redirect if already authenticated → `/dashboard`
-- Supabase clients return `null` when env vars are missing; many server actions handle this by returning `null` or errors.
+- `proxy.ts` exists at the **project root** and handles (Next.js 16 convention — replaces deprecated `middleware.ts`):
+  1. Locale routing: `/` → `/en`, bare paths → `/{defaultLocale}/{path}`
+  2. Supabase session **cookie refresh** on every request (required by `@supabase/ssr`)
+  3. Dashboard route protection — redirects to `/login` if `getUser()` returns null
+  4. Login page redirect → `/dashboard` if already authenticated
+- Auth enforcement layers (defense-in-depth, outermost to innermost):
+  1. **Edge Proxy** (`proxy.ts`) — blocks unauthenticated requests before any page/action
+  2. **Layout Guard** (`app/(dashboard)/dashboard/layout.tsx`) — `getUserAction()` redirects if not admin
+  3. **Action Guards** (all mutation Server Actions) — explicit `getUser()` + role check before any DB write
+  4. **RLS** (Supabase DB) — final layer; write policies enforce `app_metadata.role = 'admin'`
+- `getUserAction()` in `lib/actions/auth.action.ts` verifies the user is authenticated via server-side JWT validation (`getUser()`, not `getSession()`). It does NOT currently check `app_metadata.role` — that check causes a redirect loop until the SQL migration is run AND the admin role is manually assigned to the user. See the comment in `auth.action.ts` for the exact steps to enable it safely.
+- **Admin role** enforcement lives at the **database layer** (RLS via `public.is_admin()`) once the SQL migration is applied. Application-layer role check can be added after that.
+- Supabase clients return `null` when env vars are missing; actions handle this gracefully.
 - Supabase server client: `lib/supabase/server.ts`; browser client: `lib/supabase/client.ts`.
 
 ## Env vars
@@ -71,8 +78,18 @@ High-signal project notes for future sessions.
 
 - Follow `GEMINI.md`, `AGENTS.md` and `agent/*.md` (WORKFLOWS/SAFETY/REASONING/SKILL/MEMORY) for project mandates.
 
-## Corrections (2026-05-19)
+## Security (2026-05-19 — P0 + P1 fixes applied)
 
-- No `middleware.ts` exists in the repo. Locale routing uses `app/page.tsx` to redirect to the default locale and `app/[locale]/layout.tsx` to validate locale params.
-- Dashboard protection is enforced in `app/(dashboard)/dashboard/layout.tsx` via `getUserAction()`; the login page is client-side and navigates to `/dashboard` after sign-in.
+- `proxy.ts` **created** at project root — this was the P0 missing file (Next.js 16 uses `proxy.ts` with `export proxy`, not `middleware.ts`).
+- `getUserAction()` now enforces `app_metadata.role === 'admin'` (code-level admin check).
+- SQL migration `supabase/migrations/20260519000000_fix_p0_admin_rls.sql` — run in Supabase SQL Editor to lock RLS policies to admin role only. Creates `public.is_admin()` SECURITY DEFINER helper.
+- **To set admin role for a user** (run in Supabase SQL Editor):
+  ```sql
+  UPDATE auth.users
+  SET raw_app_meta_data = raw_app_meta_data || '{"role": "admin"}'::jsonb
+  WHERE email = 'your-admin@email.com';
+  ```
+- All 9 mutation Server Actions now have explicit `getUser()` auth guards (P1 fix).
+- File uploads now use `file-type` magic bytes MIME detection — client-declared `file.type` is ignored (P1 fix).
+- **Still required manually**: Supabase Dashboard → Authentication → Settings → Disable "Enable Email Signup".
 - Supported locales: `en`, `ja`. Translation dictionaries live in `locales/en.ts` and `locales/ja.ts`.

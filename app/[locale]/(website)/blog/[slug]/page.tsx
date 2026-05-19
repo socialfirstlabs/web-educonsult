@@ -99,16 +99,31 @@ export default async function BlogPostPage({
       )}
 
       <div className="prose prose-lg max-w-none prose-slate">
-        {/* Render content - assuming HTML stored in Supabase. For security, sanitize in production. */}
+        {/* Render HTML content stored in Supabase.
+            sanitize-html strips all disallowed tags/attributes before render.
+            Config is intentionally strict — see security audit P2 fixes. */}
         <div dangerouslySetInnerHTML={{
           __html: sanitizeHtml(localizedPost.content, {
-            allowedTags: sanitizeHtml.defaults.allowedTags.concat([ 'img', 'iframe' ]),
+            allowedTags: sanitizeHtml.defaults.allowedTags.concat(['img', 'iframe']),
             allowedAttributes: {
               ...sanitizeHtml.defaults.allowedAttributes,
+              // img: no style/class — prevents CSS-based data exfiltration
               'img': ['src', 'alt', 'width', 'height'],
-              'iframe': ['src', 'width', 'height', 'frameborder', 'allow', 'allowfullscreen']
+              // iframe: only src/dimensions — `allow` and `allowfullscreen` removed
+              // to minimise the permission surface granted to embedded content
+              'iframe': ['src', 'width', 'height'],
             },
-            allowedIframeHostnames: ['www.youtube.com', 'player.vimeo.com']
+            // Only youtube-nocookie.com (no tracking cookies) and Vimeo player.
+            // youtube.com embeds set persistent ad-tracking cookies; -nocookie does not.
+            allowedIframeHostnames: ['www.youtube-nocookie.com', 'player.vimeo.com'],
+            // Reject any http:// src — enforces HTTPS-only for all embedded content.
+            // Prevents mixed-content warnings and SSRF pixel-tracking via http images.
+            allowedSchemes: ['https', 'mailto'],
+            allowedSchemesByTag: {
+              img:    ['https'],
+              iframe: ['https'],
+              a:      ['https', 'mailto'],
+            },
           })
         }} />
       </div>

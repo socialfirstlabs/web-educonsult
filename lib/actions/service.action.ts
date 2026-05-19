@@ -42,6 +42,11 @@ export async function addService(values: ServiceValues, translation?: ServiceTra
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
 
+  // --- P1 FIX: Explicit auth guard ---
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
+  // ------------------------------------
+
   const validatedFields = serviceSchema.safeParse(values);
   if (!validatedFields.success) {
     throw new Error("Invalid fields");
@@ -91,6 +96,11 @@ export async function updateService(
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
 
+  // --- P1 FIX: Explicit auth guard ---
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
+  // ------------------------------------
+
   const validatedFields = serviceSchema.safeParse(values);
   if (!validatedFields.success) {
     throw new Error("Invalid fields");
@@ -134,6 +144,11 @@ export async function updateService(
 export async function deleteService(id: string) {
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
+
+  // --- P1 FIX: Explicit auth guard ---
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
+  // ------------------------------------
 
   const { error } = await supabase.from("services").delete().eq("id", id);
 

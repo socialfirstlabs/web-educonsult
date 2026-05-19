@@ -73,6 +73,11 @@ export async function addCourse(values: CourseValues, translation?: CourseTransl
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
 
+  // --- P1 FIX: Explicit auth guard ---
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
+  // ------------------------------------
+
   const validatedFields = courseSchema.safeParse(values);
   if (!validatedFields.success) {
     throw new Error("Invalid fields");
@@ -124,6 +129,11 @@ export async function updateCourse(
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
 
+  // --- P1 FIX: Explicit auth guard ---
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
+  // ------------------------------------
+
   const validatedFields = courseSchema.safeParse(values);
   if (!validatedFields.success) {
     throw new Error("Invalid fields");
@@ -169,6 +179,11 @@ export async function updateCourse(
 export async function deleteCourse(id: string) {
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
+
+  // --- P1 FIX: Explicit auth guard ---
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
+  // ------------------------------------
 
   const { error } = await supabase.from("courses").delete().eq("id", id);
 

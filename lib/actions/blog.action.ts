@@ -59,14 +59,18 @@ export async function createBlogPost(
   values: BlogValues,
   translation?: BlogTranslationInput
 ) {
-  const validatedFields = blogSchema.safeParse(values);
+  const supabase = await createClient();
+  if (!supabase) throw new Error("Supabase client not initialized");
 
+  // --- P1 FIX: Explicit auth guard ---
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
+  // ------------------------------------
+
+  const validatedFields = blogSchema.safeParse(values);
   if (!validatedFields.success) {
     throw new Error(validatedFields.error.message);
   }
-
-  const supabase = await createClient();
-  if (!supabase) throw new Error("Supabase client not initialized");
 
   const { data, error } = await supabase
     .from("blog_posts")
@@ -120,14 +124,18 @@ export async function updateBlogPost(
   values: BlogValues,
   translation?: BlogTranslationInput
 ) {
-  const validatedFields = blogSchema.safeParse(values);
+  const supabase = await createClient();
+  if (!supabase) throw new Error("Supabase client not initialized");
 
+  // --- P1 FIX: Explicit auth guard ---
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
+  // ------------------------------------
+
+  const validatedFields = blogSchema.safeParse(values);
   if (!validatedFields.success) {
     throw new Error(validatedFields.error.message);
   }
-
-  const supabase = await createClient();
-  if (!supabase) throw new Error("Supabase client not initialized");
 
   const { error } = await supabase
     .from("blog_posts")
@@ -178,6 +186,11 @@ export async function updateBlogPost(
 export async function deleteBlogPost(id: string) {
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
+
+  // --- P1 FIX: Explicit auth guard ---
+  const { data: { user }, error: authError } = await supabase.auth.getUser();
+  if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
+  // ------------------------------------
 
   const { error } = await supabase
     .from("blog_posts")
