@@ -3,7 +3,7 @@
 The following workflows must be strictly followed for all changes.
 
 ## 1. Feature Workflow (Plan -> Act -> Validate)
-1. **Research:** Map requirements to existing schema/components using `grep_search`.
+1. **Research:** Map requirements to existing schema/components using `rg`.
 2. **Strategy:** Share the architectural plan (e.g., new tables, UI changes).
 3. **Execution:** Apply surgical changes. Use `shadcn/ui` for components.
 4. **Validation:** Manually verify UI/UX and test data flows (Supabase).
@@ -25,11 +25,11 @@ The following workflows must be strictly followed for all changes.
 ## 3. SEO Content Workflow
 1. **CMS:** Create a blog post via Dashboard (Admin only).
 2. **Image:** Upload to `images` bucket in Supabase Storage.
-3. **Validation:** Check `app/(website)/blog/[slug]/page.tsx` for metadata and visual layout.
+3. **Validation:** Check `app/[locale]/(website)/blog/[slug]/page.tsx` for metadata and visual layout.
 
 ## 4. Authentication Workflow
-- `middleware.ts` at the project root handles both locale routing and auth protection.
-- It redirects unauthenticated requests to `/dashboard/*` → `/login`.
-- It redirects authenticated users at `/login` → `/dashboard`.
+- No `middleware.ts` exists in the repo. Locale routing uses `app/page.tsx` to redirect to the default locale and `app/[locale]/layout.tsx` to validate locale params.
+- Dashboard auth is enforced in `app/(dashboard)/dashboard/layout.tsx` via `getUserAction()`; unauthenticated users are redirected to `/login`.
+- The login page is client-side and navigates to `/dashboard` after successful sign-in.
 - Protected routes MUST be inside `app/(dashboard)/dashboard/`.
 - `lib/supabase/server.ts` provides the authenticated server client for use in layouts and actions.

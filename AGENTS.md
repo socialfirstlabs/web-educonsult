@@ -12,7 +12,7 @@
 
 ## App structure + auth
 
-- App Router with route groups: public pages in `app/(website)`, admin in `app/(dashboard)/dashboard`.
+- App Router with route groups: public pages in `app/[locale]/(website)`, admin in `app/(dashboard)/dashboard`.
 - Dashboard auth is enforced in `app/(dashboard)/dashboard/layout.tsx` via `lib/actions/auth.action.ts` (no `middleware.ts` in repo).
 - Server Actions live in `lib/actions` and validate with Zod schemas in `lib/validations`.
 

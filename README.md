@@ -80,139 +80,30 @@ EduNepal Consultancy Lead System is a comprehensive platform for educational con
 
 ```text
 edu-web/
-├─ .env.example
-├─ .env.local
-├─ .gitignore
-├─ AGENTS.md
-├─ GEMINI.md
-├─ MEMORY.md
-├─ README.md
-├─ build-log.txt
-├─ components.json
-├─ eslint.config.mjs
-├─ fetch-form.mjs
-├─ next-env.d.ts
-├─ next.config.ts
-├─ package.json
-├─ package-lock.json
-├─ postcss.config.mjs
-├─ proxy.ts
-├─ supabase.md
-├─ tsconfig.json
-├─ tsconfig.tsbuildinfo
-├─ agent/
-│  ├─ REASONING.md
-│  ├─ SAFETY.md
-│  ├─ SKILL.md
-│  └─ WORKFLOWS.md
 ├─ app/
-│  ├─ (dashboard)/
-│  │  └─ dashboard/
-│  │     ├─ blog/
-│  │     │  └─ page.tsx
-│  │     ├─ courses/
-│  │     │  └─ page.tsx
-│  │     ├─ leads/
-│  │     │  └─ page.tsx
-│  │     ├─ services/
-│  │     │  └─ page.tsx
-│  │     ├─ success-stories/
-│  │     │  └─ page.tsx
-│  │     ├─ layout.tsx
-│  │     └─ page.tsx
-│  ├─ (website)/
-│  │  ├─ blog/
-│  │  │  ├─ [slug]/
-│  │  │  │  └─ page.tsx
-│  │  │  └─ page.tsx
-│  │  ├─ contact/
-│  │  │  └─ page.tsx
-│  │  ├─ language-classes/
-│  │  │  └─ page.tsx
-│  │  ├─ services/
-│  │  │  └─ page.tsx
-│  │  ├─ study-in-japan/
-│  │  │  └─ page.tsx
-│  │  ├─ success-stories/
-│  │  │  └─ page.tsx
-│  │  ├─ layout.tsx
-│  │  └─ page.tsx
-│  ├─ login/
-│  │  └─ page.tsx
-│  ├─ favicon.ico
-│  ├─ favicon.png
-│  ├─ globals.css
-│  └─ layout.tsx
+│  ├─ (dashboard)/dashboard/   # admin routes (protected in layout)
+│  ├─ [locale]/(website)/      # public site (locale-prefixed)
+│  ├─ login/                   # admin login (no locale)
+│  ├─ layout.tsx
+│  ├─ page.tsx
+│  └─ globals.css
 ├─ components/
 │  ├─ dashboard/
-│  │  ├─ CourseClient.tsx
-│  │  ├─ CourseForm.tsx
-│  │  ├─ CourseList.tsx
-│  │  ├─ LogoutButton.tsx
-│  │  ├─ ServiceClient.tsx
-│  │  ├─ ServiceForm.tsx
-│  │  ├─ ServiceList.tsx
-│  │  ├─ SuccessStoryClient.tsx
-│  │  ├─ SuccessStoryForm.tsx
-│  │  └─ SuccessStoryList.tsx
 │  ├─ shared/
 │  ├─ ui/
-│  │  ├─ alert.tsx
-│  │  ├─ avatar.tsx
-│  │  ├─ badge.tsx
-│  │  ├─ button.tsx
-│  │  ├─ card.tsx
-│  │  ├─ dialog.tsx
-│  │  ├─ dropdown-menu.tsx
-│  │  ├─ form.tsx
-│  │  ├─ input.tsx
-│  │  ├─ label.tsx
-│  │  ├─ select.tsx
-│  │  ├─ switch.tsx
-│  │  ├─ table.tsx
-│  │  └─ textarea.tsx
 │  └─ website/
-│     └─ LeadForm.tsx
+├─ agent/
 ├─ docs/
-│  └─ superpowers/
-│     └─ plans/
-│        └─ 2026-03-16-first-version-release.md
-├─ error/
-│  ├─ errors.txt
-│  └─ errors2.txt
 ├─ lib/
 │  ├─ actions/
-│  │  ├─ auth.action.ts
-│  │  ├─ course.action.ts
-│  │  ├─ lead.action.ts
-│  │  ├─ service.action.ts
-│  │  ├─ storage.action.ts
-│  │  └─ success-story.action.ts
-│  ├─ prisma/
+│  ├─ i18n/
 │  ├─ services/
 │  ├─ supabase/
-│  │  ├─ client.ts
-│  │  └─ server.ts
-│  ├─ validations/
-│  │  ├─ course.schema.ts
-│  │  ├─ lead.schema.ts
-│  │  ├─ service.schema.ts
-│  │  └─ success-story.schema.ts
-│  ├─ constants.ts
-│  └─ utils.ts
-├─ prisma/
-│  └─ migrations/
-│     └─ 20260425160000_init/
+│  └─ validations/
+├─ locales/
 ├─ public/
-│  ├─ file.svg
-│  ├─ globe.svg
-│  ├─ next.svg
-│  ├─ vercel.svg
-│  └─ window.svg
+├─ scripts/
 ├─ supabase/
-│  ├─ .gitignore
-│  ├─ config.toml
-│  └─ migrations/
 └─ types/
 ```
 

@@ -33,7 +33,6 @@ High-signal project notes for future sessions.
 ## Env vars
 
 - Required: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` (see `.env.example`).
-- Prisma URLs exist in `.env.example` but Prisma schema is not present in repo.
 
 ## Database + Storage
 
@@ -71,3 +70,9 @@ High-signal project notes for future sessions.
 ## Repo guidance
 
 - Follow `GEMINI.md`, `AGENTS.md` and `agent/*.md` (WORKFLOWS/SAFETY/REASONING/SKILL/MEMORY) for project mandates.
+
+## Corrections (2026-05-19)
+
+- No `middleware.ts` exists in the repo. Locale routing uses `app/page.tsx` to redirect to the default locale and `app/[locale]/layout.tsx` to validate locale params.
+- Dashboard protection is enforced in `app/(dashboard)/dashboard/layout.tsx` via `getUserAction()`; the login page is client-side and navigates to `/dashboard` after sign-in.
+- Supported locales: `en`, `ja`. Translation dictionaries live in `locales/en.ts` and `locales/ja.ts`.

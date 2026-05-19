@@ -42,7 +42,6 @@ CREATE TABLE public.blog_posts (
   author_name TEXT NOT NULL DEFAULT 'EduNepal Team',
   excerpt TEXT,
   content TEXT NOT NULL,
-  author_name TEXT NOT NULL DEFAULT 'Admin',
   image_url TEXT,
   is_published BOOLEAN DEFAULT false,
   published_at TIMESTAMPTZ DEFAULT now(),

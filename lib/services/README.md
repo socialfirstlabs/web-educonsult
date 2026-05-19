@@ -10,10 +10,11 @@ This directory is reserved for business-logic service modules that wrap Supabase
 
 **Example service file:** `lib/services/blog.service.ts`
 ```ts
-import { createServerClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 
 export async function getPublishedPosts() {
-  const supabase = await createServerClient();
+  const supabase = await createClient();
+  if (!supabase) return [];
   const { data } = await supabase
     .from("blog_posts")
     .select("*")

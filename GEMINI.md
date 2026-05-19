@@ -53,7 +53,7 @@ EduNepal Consultancy Lead System is a comprehensive platform for an educational 
 - `lib/validations`: Zod schemas for form and data validation.
 - `lib/supabase`: Supabase client initializers (client/server).
 - `lib/i18n`: i18n config, dictionary lookup, and translation hook.
-- `locales/`: Translation dictionaries (`en.ts`, `ja.ts`, `ne.ts`).
+- `locales/`: Translation dictionaries (`en.ts`, `ja.ts`).
 - `types/`: TypeScript type definitions (Supabase types + custom domain types).
 - `scripts/`: One-off development/test utility scripts (not part of the app bundle).
 - `docs/`: Developer-facing documentation.
