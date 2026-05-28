@@ -77,7 +77,7 @@ export default async function BlogPostPage({
       <header className="mb-12">
         <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">{localizedPost.title}</h1>
         <div className="flex items-center gap-4 text-muted-foreground pb-8 border-b">
-            <span>{format(new Date(post.published_at || post.created_at), "MMMM d, yyyy")}</span>
+            <span>{format(new Date(post.published_at ?? post.created_at ?? new Date()), "MMMM d, yyyy")}</span>
             <span>•</span>
             <span className="font-medium text-primary uppercase text-xs tracking-widest">
               {t("blog.tagGuide")}

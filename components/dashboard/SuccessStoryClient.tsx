@@ -14,9 +14,13 @@ import { SuccessStoryValues } from "@/lib/validations/success-story.schema";
 import { SuccessStoryForm } from "./SuccessStoryForm";
 import { SuccessStoryList } from "./SuccessStoryList";
 
-interface SuccessStory extends SuccessStoryValues {
+interface SuccessStory extends Omit<SuccessStoryValues, 'testimonial' | 'is_published' | 'image_url' | 'university_name'> {
   id: string;
-  created_at: string;
+  created_at: string | null;
+  testimonial: string | null;
+  is_published: boolean | null;
+  image_url: string | null;
+  university_name: string | null;
   translations?: {
     locale: string;
     student_name: string;

@@ -3,7 +3,7 @@ import { getPublishedCourses } from "@/lib/actions/course.action";
 import { getT, type Locale } from "@/lib/i18n";
 
 export const metadata = {
-  title: "Contact Us | EduNepal Consultancy",
+  title: "Contact Us | J&N Caregiver Training",
   description:
     "Get free counseling for your study abroad dreams. Contact us for Japanese language classes and visa processing.",
 };

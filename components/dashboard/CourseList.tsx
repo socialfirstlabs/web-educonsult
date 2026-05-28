@@ -34,8 +34,11 @@ import { CourseForm } from "./CourseForm";
 import { deleteCourse } from "@/lib/actions/course.action";
 import { type CourseValues } from "@/lib/validations/course.schema";
 
-interface Course extends CourseValues {
+interface Course extends Omit<CourseValues, 'is_published' | 'order_index' | 'badge'> {
   id: string;
+  is_published: boolean | null;
+  order_index: number | null;
+  badge?: string | null;
   translations?: {
     locale: string;
     title: string;
@@ -150,9 +153,14 @@ export function CourseList({ courses }: { courses: Course[] }) {
           <DialogTitle>Edit Course</DialogTitle>
         </DialogHeader>
         {editingCourse && (
-          <CourseForm 
-            initialData={editingCourse} 
-            onSuccess={() => setEditingCourse(null)} 
+          <CourseForm
+            initialData={{
+              ...editingCourse,
+              is_published: editingCourse.is_published ?? false,
+              order_index: editingCourse.order_index ?? 0,
+              badge: editingCourse.badge ?? undefined,
+            }}
+            onSuccess={() => setEditingCourse(null)}
           />
         )}
       </DialogContent>

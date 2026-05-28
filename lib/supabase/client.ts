@@ -1,4 +1,5 @@
 import { createBrowserClient as createSupabaseBrowserClient } from '@supabase/ssr'
+import type { Database } from '@/types'
 
 export function createBrowserClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -7,8 +8,8 @@ export function createBrowserClient() {
   if (!supabaseUrl || !supabaseAnonKey) {
     // Return a mock or handle missing env vars during build/prerender
     // Note: In real production usage, these MUST be set in Vercel.
-    return null; 
+    return null;
   }
 
-  return createSupabaseBrowserClient(supabaseUrl, supabaseAnonKey)
+  return createSupabaseBrowserClient<Database>(supabaseUrl, supabaseAnonKey)
 }

@@ -44,3 +44,10 @@ next-env.d.ts
 /error/
 
 build-log.txt
+
+# Graphify
+*graphify*
+
+
+# agent
+/agent

@@ -7,7 +7,7 @@ import { getPublishedCourses } from "@/lib/actions/course.action";
 import { getT, type Locale } from "@/lib/i18n";
 
 export const metadata = {
-  title: "Japanese Language Classes | EduNepal Consultancy",
+  title: "Japanese Language Classes | J&N Caregiver Training",
   description: "Join our expert-led Japanese language courses (N5, N4, N3) in Kathmandu. Flexible schedules and affordable fees.",
 };
 

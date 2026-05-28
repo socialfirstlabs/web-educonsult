@@ -15,9 +15,13 @@ import { BlogList } from "./BlogList";
 import { BlogValues } from "@/lib/validations/blog.schema";
 import { User } from "@supabase/supabase-js";
 
-interface BlogPost extends BlogValues {
+interface BlogPost extends Omit<BlogValues, 'excerpt' | 'is_published' | 'image_url' | 'published_at'> {
   id: string;
-  created_at: string;
+  created_at: string | null;
+  excerpt: string | null;
+  is_published: boolean | null;
+  image_url: string | null;
+  published_at: string | null;
   translations?: {
     locale: string;
     title: string;

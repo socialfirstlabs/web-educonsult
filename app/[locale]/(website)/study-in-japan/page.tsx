@@ -5,7 +5,7 @@ import { CheckCircle2 } from "lucide-react";
 import { getT, type Locale } from "@/lib/i18n";
 
 export const metadata = {
-  title: "Study in Japan | EduNepal Consultancy",
+  title: "Study in Japan | J&N Caregiver Training",
   description: "Learn about the advantages of studying in Japan, visa process, costs, and work opportunities for Nepalese students.",
 };
 

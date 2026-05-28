@@ -4,17 +4,17 @@
  * Re-exports Supabase DB types and adds project-specific types.
  * Import from here instead of individual files: `import type { Lead } from "@/types"`.
  *
- * NOTE: supabase.ts is auto-generated. Do NOT edit it manually.
- * Regenerate with: npx supabase gen types typescript --project-id svecpkgbhyteupsmtvvl > types/supabase.ts
+ * NOTE: supabase-v1.ts is auto-generated. Do NOT edit it manually.
+ * Regenerate with: npx supabase gen types typescript --linked > types/supabase-v1.ts
  */
 
-export type { Database, Tables, TablesInsert, TablesUpdate, Enums } from "./supabase";
+export type { Database, Tables, TablesInsert, TablesUpdate, Enums } from "./supabase-v1";
 
 // ---------------------------------------------------------------------------
 // Convenience row-type aliases (auto-derived from generated types)
 // ---------------------------------------------------------------------------
 
-import type { Tables as T } from "./supabase";
+import type { Tables as T } from "./supabase-v1";
 
 /** A single lead submission from the public contact form */
 export type Lead = T<"leads">;
@@ -51,7 +51,7 @@ export type SiteConfig = T<"site_config">;
 // ---------------------------------------------------------------------------
 
 /** Supported application locales */
-export type Locale = "en" | "ja" | "ne";
+export type Locale = "en" | "ja";
 
 /** Lead status values */
 export type LeadStatus = "new" | "contacted" | "converted" | "archived";

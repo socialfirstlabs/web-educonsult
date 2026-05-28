@@ -14,7 +14,7 @@ import { getServices } from "@/lib/actions/service.action";
 import { getT, type Locale } from "@/lib/i18n";
 
 export const metadata = {
-  title: "Our Services | EduNepal Consultancy",
+  title: "Our Services | J&N Caregiver Training",
   description: "Comprehensive study abroad counseling, visa processing, and documentation support.",
 };
 

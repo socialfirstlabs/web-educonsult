@@ -14,8 +14,10 @@ import { ServiceForm } from "./ServiceForm";
 import { ServiceList } from "./ServiceList";
 import { type ServiceValues } from "@/lib/validations/service.schema";
 
-interface Service extends ServiceValues {
+interface Service extends Omit<ServiceValues, 'is_active' | 'features'> {
   id: string;
+  is_active: boolean | null;
+  features?: string | null;
   translations?: { locale: string; title: string; description: string; features?: string | null }[];
 }
 

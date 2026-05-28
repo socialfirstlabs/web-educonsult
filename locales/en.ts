@@ -126,7 +126,7 @@ export const en = {
   "form.messagePlaceholder": "I am interested in studying Japanese and...",
   "form.submit": "Submit Inquiry",
   "form.submitting": "Sending..."
-  ,"footer.brandTitle": "EduNepal Consultancy"
+  ,"footer.brandTitle": "J&N Caregiver Training"
   ,"footer.brandDesc": "Helping students achieve their dreams of studying in Japan and mastering the Japanese language."
   ,"footer.quickLinks": "Quick Links"
   ,"footer.contactInfoTitle": "Contact Info"

@@ -55,7 +55,7 @@ export default async function LeadsPage() {
             {leads?.map((lead) => (
               <TableRow key={lead.id}>
                 <TableCell className="font-medium whitespace-nowrap">
-                  {format(new Date(lead.created_at), 'MMM d, yyyy')}
+                  {format(new Date(lead.created_at ?? new Date()), 'MMM d, yyyy')}
                 </TableCell>
                 <TableCell className="font-semibold">{lead.name}</TableCell>
                 <TableCell>
@@ -67,11 +67,11 @@ export default async function LeadsPage() {
                   <div className="text-xs text-muted-foreground">{lead.course_interest}</div>
                 </TableCell>
                 <TableCell>
-                  <Badge className={`capitalize border-none ${getStatusColor(lead.status)}`}>
+                  <Badge className={`capitalize border-none ${getStatusColor(lead.status ?? 'new')}`}>
                     {lead.status}
                   </Badge>
                 </TableCell>
-                <TableCell className="text-sm truncate max-w-[200px]" title={lead.message}>
+                <TableCell className="text-sm truncate max-w-[200px]" title={lead.message ?? undefined}>
                   {lead.message}
                 </TableCell>
               </TableRow>

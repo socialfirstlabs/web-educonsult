@@ -37,9 +37,13 @@ import { deleteBlogPost } from "@/lib/actions/blog.action";
 import { BlogValues } from "@/lib/validations/blog.schema";
 import { defaultLocale } from "@/lib/i18n/config";
 
-interface BlogPost extends BlogValues {
+interface BlogPost extends Omit<BlogValues, 'excerpt' | 'is_published' | 'image_url' | 'published_at'> {
   id: string;
-  created_at: string;
+  created_at: string | null;
+  excerpt: string | null;
+  is_published: boolean | null;
+  image_url: string | null;
+  published_at: string | null;
   translations?: {
     locale: string;
     title: string;
@@ -110,7 +114,7 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
                   <TableCell className="text-xs">
                     <div className="flex items-center gap-1">
                       <Calendar size={12} className="text-muted-foreground" />
-                      {format(new Date(post.published_at || post.created_at), "MMM d, yyyy")}
+                      {format(new Date(post.published_at ?? post.created_at ?? new Date()), "MMM d, yyyy")}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -163,9 +167,15 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
             <DialogTitle>Edit Blog Post</DialogTitle>
           </DialogHeader>
           {editingPost && (
-            <BlogForm 
-              initialData={editingPost} 
-              onSuccess={() => setEditingPost(null)} 
+            <BlogForm
+              initialData={{
+                ...editingPost,
+                excerpt: editingPost.excerpt ?? '',
+                is_published: editingPost.is_published ?? false,
+                image_url: editingPost.image_url ?? '',
+                published_at: editingPost.published_at ?? '',
+              }}
+              onSuccess={() => setEditingPost(null)}
             />
           )}
         </DialogContent>

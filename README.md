@@ -1,6 +1,6 @@
-# EduNepal Consultancy Lead System
+# J&N Caregiver Training Lead System
 
-EduNepal Consultancy Lead System is a comprehensive platform for educational consultancies to manage leads, courses, services, blog posts, and success stories. It features a modern, high-performance public website for lead generation and a powerful admin dashboard for back-office management.
+J&N Caregiver Training Lead System is a comprehensive platform for educational consultancies to manage leads, courses, services, blog posts, and success stories. It features a modern, high-performance public website for lead generation and a powerful admin dashboard for back-office management.
 
 ## 🚀 Key Features
 
@@ -115,4 +115,4 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## 📧 Contact
 
-For inquiries, please contact EduNepal Consultancy.
+For inquiries, please contact J&N Caregiver Training.

@@ -3,7 +3,7 @@
  */
 
 export const SITE_CONFIG = {
-  name: "EduNepal Consultancy",
+  name: "J&N Caregiver Training",
   description: "Your path to global education",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   ogImage: "/og-image.jpg",

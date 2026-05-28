@@ -14,8 +14,11 @@ import { CourseForm } from "./CourseForm";
 import { CourseList } from "./CourseList";
 import { type CourseValues } from "@/lib/validations/course.schema";
 
-interface Course extends CourseValues {
+interface Course extends Omit<CourseValues, 'is_published' | 'order_index' | 'badge'> {
   id: string;
+  is_published: boolean | null;
+  order_index: number | null;
+  badge?: string | null;
   translations?: {
     locale: string;
     title: string;

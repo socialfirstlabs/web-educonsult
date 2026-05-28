@@ -40,8 +40,10 @@ import { ServiceForm } from "./ServiceForm";
 import { deleteService } from "@/lib/actions/service.action";
 import { type ServiceValues } from "@/lib/validations/service.schema";
 
-interface Service extends ServiceValues {
+interface Service extends Omit<ServiceValues, 'is_active' | 'features'> {
   id: string;
+  is_active: boolean | null;
+  features?: string | null;
   translations?: { locale: string; title: string; description: string; features?: string | null }[];
 }
 
@@ -134,9 +136,13 @@ export function ServiceList({ services }: { services: Service[] }) {
           <DialogTitle>Edit Service</DialogTitle>
         </DialogHeader>
         {editingService && (
-          <ServiceForm 
-            initialData={editingService} 
-            onSuccess={() => setEditingService(null)} 
+          <ServiceForm
+            initialData={{
+              ...editingService,
+              is_active: editingService.is_active ?? false,
+              features: editingService.features ?? undefined,
+            }}
+            onSuccess={() => setEditingService(null)}
           />
         )}
       </DialogContent>

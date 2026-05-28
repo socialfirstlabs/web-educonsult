@@ -14,11 +14,11 @@ import { FEATURE_FLAGS } from "@/lib/constants";
 import { notFound } from "next/navigation";
 
 export const metadata = {
-  title: "Blog & Expert Guides | EduNepal Consultancy",
+  title: "Blog & Expert Guides | J&N Caregiver Training",
   description:
     "Explore our latest expert guides, success stories, and updates about studying in Japan and language learning.",
   openGraph: {
-    title: "Blog & Expert Guides | EduNepal Consultancy",
+    title: "Blog & Expert Guides | J&N Caregiver Training",
     description: "Expert insights for your international education journey.",
     type: "website",
   },
@@ -84,7 +84,7 @@ export default async function BlogPage({
                 <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
                   <span>
                     {format(
-                      new Date(post.published_at || post.created_at),
+                      new Date(post.published_at ?? post.created_at ?? new Date()),
                       "MMM d, yyyy",
                     )}
                   </span>

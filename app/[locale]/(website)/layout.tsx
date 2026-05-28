@@ -191,7 +191,7 @@ export default async function WebsiteLayout({
           </div>
         </div>
         <div className="container mt-12 border-t pt-8 text-center text-sm text-muted-foreground">
-          © {new Date().getFullYear()} EduNepal Consultancy. All rights
+          © {new Date().getFullYear()} J&N Caregiver Training. All rights
           reserved.
         </div>
       </footer>

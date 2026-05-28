@@ -36,9 +36,13 @@ import { SuccessStoryForm } from "./SuccessStoryForm";
 import { deleteSuccessStory } from "@/lib/actions/success-story.action";
 import { SuccessStoryValues } from "@/lib/validations/success-story.schema";
 
-interface SuccessStory extends SuccessStoryValues {
+interface SuccessStory extends Omit<SuccessStoryValues, 'testimonial' | 'is_published' | 'image_url' | 'university_name'> {
   id: string;
-  created_at: string;
+  created_at: string | null;
+  testimonial: string | null;
+  is_published: boolean | null;
+  image_url: string | null;
+  university_name: string | null;
   translations?: {
     locale: string;
     student_name: string;
@@ -157,9 +161,15 @@ export function SuccessStoryList({ stories }: { stories: SuccessStory[] }) {
           <DialogTitle>Edit Success Story</DialogTitle>
         </DialogHeader>
         {editingStory && (
-          <SuccessStoryForm 
-            initialData={editingStory} 
-            onSuccess={() => setEditingStory(null)} 
+          <SuccessStoryForm
+            initialData={{
+              ...editingStory,
+              testimonial: editingStory.testimonial ?? '',
+              is_published: editingStory.is_published ?? false,
+              image_url: editingStory.image_url ?? '',
+              university_name: editingStory.university_name ?? '',
+            }}
+            onSuccess={() => setEditingStory(null)}
           />
         )}
       </DialogContent>

@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getT, type Locale } from "@/lib/i18n";
 
 export const metadata = {
-  title: "Success Stories | EduNepal Consultancy",
+  title: "Success Stories | J&N Caregiver Training",
   description: "Read about our students who have successfully achieved their dreams of studying abroad.",
 };
 
@@ -42,7 +42,7 @@ export default async function SuccessStoriesPage({
               <CardHeader className="pb-4">
                 <div className="flex items-center gap-4">
                   <Avatar className="h-16 w-16 border-2 border-primary/20">
-                    <AvatarImage src={story.image_url} alt={story.student_name} />
+                    <AvatarImage src={story.image_url ?? undefined} alt={story.student_name} />
                     <AvatarFallback className="bg-primary/10 text-primary">
                       {story.student_name.substring(0, 2).toUpperCase()}
                     </AvatarFallback>
