@@ -1,70 +1,96 @@
 import { createClient } from '@/lib/supabase/server';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, GraduationCap, BookOpen, FileText } from "lucide-react";
+import { Users, GraduationCap, BookOpen, FileText, Briefcase, Trophy } from "lucide-react";
 import { FEATURE_FLAGS } from "@/lib/constants";
+import Link from "next/link";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
-  
-  if (!supabase) return <div className="p-4 border border-destructive text-destructive rounded-md bg-destructive/10">Supabase environment variables are missing.</div>;
 
-  // Fetch summary stats in parallel
+  if (!supabase) return (
+    <div className="p-4 border border-destructive text-destructive rounded-md bg-destructive/10">
+      Supabase environment variables are missing.
+    </div>
+  );
+
   const [
     { count: leadsCount },
     { count: coursesCount },
+    { count: servicesCount },
     { count: postsCount },
-    { count: successCount }
+    { count: successCount },
   ] = await Promise.all([
     supabase.from('leads').select('*', { count: 'exact', head: true }),
     supabase.from('courses').select('*', { count: 'exact', head: true }),
+    supabase.from('services').select('*', { count: 'exact', head: true }),
     supabase.from('blog_posts').select('*', { count: 'exact', head: true }),
-    supabase.from('success_stories').select('*', { count: 'exact', head: true })
+    supabase.from('success_stories').select('*', { count: 'exact', head: true }),
   ]);
 
   const stats = [
-    { title: "Total Leads", value: leadsCount || 0, icon: Users, color: "text-blue-600" },
-    { title: "Active Courses", value: coursesCount || 0, icon: BookOpen, color: "text-green-600" },
-    ...(FEATURE_FLAGS.ENABLE_BLOG ? [{ title: "Blog Posts", value: postsCount || 0, icon: FileText, color: "text-purple-600" }] : []),
-    { title: "Success Stories", value: successCount || 0, icon: GraduationCap, color: "text-orange-600" },
+    { title: "Total Leads", value: leadsCount ?? 0, icon: Users, color: "text-blue-600", href: "/dashboard/leads" },
+    { title: "Services", value: servicesCount ?? 0, icon: Briefcase, color: "text-indigo-600", href: "/dashboard/services" },
+    { title: "Courses", value: coursesCount ?? 0, icon: BookOpen, color: "text-green-600", href: "/dashboard/courses" },
+    { title: "Success Stories", value: successCount ?? 0, icon: Trophy, color: "text-orange-600", href: "/dashboard/success-stories" },
+    ...(FEATURE_FLAGS.ENABLE_BLOG
+      ? [{ title: "Blog Posts", value: postsCount ?? 0, icon: FileText, color: "text-purple-600", href: "/dashboard/blog" }]
+      : []),
+  ];
+
+  const quickActions = [
+    { label: "Manage Leads", desc: "View and manage student inquiries", href: "/dashboard/leads", icon: Users },
+    { label: "Add Service", desc: "Create a new service listing", href: "/dashboard/services", icon: Briefcase },
+    { label: "Add Course", desc: "Create a new language class", href: "/dashboard/courses", icon: BookOpen },
+    { label: "Add Success Story", desc: "Publish a student testimonial", href: "/dashboard/success-stories", icon: GraduationCap },
+    ...(FEATURE_FLAGS.ENABLE_BLOG
+      ? [{ label: "Write Blog Post", desc: "Publish a new SEO article", href: "/dashboard/blog", icon: FileText }]
+      : []),
   ];
 
   return (
     <div className="space-y-8">
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Stats */}
+      <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              <stat.icon className={`h-4 w-4 ${stat.color}`} />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-            </CardContent>
-          </Card>
+          <Link key={stat.title} href={stat.href}>
+            <Card className="hover:shadow-md transition-shadow cursor-pointer">
+              <CardHeader className="flex flex-row items-center justify-between pb-2">
+                <CardTitle className="text-sm font-medium text-muted-foreground">{stat.title}</CardTitle>
+                <stat.icon className={`h-4 w-4 ${stat.color}`} />
+              </CardHeader>
+              <CardContent>
+                <div className="text-3xl font-bold">{stat.value}</div>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8">
-         <Card>
-            <CardHeader>
-              <CardTitle>Quick Actions</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-               <div className="grid grid-cols-2 gap-4">
-                  <button className="p-4 border rounded-lg hover:bg-muted/50 transition-colors text-left">
-                     <p className="font-semibold">Add Course</p>
-                     <p className="text-sm text-muted-foreground">Create a new language class</p>
-                  </button>
-                  {FEATURE_FLAGS.ENABLE_BLOG && (
-                    <button className="p-4 border rounded-lg hover:bg-muted/50 transition-colors text-left">
-                       <p className="font-semibold">Write Blog</p>
-                       <p className="text-sm text-muted-foreground">Post a new SEO article</p>
-                    </button>
-                  )}
-               </div>
-            </CardContent>
-         </Card>
-      </div>
+      {/* Quick Actions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Quick Actions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {quickActions.map(({ label, desc, href, icon: Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className="p-4 border rounded-lg hover:bg-muted/50 hover:border-primary/30 transition-colors flex items-start gap-3"
+              >
+                <div className="mt-0.5 p-2 bg-primary/10 rounded-md">
+                  <Icon size={16} className="text-primary" />
+                </div>
+                <div>
+                  <p className="font-semibold text-sm">{label}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{desc}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 }

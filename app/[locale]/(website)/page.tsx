@@ -1,8 +1,29 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { GraduationCap, BookOpen, Globe, CheckCircle } from "lucide-react";
+import {
+  GraduationCap,
+  BookOpen,
+  Globe,
+  CheckCircle,
+  Briefcase,
+  FileText,
+  Users,
+  ShieldCheck,
+  type LucideIcon,
+} from "lucide-react";
 import { getT, type Locale } from "@/lib/i18n";
+import { getServices } from "@/lib/actions/service.action";
+
+const iconMap: Record<string, LucideIcon> = {
+  Briefcase,
+  Globe,
+  GraduationCap,
+  FileText,
+  Users,
+  BookOpen,
+  ShieldCheck,
+};
 
 export default async function HomePage({
   params,
@@ -12,6 +33,9 @@ export default async function HomePage({
   const { locale } = await params;
   const safeLocale = locale as Locale;
   const t = getT(safeLocale);
+  const services = await getServices(safeLocale);
+  const featuredServices = services.slice(0, 3);
+
   return (
     <div className="flex flex-col w-full">
       {/* Hero Section */}
@@ -25,19 +49,12 @@ export default async function HomePage({
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href={`/${safeLocale}/contact`}>
-              <Button
-                size="lg"
-                className="bg-white text-blue-900 hover:bg-blue-50 text-lg px-8 py-6"
-              >
+              <Button size="lg" className="bg-white text-blue-900 hover:bg-blue-50 text-lg px-8 py-6">
                 {t("cta.freeCounseling")}
               </Button>
             </Link>
             <Link href={`/${safeLocale}/language-classes`}>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-white border-white hover:bg-white/10 text-lg px-8 py-6"
-              >
+              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10 text-lg px-8 py-6">
                 {t("cta.viewCourses")}
               </Button>
             </Link>
@@ -45,42 +62,62 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* Services Overview */}
+      {/* Services Overview — dynamic from DB */}
       <section className="py-20 bg-background">
         <div className="container px-4">
           <div className="text-center mb-16">
             <h2 className="text-3xl font-bold mb-4">{t("home.coreServices")}</h2>
-            <div className="w-24 h-1 bg-primary mx-auto"></div>
+            <div className="w-24 h-1 bg-primary mx-auto" />
           </div>
           <div className="grid md:grid-cols-3 gap-8">
-            <Card>
-              <CardHeader>
-                <Globe className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>{t("home.services.studyInJapan.title")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {t("home.services.studyInJapan.desc")}
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <BookOpen className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>{t("home.services.languageClasses.title")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {t("home.services.languageClasses.desc")}
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <GraduationCap className="w-12 h-12 text-primary mb-4" />
-                <CardTitle>{t("home.services.visaDocumentation.title")}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                {t("home.services.visaDocumentation.desc")}
-              </CardContent>
-            </Card>
+            {featuredServices.length > 0 ? (
+              featuredServices.map((service) => {
+                const Icon = iconMap[service.icon_name] ?? Globe;
+                return (
+                  <Card key={service.id}>
+                    <CardHeader>
+                      <Icon className="w-12 h-12 text-primary mb-4" />
+                      <CardTitle>{service.title}</CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-muted-foreground">
+                      {service.description}
+                    </CardContent>
+                  </Card>
+                );
+              })
+            ) : (
+              <>
+                <Card>
+                  <CardHeader>
+                    <Globe className="w-12 h-12 text-primary mb-4" />
+                    <CardTitle>{t("home.services.studyInJapan.title")}</CardTitle>
+                  </CardHeader>
+                  <CardContent>{t("home.services.studyInJapan.desc")}</CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <BookOpen className="w-12 h-12 text-primary mb-4" />
+                    <CardTitle>{t("home.services.languageClasses.title")}</CardTitle>
+                  </CardHeader>
+                  <CardContent>{t("home.services.languageClasses.desc")}</CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <GraduationCap className="w-12 h-12 text-primary mb-4" />
+                    <CardTitle>{t("home.services.visaDocumentation.title")}</CardTitle>
+                  </CardHeader>
+                  <CardContent>{t("home.services.visaDocumentation.desc")}</CardContent>
+                </Card>
+              </>
+            )}
           </div>
+          {services.length > 3 && (
+            <div className="text-center mt-10">
+              <Link href={`/${safeLocale}/services`}>
+                <Button variant="outline" size="lg">View All Services</Button>
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
@@ -99,7 +136,7 @@ export default async function HomePage({
                 t("home.whyJapan.items.6"),
               ].map((item, i) => (
                 <li key={i} className="flex items-center gap-3">
-                  <CheckCircle className="text-green-500" size={20} />
+                  <CheckCircle className="text-green-500 shrink-0" size={20} />
                   <span>{item}</span>
                 </li>
               ))}
@@ -128,11 +165,7 @@ export default async function HomePage({
             {t("home.cta.subtitle")}
           </p>
           <Link href={`/${safeLocale}/contact`}>
-            <Button
-              size="lg"
-              variant="secondary"
-              className="px-10 py-6 text-lg"
-            >
+            <Button size="lg" variant="secondary" className="px-10 py-6 text-lg">
               {t("cta.bookCounseling")}
             </Button>
           </Link>

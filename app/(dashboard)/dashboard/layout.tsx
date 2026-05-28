@@ -1,17 +1,10 @@
-import Link from "next/link";
-import { 
-  LayoutDashboard, 
-  Users, 
-  BookOpen, 
-  FileText, 
-  Image as ImageIcon,
-  Briefcase
-} from "lucide-react";
 import { getUserAction } from "@/lib/actions/auth.action";
 import { LogoutButton } from "@/components/dashboard/LogoutButton";
+import { SidebarNav } from "@/components/dashboard/SidebarNav";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { redirect } from "next/navigation";
 import { FEATURE_FLAGS } from "@/lib/constants";
+import Image from "next/image";
 
 export default async function DashboardLayout({
   children,
@@ -28,31 +21,11 @@ export default async function DashboardLayout({
     <div className="flex min-h-screen">
       {/* Sidebar */}
       <aside className="w-64 border-r bg-muted/20 hidden md:flex flex-col">
-        <div className="h-16 flex items-center px-6 border-b font-bold text-lg">
-          Admin Portal
+        <div className="h-16 flex items-center px-4 border-b gap-3">
+          <Image src="/images/JN_Logo--icon.png" alt="J&N" width={32} height={32} className="object-contain" />
+          <span className="font-bold text-sm leading-tight">J&N Admin Portal</span>
         </div>
-        <nav className="flex-1 p-4 space-y-2">
-          <Link href="/dashboard" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
-            <LayoutDashboard size={20} /> Dashboard
-          </Link>
-          <Link href="/dashboard/leads" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
-            <Users size={20} /> Leads
-          </Link>
-          <Link href="/dashboard/services" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
-            <Briefcase size={20} /> Services
-          </Link>
-          <Link href="/dashboard/courses" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
-            <BookOpen size={20} /> Courses
-          </Link>
-          {FEATURE_FLAGS.ENABLE_BLOG && (
-            <Link href="/dashboard/blog" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
-              <FileText size={20} /> Blog
-            </Link>
-          )}
-          <Link href="/dashboard/success-stories" className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted transition-colors">
-            <ImageIcon size={20} /> Success Stories
-          </Link>
-        </nav>
+        <SidebarNav enableBlog={FEATURE_FLAGS.ENABLE_BLOG} />
         
         {user && (
           <div className="px-4 py-2 mb-2">

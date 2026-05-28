@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import LanguageSwitcher from "@/components/layout/LanguageSwitcher";
 import { getServices } from "@/lib/actions/service.action";
@@ -26,9 +27,18 @@ export default async function WebsiteLayout({
           <div className="flex items-center gap-6 md:gap-10">
             <Link
               href={`/${safeLocale}`}
-              className="flex items-center space-x-2"
+              className="flex items-center gap-2"
             >
-              <span className="inline-block font-bold text-xl">EduNepal</span>
+              <Image
+                src="/images/JN_Logo--icon.png"
+                alt="J&N"
+                width={36}
+                height={36}
+                className="object-contain"
+              />
+              <span className="hidden sm:inline-block font-bold text-base leading-tight">
+                J&N Caregiver Training
+              </span>
             </Link>
             <nav className="hidden md:flex gap-6">
               <Link
