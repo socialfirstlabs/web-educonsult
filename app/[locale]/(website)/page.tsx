@@ -157,8 +157,8 @@ export default async function HomePage({
       <div className="relative z-20 -mt-16 px-4 md:px-0">
         <div className="jn-container max-w-6xl mx-auto">
           <div className="bg-white/90 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_-10px_rgba(36,62,188,0.12)] border border-white/60 p-6 md:p-8 flex justify-center lg:justify-between items-center flex-wrap gap-x-12 gap-y-8">
-            {trustItems.map((item) => (
-              <div key={item.title} className="flex items-center gap-4 group cursor-default transition-transform duration-300 hover:-translate-y-1.5">
+            {trustItems.map((item, i) => (
+              <div key={item.title} data-reveal data-reveal-delay={String(i + 1)} className="flex items-center gap-4 group cursor-default transition-transform duration-300 hover:-translate-y-1.5">
                 <div aria-hidden="true" className="w-14 h-14 flex items-center justify-center bg-jn-primary-light text-jn-primary rounded-2xl shadow-sm transition-all duration-300 group-hover:bg-jn-primary group-hover:text-white group-hover:shadow-md group-hover:-rotate-3 text-xl font-bold">
                   {item.icon}
                 </div>
@@ -175,13 +175,13 @@ export default async function HomePage({
       {/* WHY JAPAN */}
       <section id="japan" className="jn-section bg-white">
         <div className="jn-container">
-          <div className="text-center max-w-[700px] mx-auto mb-16">
+          <div data-reveal className="text-center max-w-[700px] mx-auto mb-16">
             <span className="jn-section-label">{t("home.japan.label")}</span>
             <h2 className="jn-heading-2">{t("home.japan.title")}</h2>
             <p className="jn-body-text">{t("home.japan.body")}</p>
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
-            <div>
+            <div data-reveal>
               <Image
                 src="/images/home-2.png"
                 alt="Beautiful Japan scenery"
@@ -191,8 +191,8 @@ export default async function HomePage({
               />
             </div>
             <div className="grid gap-8">
-              {japanItems.map((item) => (
-                <div key={item.title} className="flex gap-5">
+              {japanItems.map((item, i) => (
+                <div key={item.title} data-reveal data-reveal-delay={String(i + 1)} className="flex gap-5">
                   <div aria-hidden="true" className="w-14 h-14 bg-white border border-jn-primary-light text-jn-primary shadow-sm rounded-2xl flex items-center justify-center text-2xl shrink-0">{item.icon}</div>
                   <div>
                     <h4 className="text-xl mb-2 text-jn-text-dark font-[family-name:var(--font-poppins)] font-semibold">{item.title}</h4>
@@ -211,15 +211,15 @@ export default async function HomePage({
       {/* PATHWAY */}
       <section id="process" className="jn-section bg-white">
         <div className="jn-container">
-          <div className="text-center max-w-[700px] mx-auto mb-16">
+          <div data-reveal className="text-center max-w-[700px] mx-auto mb-16">
             <span className="jn-section-label">{t("home.pathway.label")}</span>
             <h2 className="jn-heading-2">{t("home.pathway.title")}</h2>
             <p className="jn-body-text">{t("home.pathway.body")}</p>
           </div>
           <div className="flex flex-col lg:flex-row justify-between relative mt-16 gap-10 lg:gap-0">
             <div className="hidden lg:block absolute top-10 left-[5%] w-[90%] h-0.5 bg-jn-border z-0" />
-            {pathwaySteps.map((s) => (
-              <div key={s.step} className="relative z-10 text-center w-full lg:w-[18%] flex flex-col items-center group">
+            {pathwaySteps.map((s, i) => (
+              <div key={s.step} data-reveal data-reveal-delay={String(i + 1)} className="relative z-10 text-center w-full lg:w-[18%] flex flex-col items-center group">
                 <div aria-hidden="true" className="w-20 h-20 bg-white border-2 border-jn-border text-jn-primary rounded-full mb-5 flex items-center justify-center text-[2rem] shadow-sm transition-all duration-300 group-hover:border-jn-accent group-hover:bg-jn-accent-light group-hover:text-jn-accent-dark group-hover:scale-105">
                   {s.icon}
                 </div>
@@ -234,7 +234,7 @@ export default async function HomePage({
       {/* PROGRAMS */}
       <section id="programs" className="jn-section bg-jn-bg-off">
         <div className="jn-container">
-          <div className="text-center max-w-[700px] mx-auto mb-10">
+          <div data-reveal className="text-center max-w-[700px] mx-auto mb-10">
             <span className="jn-section-label">{t("home.programs.label")}</span>
             <h2 className="jn-heading-2">{t("home.programs.title")}</h2>
             <p className="jn-body-text">{t("home.programs.body")}</p>
@@ -244,11 +244,13 @@ export default async function HomePage({
               <p className="col-span-3 text-center text-jn-text-muted py-10 italic">
                 {t("courses.empty")}
               </p>
-            ) : programs.map((p) => {
+            ) : programs.map((p, i) => {
               const featured = !!p.badge;
               return (
                 <div
                   key={p.id}
+                  data-reveal
+                  data-reveal-delay={String((i % 3) + 1)}
                   className={`bg-white rounded-[24px] shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col group relative ${
                     featured ? "border-2 border-jn-accent" : "border border-jn-border hover:shadow-[0_20px_40px_-10px_rgba(36,62,188,0.1)]"
                   }`}
@@ -289,7 +291,7 @@ export default async function HomePage({
       {/* TESTIMONIALS */}
       <section id="success" className="jn-section bg-white">
         <div className="jn-container">
-          <div className="text-center max-w-[700px] mx-auto mb-10">
+          <div data-reveal className="text-center max-w-[700px] mx-auto mb-10">
             <span className="jn-section-label">{t("home.testimonials.label")}</span>
             <h2 className="jn-heading-2">{t("home.testimonials.title")}</h2>
             <p className="jn-body-text">{t("home.testimonials.body")}</p>
@@ -299,8 +301,8 @@ export default async function HomePage({
               <p className="col-span-3 text-center text-jn-text-muted py-10 italic">
                 {t("successStories.empty")}
               </p>
-            ) : testimonials.map((item) => (
-              <div key={item.name} className="bg-white p-8 rounded-[24px] shadow-sm border border-jn-border flex flex-col">
+            ) : testimonials.map((item, i) => (
+              <div key={item.name} data-reveal data-reveal-delay={String((i % 3) + 1)} className="bg-white p-8 rounded-[24px] shadow-sm border border-jn-border flex flex-col">
                 <div className="text-jn-accent text-xl mb-4 tracking-wide" aria-label="5 out of 5 stars" role="img">★★★★★</div>
                 <p className="text-[1.05rem] text-jn-text-dark italic mb-6 flex-grow line-clamp-5">&ldquo;{item.quote}&rdquo;</p>
                 <div className="flex items-center gap-4">
@@ -335,14 +337,14 @@ export default async function HomePage({
           <div className="absolute -bottom-[20%] -left-[10%] w-[50%] h-[50%] rounded-full bg-jn-accent/10 blur-3xl" />
         </div>
         <div className="jn-container relative z-10">
-          <div className="text-center max-w-[700px] mx-auto mb-16">
+          <div data-reveal className="text-center max-w-[700px] mx-auto mb-16">
             <span className="jn-section-label">{t("home.blog.label")}</span>
             <h2 className="jn-heading-2">{t("home.blog.title")}</h2>
             <p className="jn-body-text">{t("home.blog.body")}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {blogPosts.map((post, i) => (
-              <Link key={i} href={post.href} className="group">
+              <Link key={i} href={post.href} className="group" data-reveal data-reveal-delay={String((i % 3) + 1)}>
                 <article className="bg-white rounded-2xl shadow-sm border border-jn-border overflow-hidden transition-all duration-300 hover:shadow-[var(--shadow-jn-float)] hover:-translate-y-1 flex flex-col h-full">
                   <div className="h-56 overflow-hidden relative rounded-t-2xl bg-jn-primary-light">
                     <Image

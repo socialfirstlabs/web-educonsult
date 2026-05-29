@@ -54,7 +54,7 @@ export default async function AboutPage({
       {/* OUR MISSION */}
       <section className="jn-section bg-white">
         <div className="jn-container grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-          <div>
+          <div data-reveal>
             <Image
               src="/images/about-1.png"
               alt="Our team at J&N Caregiver Training"
@@ -63,7 +63,7 @@ export default async function AboutPage({
               className="w-full h-auto rounded-3xl shadow-lg"
             />
           </div>
-          <div>
+          <div data-reveal data-reveal-delay="2">
             <span className="jn-section-label">{t("about.mission.label")}</span>
             <h2 className="jn-heading-2 mb-6">{t("about.mission.title")}</h2>
             <p className="jn-body-text mb-6">
@@ -113,9 +113,11 @@ export default async function AboutPage({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {team.map((member) => (
+            {team.map((member, i) => (
               <div
                 key={member.id}
+                data-reveal
+                data-reveal-delay={String((i % 3) + 1)}
                 className="bg-white rounded-2xl shadow-sm border border-jn-border overflow-hidden group transition-all duration-300 hover:shadow-[var(--shadow-jn-float)] hover:-translate-y-2 hover:border-jn-primary-light"
               >
                 <div className="h-64 overflow-hidden bg-jn-bg-off flex items-center justify-center">

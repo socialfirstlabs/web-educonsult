@@ -1,6 +1,7 @@
 import Navbar from "@/components/website/Navbar";
 import Footer from "@/components/website/Footer";
 import ScrollToTop from "@/components/website/ScrollToTop";
+import ScrollReveal from "@/components/website/ScrollReveal";
 import { ApplyModalProvider } from "@/components/website/ApplyModal";
 import WhatsAppButton from "@/components/website/WhatsAppButton";
 import { getServices } from "@/lib/actions/service.action";
@@ -37,6 +38,7 @@ export default async function WebsiteLayout({
         <Footer locale={safeLocale} />
         <WhatsAppButton />
         <ScrollToTop />
+        <ScrollReveal />
       </div>
     </ApplyModalProvider>
   );

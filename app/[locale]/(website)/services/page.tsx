@@ -117,23 +117,26 @@ export default async function ServicesPage({
 
           {activeDbServices.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {activeDbServices.map((service) => (
-                <ServiceCard
-                  key={service.id}
-                  title={service.title}
-                  description={service.description}
-                  features={service.features}
-                  tags={service.tags}
-                  image_url={service.image_url}
-                />
+              {activeDbServices.map((service, i) => (
+                <div key={service.id} data-reveal data-reveal-delay={String((i % 3) + 1)}>
+                  <ServiceCard
+                    title={service.title}
+                    description={service.description}
+                    features={service.features}
+                    tags={service.tags}
+                    image_url={service.image_url}
+                  />
+                </div>
               ))}
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {staticServices.map((s) => (
+              {staticServices.map((s, i) => (
                 <div
                   key={s.id}
                   id={s.id}
+                  data-reveal
+                  data-reveal-delay={String((i % 3) + 1)}
                   className={`bg-white rounded-[24px] shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-jn-float)] flex flex-col group relative ${
                     s.featured
                       ? "border-2 border-jn-accent"
@@ -188,9 +191,11 @@ export default async function ServicesPage({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {processSteps.map((p) => (
+            {processSteps.map((p, i) => (
               <div
                 key={p.step}
+                data-reveal
+                data-reveal-delay={String(i + 1)}
                 className="bg-jn-bg-off border border-jn-border rounded-2xl p-6 text-center"
               >
                 <div className="w-12 h-12 rounded-full bg-jn-primary text-white flex items-center justify-center font-[family-name:var(--font-poppins)] font-semibold mx-auto mb-4">
