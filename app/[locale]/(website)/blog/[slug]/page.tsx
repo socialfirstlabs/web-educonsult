@@ -5,6 +5,48 @@ import Image from "next/image";
 import { getT, type Locale } from "@/lib/i18n";
 import { FEATURE_FLAGS } from "@/lib/constants";
 import sanitizeHtml from "sanitize-html";
+import type { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string; locale: string }>;
+}): Promise<Metadata> {
+  if (!FEATURE_FLAGS.ENABLE_BLOG) return {};
+  const { slug, locale } = await params;
+  const supabase = await createClient();
+  if (!supabase) return {};
+
+  const { data: post } = await supabase
+    .from("blog_posts")
+    .select("title, excerpt, image_url, published_at, author_name, translations:blog_translations(locale,title,excerpt,slug)")
+    .eq("slug", slug)
+    .single();
+
+  if (!post) return {};
+  const translation = post.translations?.find((t: { locale: string }) => t.locale === locale);
+  const title = (translation as { title?: string } | undefined)?.title ?? post.title;
+  const description = (translation as { excerpt?: string } | undefined)?.excerpt ?? post.excerpt ?? undefined;
+
+  return {
+    title,
+    description,
+    openGraph: {
+      title,
+      description: description ?? "",
+      type: "article",
+      publishedTime: post.published_at ?? undefined,
+      authors: post.author_name ? [post.author_name] : undefined,
+      images: post.image_url ? [{ url: post.image_url }] : undefined,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description: description ?? "",
+      images: post.image_url ? [post.image_url] : undefined,
+    },
+  };
+}
 
 export default async function BlogPostPage({
   params,
@@ -79,9 +121,15 @@ export default async function BlogPostPage({
         <div className="flex items-center gap-4 text-muted-foreground pb-8 border-b">
             <span>{format(new Date(post.published_at ?? post.created_at ?? new Date()), "MMMM d, yyyy")}</span>
             <span>•</span>
-            <span className="font-medium text-primary uppercase text-xs tracking-widest">
-              {t("blog.tagGuide")}
-            </span>
+            {((localizedPost.tags as string[] | null) ?? []).length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {((localizedPost.tags as string[]) ?? []).map((tag: string) => (
+                  <span key={tag} className="font-medium text-primary uppercase text-xs tracking-widest">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
         </div>
       </header>
 
@@ -91,14 +139,14 @@ export default async function BlogPostPage({
               src={localizedPost.image_url} 
               alt={localizedPost.title} 
               fill 
-              sizes="100vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 896px, 896px"
               className="object-cover" 
               priority
             />
         </div>
       )}
 
-      <div className="prose prose-lg max-w-none prose-slate">
+      <div className="blog-content">
         {/* Render HTML content stored in Supabase.
             sanitize-html strips all disallowed tags/attributes before render.
             Config is intentionally strict — see security audit P2 fixes. */}

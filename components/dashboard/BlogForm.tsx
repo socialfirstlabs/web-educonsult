@@ -2,7 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { blogSchema, type BlogValues } from "@/lib/validations/blog.schema";
+import { blogSchema, type BlogValues, BLOG_TAGS } from "@/lib/validations/blog.schema";
 import { 
   Form, 
   FormControl, 
@@ -53,6 +53,7 @@ export function BlogForm({ initialData, onSuccess, currentUser }: BlogFormProps)
       excerpt: "",
       content: "",
       image_url: "",
+      tags: [],
       is_published: false,
     },
   });
@@ -76,10 +77,11 @@ export function BlogForm({ initialData, onSuccess, currentUser }: BlogFormProps)
       form.reset({
         title: initialData.title,
         slug: initialData.slug,
-        author_name: initialData.author_name || "EduNepal Team",
+        author_name: initialData.author_name || "J & N Team",
         excerpt: initialData.excerpt || "",
         content: initialData.content,
         image_url: initialData.image_url || "",
+        tags: (initialData as { tags?: string[] }).tags ?? [],
         is_published: initialData.is_published,
         published_at: initialData.published_at || "",
       });
@@ -193,6 +195,88 @@ export function BlogForm({ initialData, onSuccess, currentUser }: BlogFormProps)
           )}
         />
         
+        <FormField
+          control={form.control}
+          name="tags"
+          render={({ field }) => {
+            const selected: string[] = field.value ?? [];
+            const toggle = (tag: string) => {
+              const next = selected.includes(tag)
+                ? selected.filter((t) => t !== tag)
+                : [...selected, tag];
+              field.onChange(next);
+            };
+            return (
+              <FormItem>
+                <FormLabel>Tags</FormLabel>
+                <FormControl>
+                  <div className="space-y-2">
+                    {/* Preset tag chips */}
+                    <div className="flex flex-wrap gap-2">
+                      {BLOG_TAGS.map((tag) => {
+                        const active = selected.includes(tag);
+                        return (
+                          <button
+                            key={tag}
+                            type="button"
+                            onClick={() => toggle(tag)}
+                            className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
+                              active
+                                ? "bg-primary text-primary-foreground border-primary"
+                                : "bg-muted text-muted-foreground border-border hover:border-primary hover:text-primary"
+                            }`}
+                          >
+                            {tag}
+                            {active && <X size={10} />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                    {/* Custom tag input */}
+                    <div className="flex gap-2">
+                      <Input
+                        placeholder="Add custom tag…"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === ",") {
+                            e.preventDefault();
+                            const val = (e.target as HTMLInputElement).value.trim();
+                            if (val && !selected.includes(val)) {
+                              field.onChange([...selected, val]);
+                            }
+                            (e.target as HTMLInputElement).value = "";
+                          }
+                        }}
+                      />
+                    </div>
+                    {/* Selected tags display */}
+                    {selected.length > 0 && (
+                      <div className="flex flex-wrap gap-1 pt-1">
+                        {selected.map((tag) => (
+                          <span
+                            key={tag}
+                            className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-primary/10 text-primary border border-primary/20"
+                          >
+                            {tag}
+                            <button
+                              type="button"
+                              onClick={() => toggle(tag)}
+                              className="hover:text-destructive"
+                            >
+                              <X size={10} />
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </FormControl>
+                <FormDescription>Click a tag to select/deselect, or type a custom tag and press Enter.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            );
+          }}
+        />
+
         <FormField
           control={form.control}
           name="slug"

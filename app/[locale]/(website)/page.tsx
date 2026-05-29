@@ -81,9 +81,8 @@ export default async function HomePage({
       : "";
     return {
       img: post.image_url || "https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=600&auto=format&fit=crop",
-      tag: post.author_name,
+      tags: (post as { tags?: string[] }).tags ?? [],
       date,
-      read: "",
       title,
       desc: excerpt,
       href: `/${l}/blog/${slug}`,
@@ -340,24 +339,50 @@ export default async function HomePage({
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {blogPosts.map((post, i) => (
-              <div key={i} className="bg-white rounded-2xl shadow-sm border border-jn-border overflow-hidden group transition-all duration-300 hover:shadow-[0_20px_40px_-10px_rgba(36,62,188,0.1)] hover:-translate-y-2 hover:border-jn-primary-light">
-                <div className="h-56 overflow-hidden relative rounded-t-2xl">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={post.img} alt={post.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute top-4 left-4 bg-white/95 backdrop-blur-sm px-3 py-1.5 text-xs font-semibold text-jn-primary rounded-full uppercase tracking-wider shadow-sm">
-                    {post.tag}
+              <Link key={i} href={post.href} className="group">
+                <article className="bg-white rounded-2xl shadow-sm border border-jn-border overflow-hidden transition-all duration-300 hover:shadow-[var(--shadow-jn-float)] hover:-translate-y-1 flex flex-col h-full">
+                  <div className="h-56 overflow-hidden relative rounded-t-2xl bg-jn-primary-light">
+                    <Image
+                      src={post.img}
+                      alt={post.title}
+                      fill
+                      sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
                   </div>
-                </div>
-                <div className="p-8 flex flex-col">
-                  <div className="text-sm text-jn-text-muted mb-3 font-medium">{post.date}{post.read ? ` • ${post.read}` : ""}</div>
-                  <h3 className="jn-heading-3 mb-4 group-hover:text-jn-primary transition-colors leading-snug">{post.title}</h3>
-                  <p className="text-jn-text-muted text-[0.95rem] mb-6 line-clamp-2 flex-grow">{post.desc}</p>
-                  <Link href={post.href} className="inline-flex items-center gap-2 font-[family-name:var(--font-poppins)] font-semibold text-jn-primary group-hover:text-jn-primary-dark transition-all mt-auto">
-                    {t("home.blog.readMore")} <span className="group-hover:translate-x-1 transition-transform">→</span>
-                  </Link>
-                </div>
-              </div>
+                  <div className="p-6 flex flex-col flex-1">
+                    <div className="flex items-center gap-3 mb-3">
+                      {post.date && (
+                        <span className="text-sm text-jn-text-muted font-medium">{post.date}</span>
+                      )}
+                      {post.tags.length > 0 && (
+                        <>
+                          {post.date && <span className="text-jn-border">•</span>}
+                          <div className="flex flex-wrap gap-1">
+                            {post.tags.map((tag) => (
+                              <span
+                                key={tag}
+                                className="px-2 py-0.5 rounded-full text-[0.7rem] font-semibold bg-jn-primary-light text-jn-primary uppercase tracking-wide"
+                              >
+                                {tag}
+                              </span>
+                            ))}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                    <h3 className="text-xl font-semibold mb-3 font-[family-name:var(--font-poppins)] text-jn-text-dark group-hover:text-jn-primary transition-colors line-clamp-2">
+                      {post.title}
+                    </h3>
+                    {post.desc && (
+                      <p className="text-jn-text-muted text-[0.95rem] mb-6 line-clamp-3 flex-grow">{post.desc}</p>
+                    )}
+                    <span className="inline-flex items-center gap-1 font-[family-name:var(--font-poppins)] font-semibold text-jn-primary group-hover:gap-2 transition-all mt-auto">
+                      {t("home.blog.readMore")} <span aria-hidden="true">→</span>
+                    </span>
+                  </div>
+                </article>
+              </Link>
             ))}
           </div>
           <div className="text-center mt-14">

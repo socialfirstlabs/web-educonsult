@@ -1,5 +1,8 @@
 import { z } from "zod";
 
+export const BLOG_TAGS = ["Guide", "News", "Tips", "Story", "Announcement"] as const;
+export type BlogTag = typeof BLOG_TAGS[number];
+
 export const blogSchema = z.object({
   title: z.string().min(5, "Title must be at least 5 characters"),
   slug: z.string().min(3, "Slug must be at least 3 characters").regex(/^[a-z0-9-]+$/, "Slug must be lowercase and contain only letters, numbers, and hyphens"),
@@ -7,6 +10,7 @@ export const blogSchema = z.object({
   content: z.string().min(20, "Content must be at least 20 characters"),
   image_url: z.string().url("Valid image URL is required").or(z.literal("")),
   author_name: z.string().min(2, "Author name is required"),
+  tags: z.array(z.string()).min(1, "At least one tag is required"),
   is_published: z.boolean(),
   published_at: z.string().optional().or(z.literal("")),
 });

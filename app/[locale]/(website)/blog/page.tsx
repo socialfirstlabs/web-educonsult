@@ -98,12 +98,29 @@ export default async function BlogPage({
 
                     {/* Content */}
                     <div className="p-6 flex flex-col flex-1">
-                      <div className="text-sm text-jn-text-muted mb-3 font-medium">
-                        {format(
-                          new Date(
-                            post.published_at ?? post.created_at ?? new Date(),
-                          ),
-                          "MMM d, yyyy",
+                      <div className="flex items-center gap-3 mb-3">
+                        <span className="text-sm text-jn-text-muted font-medium">
+                          {format(
+                            new Date(
+                              post.published_at ?? post.created_at ?? new Date(),
+                            ),
+                            "MMM d, yyyy",
+                          )}
+                        </span>
+                        {((post as { tags?: string[] }).tags ?? []).length > 0 && (
+                          <>
+                            <span className="text-jn-border">•</span>
+                            <div className="flex flex-wrap gap-1">
+                              {((post as { tags?: string[] }).tags ?? []).map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="px-2 py-0.5 rounded-full text-[0.7rem] font-semibold bg-jn-primary-light text-jn-primary uppercase tracking-wide"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </>
                         )}
                       </div>
                       <h3 className="text-xl font-semibold mb-3 font-[family-name:var(--font-poppins)] text-jn-text-dark group-hover:text-jn-primary transition-colors line-clamp-2">

@@ -37,13 +37,14 @@ import { deleteBlogPost } from "@/lib/actions/blog.action";
 import { BlogValues } from "@/lib/validations/blog.schema";
 import { defaultLocale } from "@/lib/i18n/config";
 
-interface BlogPost extends Omit<BlogValues, 'excerpt' | 'is_published' | 'image_url' | 'published_at'> {
+interface BlogPost extends Omit<BlogValues, 'excerpt' | 'is_published' | 'image_url' | 'published_at' | 'tags'> {
   id: string;
   created_at: string | null;
   excerpt: string | null;
   is_published: boolean | null;
   image_url: string | null;
   published_at: string | null;
+  tags: string[] | null;
   translations?: {
     locale: string;
     title: string;
@@ -74,6 +75,7 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
           <TableHeader>
             <TableRow>
               <TableHead>Post</TableHead>
+              <TableHead>Tag</TableHead>
               <TableHead>Slug</TableHead>
               <TableHead>Date</TableHead>
               <TableHead>Status</TableHead>
@@ -83,7 +85,7 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
           <TableBody>
             {posts.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-10 text-muted-foreground">
+                <TableCell colSpan={6} className="text-center py-10 text-muted-foreground">
                   No blog posts found. Create your first post to get started.
                 </TableCell>
               </TableRow>
@@ -106,6 +108,13 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
                         )}
                       </div>
                       <span className="line-clamp-1 max-w-[200px]">{post.title}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap gap-1">
+                      {(post.tags ?? []).map((tag) => (
+                        <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>
+                      ))}
                     </div>
                   </TableCell>
                   <TableCell className="text-xs font-mono text-muted-foreground">
@@ -174,6 +183,7 @@ export function BlogList({ posts }: { posts: BlogPost[] }) {
                 is_published: editingPost.is_published ?? false,
                 image_url: editingPost.image_url ?? '',
                 published_at: editingPost.published_at ?? '',
+                tags: editingPost.tags ?? [],
               }}
               onSuccess={() => setEditingPost(null)}
             />
