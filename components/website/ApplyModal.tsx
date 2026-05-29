@@ -59,9 +59,11 @@ export function useApplyModal() {
 export function ApplyModalProvider({
   children,
   locale,
+  programs = [],
 }: {
   children: React.ReactNode;
   locale: string;
+  programs?: string[];
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -71,7 +73,7 @@ export function ApplyModalProvider({
   return (
     <ApplyModalContext.Provider value={{ openModal }}>
       {children}
-      {isOpen && <ApplyModalDialog locale={locale} onClose={closeModal} />}
+      {isOpen && <ApplyModalDialog locale={locale} onClose={closeModal} programs={programs} />}
     </ApplyModalContext.Provider>
   );
 }
@@ -81,9 +83,11 @@ export function ApplyModalProvider({
 function ApplyModalDialog({
   locale,
   onClose,
+  programs,
 }: {
   locale: string;
   onClose: () => void;
+  programs: string[];
 }) {
   const t = getT(locale);
 
@@ -415,15 +419,11 @@ function ApplyModalDialog({
                     {...register("program")}
                   >
                     <option value="">{t("apply.programPh")}</option>
-                    <option value={t("apply.prog.basic")}>
-                      {t("apply.prog.basic")}
-                    </option>
-                    <option value={t("apply.prog.advanced")}>
-                      {t("apply.prog.advanced")}
-                    </option>
-                    <option value={t("apply.prog.dementia")}>
-                      {t("apply.prog.dementia")}
-                    </option>
+                    {programs.map((title) => (
+                      <option key={title} value={title}>
+                        {title}
+                      </option>
+                    ))}
                     <option value={t("apply.prog.unsure")}>
                       {t("apply.prog.unsure")}
                     </option>
