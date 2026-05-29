@@ -1,15 +1,24 @@
 "use server";
 
+import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { revalidatePath } from "next/cache";
 import {
   enrollmentSchema,
   type EnrollmentFormValues,
 } from "@/lib/validations/enrollment.schema";
+import { checkRateLimit, getClientIp } from "@/lib/rate-limit";
 
 // ─── Public: submit application form ─────────────────────────────────────────
 
 export async function submitEnrollment(values: EnrollmentFormValues) {
+  // ── Rate limiting ──────────────────────────────────────────────────────────
+  const ip = getClientIp(await headers())
+  const { allowed } = checkRateLimit(ip)
+  if (!allowed) {
+    return { success: false, error: "Too many requests. Please try again in a minute." }
+  }
+
   const parsed = enrollmentSchema.safeParse(values);
 
   if (!parsed.success) {

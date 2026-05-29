@@ -114,11 +114,29 @@ function ApplyModalDialog({
     },
   });
 
+  // ── Handlers ───────────────────────────────────────────
+  // Declared before the effects so the Escape key useEffect can reference it.
+  const handleClose = useCallback(() => {
+    setVisible(false);
+    setTimeout(onClose, 300);
+  }, [onClose]);
+
   // ── Lifecycle ──────────────────────────────────────────
+  // Two nested RAFs:
+  //  Frame 1 — mount the portal so the element exists in the DOM
+  //  Frame 2 — flip visible=true to trigger the CSS scale/opacity transition
+  // Neither setState is called synchronously inside the effect body, which
+  // satisfies the react-hooks/set-state-in-effect lint rule.
   useEffect(() => {
-    setMounted(true);
-    const id = requestAnimationFrame(() => setVisible(true));
-    return () => cancelAnimationFrame(id);
+    let visibleId: number;
+    const mountedId = requestAnimationFrame(() => {
+      setMounted(true);
+      visibleId = requestAnimationFrame(() => setVisible(true));
+    });
+    return () => {
+      cancelAnimationFrame(mountedId);
+      cancelAnimationFrame(visibleId);
+    };
   }, []);
 
   // lock body scroll
@@ -142,13 +160,7 @@ function ApplyModalDialog({
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  });
-
-  // ── Handlers ───────────────────────────────────────────
-  function handleClose() {
-    setVisible(false);
-    setTimeout(onClose, 300);
-  }
+  }, [handleClose]);
 
   async function onSubmit(values: ApplyFormValues) {
     setServerError(null);

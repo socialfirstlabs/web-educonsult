@@ -221,7 +221,8 @@ VALUES (
     'images',
     true,
     52428800,   -- 50 MiB
-    ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/svg+xml']
+    -- SVG excluded: can carry embedded <script>/event-handler XSS payloads.
+    ARRAY['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 )
 ON CONFLICT (id) DO NOTHING;
 

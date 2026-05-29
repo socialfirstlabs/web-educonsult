@@ -8,8 +8,6 @@ import { Input } from '@/components/ui/input';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 
-const supabase = createBrowserClient();
-
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -22,19 +20,26 @@ export default function LoginPage() {
     setLoading(true);
     setError(null);
 
+    // Create the client lazily inside the handler so it is never instantiated
+    // at module-level (avoids issues during SSR / build-time pre-rendering).
+    const supabase = createBrowserClient();
+
     if (!supabase) {
-       setError("Authentication service is not configured.");
-       setLoading(false);
-       return;
+      setError("Authentication service is not configured.");
+      setLoading(false);
+      return;
     }
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { error: authError } = await supabase.auth.signInWithPassword({
       email,
       password,
     });
 
-    if (error) {
-      setError(error.message);
+    if (authError) {
+      // Return a generic message — never leak Supabase's raw error string to
+      // the browser. Raw messages like "Invalid login credentials" or
+      // "Email not confirmed" reveal account enumeration information.
+      setError("Invalid email or password. Please try again.");
       setLoading(false);
     } else {
       router.push('/dashboard');
@@ -49,26 +54,32 @@ export default function LoginPage() {
           <CardTitle className="text-2xl text-center">Admin Login</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
-            {error && <div className="p-3 text-sm bg-destructive/10 text-destructive rounded-md">{error}</div>}
+          <form onSubmit={handleLogin} className="space-y-4" noValidate>
+            {error && (
+              <div role="alert" className="p-3 text-sm bg-destructive/10 text-destructive rounded-md">
+                {error}
+              </div>
+            )}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input 
-                id="email" 
-                type="email" 
-                value={email} 
-                onChange={(e) => setEmail(e.target.value)} 
-                required 
+              <Input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                required
               />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input 
-                id="password" 
-                type="password" 
-                value={password} 
-                onChange={(e) => setPassword(e.target.value)} 
-                required 
+              <Input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete="current-password"
+                required
               />
             </div>
             <Button type="submit" className="w-full" disabled={loading}>
