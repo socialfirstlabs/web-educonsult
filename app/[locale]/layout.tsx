@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { isValidLocale } from "@/lib/i18n/config";
+import LocaleSetter from "@/components/LocaleSetter";
 
 export default async function LocaleLayout({
   children,
@@ -14,5 +15,10 @@ export default async function LocaleLayout({
     notFound();
   }
 
-  return children;
+  return (
+    <>
+      <LocaleSetter locale={locale} />
+      {children}
+    </>
+  );
 }

@@ -225,7 +225,7 @@ export const ja: Record<TranslationKey, string> = {
   "contact.info.email.l1": "info@jncaregiver.com",
   "contact.info.email.l2": "support@jncaregiver.com",
   "contact.info.call.title": "電話でお問い合わせ",
-  "contact.info.call.l1": "+977 1 4XXXXXX",
+  "contact.info.call.l1": "+977 1 9812345678",
   "contact.info.call.l2": "月〜金、9:00〜17:00",
   "contact.form.title": "メッセージを送る",
   "contact.form.sub": "下のフォームに記入していただければ、24時間以内にチームがご連絡します。",
@@ -334,6 +334,18 @@ export const ja: Record<TranslationKey, string> = {
   "apply.error": "エラーが発生しました。もう一度お試しください。",
   "apply.closeLabel": "申し込みフォームを閉じる",
   "home.programs.applyNow": "今すぐ申し込む",
+
+  // ─────────────────────────────────────────────────────────
+  // TERMS & PRIVACY POLICY PAGE
+  // ─────────────────────────────────────────────────────────
+  "terms.intro": "J & N Caregiver Training Co. Ltd.（以下「当社」）は、本ウェブサイトのご利用規約およびプライバシーポリシーを現在整備中です。最新の内容は近日中に公開予定です。",
+  "terms.data.title": "個人情報の取り扱いについて",
+  "terms.data.body": "お問い合わせフォームまたは申込フォームからご提供いただいた氏名・メールアドレス・電話番号は、入学相談・お問い合わせへの回答のみに使用します。第三者への提供は行いません。",
+  "terms.cookies.title": "Cookieについて",
+  "terms.cookies.body": "本サイトは、サービス向上のために必要最小限のCookieを使用します。サードパーティの追跡Cookieは使用していません。",
+  "terms.contact.title": "お問い合わせ",
+  "terms.contact.body": "本ポリシーに関するご質問は、下記メールアドレスまでお問い合わせください。",
+  "terms.contact.cta": "お問い合わせページへ",
 
   // ─────────────────────────────────────────────────────────
   // LEGACY / COMPATIBILITY

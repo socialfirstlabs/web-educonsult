@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
+import Image from "next/image";
 import { CheckCircle2 } from "lucide-react";
 import { getT, type Locale } from "@/lib/i18n";
 
@@ -34,8 +35,14 @@ export default async function StudyInJapanPage({
             </Link>
           </div>
         </div>
-        <div className="flex-1 aspect-video bg-muted rounded-3xl flex items-center justify-center border-4 border-white shadow-xl">
-             <span className="text-muted-foreground italic">{t("studyJapan.heroPlaceholder")}</span>
+        <div className="flex-1 aspect-video relative rounded-3xl overflow-hidden border-4 border-white shadow-xl">
+          <Image
+            src="/images/home-2.png"
+            alt="Japan — your next destination"
+            fill
+            sizes="(min-width: 768px) 50vw, 100vw"
+            className="object-cover"
+          />
         </div>
       </div>
 

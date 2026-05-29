@@ -80,7 +80,7 @@ export default function Footer({ locale }: FooterProps) {
               <li><Link href={`/${l}/about`} className="hover:text-white transition-colors">{t("footer.company.about")}</Link></li>
               <li><Link href={`/${l}/services`} className="hover:text-white transition-colors">{t("footer.company.services")}</Link></li>
               <li><Link href={`/${l}/blog`} className="hover:text-white transition-colors">{t("footer.company.blog")}</Link></li>
-              <li><Link href="#" className="hover:text-white transition-colors">{t("footer.company.terms")}</Link></li>
+              <li><Link href={`/${l}/terms`} className="hover:text-white transition-colors">{t("footer.company.terms")}</Link></li>
             </ul>
           </div>
 

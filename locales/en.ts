@@ -223,7 +223,7 @@ export const en = {
   "contact.info.email.l1": "info@jncaregiver.com",
   "contact.info.email.l2": "support@jncaregiver.com",
   "contact.info.call.title": "Call Us",
-  "contact.info.call.l1": "+977 1 4XXXXXX",
+  "contact.info.call.l1": "+977 9812345678",
   "contact.info.call.l2": "Mon–Fri, 9am – 5pm",
   "contact.form.title": "Send us a message",
   "contact.form.sub": "Fill out the form below and our team will get back to you within 24 hours.",
@@ -332,6 +332,18 @@ export const en = {
   "apply.error": "Something went wrong. Please try again.",
   "apply.closeLabel": "Close application form",
   "home.programs.applyNow": "Apply Now",
+
+  // ─────────────────────────────────────────────────────────
+  // TERMS & PRIVACY POLICY PAGE
+  // ─────────────────────────────────────────────────────────
+  "terms.intro": "J & N Caregiver Training Co. Ltd. is currently finalizing its full Terms of Service and Privacy Policy. The complete document will be published here shortly.",
+  "terms.data.title": "Data We Collect",
+  "terms.data.body": "Information you submit through our contact or application forms (name, email address, phone number) is used solely to respond to your inquiry or enrollment request. We do not sell or share your data with third parties.",
+  "terms.cookies.title": "Cookies",
+  "terms.cookies.body": "This website uses only essential cookies required for site functionality. We do not use third-party tracking cookies.",
+  "terms.contact.title": "Contact",
+  "terms.contact.body": "For any questions about this policy, please reach out to us directly.",
+  "terms.contact.cta": "Go to Contact Page",
 
   // ─────────────────────────────────────────────────────────
   // LEGACY / KEPT FOR COMPATIBILITY
