@@ -1,53 +1,33 @@
 "use client";
 
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
+import {
+  Table, TableBody, TableCell, TableHead, TableHeader, TableRow
 } from "@/components/ui/table";
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
+import {
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { 
-  MoreHorizontal, 
-  Pencil, 
-  Trash,
-  User,
-  MapPin,
-  GraduationCap
-} from "lucide-react";
+import { MoreHorizontal, Pencil, Trash, User, MapPin, Building2 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle 
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useState } from "react";
 import Image from "next/image";
 import { SuccessStoryForm } from "./SuccessStoryForm";
 import { deleteSuccessStory } from "@/lib/actions/success-story.action";
-import { SuccessStoryValues } from "@/lib/validations/success-story.schema";
+import { type SuccessStoryValues } from "@/lib/validations/success-story.schema";
 
-interface SuccessStory extends Omit<SuccessStoryValues, 'testimonial' | 'is_published' | 'image_url' | 'university_name'> {
+interface SuccessStory extends Omit<SuccessStoryValues, 'testimonial' | 'is_published' | 'image_url' | 'company_name'> {
   id: string;
   created_at: string | null;
   testimonial: string | null;
   is_published: boolean | null;
   image_url: string | null;
-  university_name: string | null;
+  company_name: string | null;
   translations?: {
     locale: string;
     student_name: string;
-    destination_country: string;
-    university_name?: string | null;
+    destination: string;
+    company_name?: string | null;
     testimonial?: string | null;
   }[];
 }
@@ -73,7 +53,7 @@ export function SuccessStoryList({ stories }: { stories: SuccessStory[] }) {
             <TableRow>
               <TableHead>Student</TableHead>
               <TableHead>Destination</TableHead>
-              <TableHead>University</TableHead>
+              <TableHead>Company / Facility</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
@@ -90,15 +70,9 @@ export function SuccessStoryList({ stories }: { stories: SuccessStory[] }) {
                 <TableRow key={story.id}>
                   <TableCell className="font-medium">
                     <div className="flex items-center gap-2">
-                      <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center overflow-hidden">
+                      <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center overflow-hidden shrink-0">
                         {story.image_url ? (
-                          <Image 
-                            src={story.image_url} 
-                            alt={story.student_name} 
-                            width={32} 
-                            height={32} 
-                            className="h-full w-full object-cover" 
-                          />
+                          <Image src={story.image_url} alt={story.student_name} width={32} height={32} className="h-full w-full object-cover" />
                         ) : (
                           <User size={16} />
                         )}
@@ -109,13 +83,13 @@ export function SuccessStoryList({ stories }: { stories: SuccessStory[] }) {
                   <TableCell>
                     <div className="flex items-center gap-1 text-xs">
                       <MapPin size={12} className="text-muted-foreground" />
-                      {story.destination_country}
+                      {story.destination}
                     </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1 text-xs">
-                      <GraduationCap size={12} className="text-muted-foreground" />
-                      {story.university_name || "N/A"}
+                      <Building2 size={12} className="text-muted-foreground" />
+                      {story.company_name || "—"}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -125,21 +99,16 @@ export function SuccessStoryList({ stories }: { stories: SuccessStory[] }) {
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
-                      <DropdownMenuTrigger
-                        render={
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        }
-                      />
+                      <DropdownMenuTrigger render={
+                        <Button variant="ghost" size="icon">
+                          <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                      } />
                       <DropdownMenuContent align="end">
                         <DropdownMenuItem onClick={() => setEditingStory(story)}>
                           <Pencil className="mr-2 h-4 w-4" /> Edit
                         </DropdownMenuItem>
-                        <DropdownMenuItem 
-                          className="text-destructive"
-                          onClick={() => handleDelete(story.id)}
-                        >
+                        <DropdownMenuItem className="text-destructive" onClick={() => handleDelete(story.id)}>
                           <Trash className="mr-2 h-4 w-4" /> Delete
                         </DropdownMenuItem>
                       </DropdownMenuContent>
@@ -152,27 +121,24 @@ export function SuccessStoryList({ stories }: { stories: SuccessStory[] }) {
         </Table>
       </div>
 
-      <Dialog 
-        open={!!editingStory} 
-        onOpenChange={(open) => !open && setEditingStory(null)}
-      >
-      <DialogContent className="w-full max-h-[85vh] overflow-y-auto sm:max-w-[720px]">
-        <DialogHeader>
-          <DialogTitle>Edit Success Story</DialogTitle>
-        </DialogHeader>
-        {editingStory && (
-          <SuccessStoryForm
-            initialData={{
-              ...editingStory,
-              testimonial: editingStory.testimonial ?? '',
-              is_published: editingStory.is_published ?? false,
-              image_url: editingStory.image_url ?? '',
-              university_name: editingStory.university_name ?? '',
-            }}
-            onSuccess={() => setEditingStory(null)}
-          />
-        )}
-      </DialogContent>
+      <Dialog open={!!editingStory} onOpenChange={(open) => !open && setEditingStory(null)}>
+        <DialogContent className="w-full max-h-[85vh] overflow-y-auto sm:max-w-[720px]">
+          <DialogHeader>
+            <DialogTitle>Edit Success Story</DialogTitle>
+          </DialogHeader>
+          {editingStory && (
+            <SuccessStoryForm
+              initialData={{
+                ...editingStory,
+                testimonial: editingStory.testimonial ?? "",
+                is_published: editingStory.is_published ?? false,
+                image_url: editingStory.image_url ?? "",
+                company_name: editingStory.company_name ?? "",
+              }}
+              onSuccess={() => setEditingStory(null)}
+            />
+          )}
+        </DialogContent>
       </Dialog>
     </>
   );

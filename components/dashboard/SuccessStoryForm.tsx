@@ -3,18 +3,17 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { successStorySchema, type SuccessStoryValues } from "@/lib/validations/success-story.schema";
-import { 
-  Form, 
-  FormControl, 
-  FormField, 
-  FormItem, 
-  FormLabel, 
-  FormMessage 
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { addSuccessStory, updateSuccessStory } from "@/lib/actions/success-story.action";
 import { uploadImage } from "@/lib/actions/storage.action";
@@ -28,8 +27,8 @@ interface SuccessStoryFormProps {
     translations?: {
       locale: string;
       student_name: string;
-      destination_country: string;
-      university_name?: string | null;
+      destination: string;
+      company_name?: string | null;
       testimonial?: string | null;
     }[];
   };
@@ -45,8 +44,8 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
     resolver: zodResolver(successStorySchema),
     defaultValues: {
       student_name: "",
-      destination_country: "",
-      university_name: "",
+      destination: "",
+      company_name: "",
       testimonial: "",
       image_url: "",
       is_published: true,
@@ -55,25 +54,24 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
 
   const jaForm = useForm<{
     student_name: string;
-    destination_country: string;
-    university_name: string;
+    destination: string;
+    company_name: string;
     testimonial: string;
   }>({
     defaultValues: {
       student_name: "",
-      destination_country: "",
-      university_name: "",
+      destination: "",
+      company_name: "",
       testimonial: "",
     },
   });
 
-  // Update form values when initialData changes (for editing)
   useEffect(() => {
     if (initialData) {
       form.reset({
         student_name: initialData.student_name,
-        destination_country: initialData.destination_country,
-        university_name: initialData.university_name || "",
+        destination: initialData.destination,
+        company_name: initialData.company_name || "",
         testimonial: initialData.testimonial,
         image_url: initialData.image_url,
         is_published: initialData.is_published,
@@ -83,8 +81,8 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
       if (ja) {
         jaForm.reset({
           student_name: ja.student_name || "",
-          destination_country: ja.destination_country || "",
-          university_name: ja.university_name || "",
+          destination: ja.destination || "",
+          company_name: ja.company_name || "",
           testimonial: ja.testimonial || "",
         });
       }
@@ -96,21 +94,15 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
-
     setUploading(true);
     try {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("folder", "success-stories");
-      
       const publicUrl = await uploadImage(formData);
-      form.setValue("image_url", publicUrl, { 
-        shouldDirty: true, 
-        shouldValidate: true 
-      });
+      form.setValue("image_url", publicUrl, { shouldDirty: true, shouldValidate: true });
     } catch (error) {
-      console.error("Upload failed:", error);
-      alert(error instanceof Error ? error.message : "Failed to upload image. Please try again.");
+      alert(error instanceof Error ? error.message : "Failed to upload image.");
     } finally {
       setUploading(false);
     }
@@ -124,12 +116,11 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
         await updateSuccessStory(initialData.id, values, jaValues);
       } else {
         await addSuccessStory(values, jaValues);
-        form.reset(); // Only reset after adding a new story
+        form.reset();
         jaForm.reset();
       }
       onSuccess?.();
     } catch (error) {
-      console.error(error);
       alert(error instanceof Error ? error.message : "Something went wrong. Please try again.");
     } finally {
       setLoading(false);
@@ -155,12 +146,12 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <FormField
             control={form.control}
-            name="destination_country"
+            name="destination"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Destination Country</FormLabel>
+                <FormLabel>Destination</FormLabel>
                 <FormControl>
-                  <Input placeholder="e.g. Japan" {...field} />
+                  <Input placeholder="e.g. Tokyo, Japan" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -168,12 +159,12 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
           />
           <FormField
             control={form.control}
-            name="university_name"
+            name="company_name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>University Name (Optional)</FormLabel>
+                <FormLabel>Company / Facility Name (Optional)</FormLabel>
                 <FormControl>
-                  <Input placeholder="e.g. Tokyo University" {...field} />
+                  <Input placeholder="e.g. Sakura Care Center" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -187,16 +178,14 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
             <FormItem>
               <FormLabel>Testimonial</FormLabel>
               <FormControl>
-                <Textarea 
-                  placeholder="Student's experience..." 
-                  className="resize-none" 
-                  {...field} 
-                />
+                <Textarea placeholder="Student's experience..." className="resize-none" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
+
+        {/* Japanese Translation */}
         <Form {...jaForm}>
           <div className="rounded-lg border p-4 space-y-4">
             <div className="text-sm font-semibold">Japanese Translation (JA)</div>
@@ -206,9 +195,7 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Student Name (JA)</FormLabel>
-                  <FormControl>
-                    <Input placeholder="例: 山田 太郎" {...field} />
-                  </FormControl>
+                  <FormControl><Input placeholder="例: 山田 太郎" {...field} /></FormControl>
                   <FormMessage />
                 </FormItem>
               )}
@@ -216,26 +203,22 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <FormField
                 control={jaForm.control}
-                name="destination_country"
+                name="destination"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Destination Country (JA)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="例: 日本" {...field} />
-                    </FormControl>
+                    <FormLabel>Destination (JA)</FormLabel>
+                    <FormControl><Input placeholder="例: 東京都" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <FormField
                 control={jaForm.control}
-                name="university_name"
+                name="company_name"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>University Name (JA)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="例: 東京大学" {...field} />
-                    </FormControl>
+                    <FormLabel>Company / Facility (JA)</FormLabel>
+                    <FormControl><Input placeholder="例: さくらケアセンター" {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -256,21 +239,21 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
             />
           </div>
         </Form>
-        
+
+        {/* Photo upload */}
         <div className="space-y-2">
-          <Label>Student Photo</Label>
+          <p className="text-sm font-medium leading-none">Student Photo</p>
           <div className="flex items-center gap-4">
             {imageUrl ? (
               <div className="relative h-24 w-24 rounded-lg overflow-hidden border">
                 <Image src={imageUrl} alt="Student preview" fill sizes="96px" className="object-cover" />
-                <button 
+                <button
                   type="button"
                   title="Remove image"
                   onClick={() => form.setValue("image_url", "", { shouldDirty: true, shouldValidate: true })}
                   className="absolute top-1 right-1 bg-destructive text-destructive-foreground rounded-full p-1 shadow-sm"
                 >
                   <X size={12} />
-                  <span className="sr-only">Remove image</span>
                 </button>
               </div>
             ) : (
@@ -290,18 +273,17 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
                 )}
               </button>
             )}
-            <input 
-              type="file" 
-              ref={fileInputRef} 
-              className="hidden" 
+            <input
+              type="file"
+              ref={fileInputRef}
+              className="hidden"
               accept="image/*"
               title="Upload photo"
-              placeholder="Upload photo"
               onChange={handleImageUpload}
             />
             <div className="text-xs text-muted-foreground">
-              <p>Recommended: Square image (500x500px)</p>
-              <p>Max size: 5MB</p>
+              <p>Recommended: Square image (500×500px)</p>
+              <p>Max size: 5 MB</p>
             </div>
           </div>
           <FormField
@@ -309,9 +291,7 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
             name="image_url"
             render={({ field }) => (
               <FormItem className="hidden">
-                <FormControl>
-                  <Input {...field} />
-                </FormControl>
+                <FormControl><Input {...field} /></FormControl>
                 <FormMessage />
               </FormItem>
             )}
@@ -330,10 +310,7 @@ export function SuccessStoryForm({ initialData, onSuccess }: SuccessStoryFormPro
                 </div>
               </div>
               <FormControl>
-                <Switch
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
-                />
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
               </FormControl>
             </FormItem>
           )}

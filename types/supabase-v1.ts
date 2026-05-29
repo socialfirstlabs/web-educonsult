@@ -344,66 +344,66 @@ export type Database = {
       success_stories: {
         Row: {
           created_at: string | null
-          destination_country: string
+          destination: string
           id: string
           image_url: string | null
           is_published: boolean | null
           student_name: string
           testimonial: string | null
-          university_name: string | null
+          company_name: string | null
         }
         Insert: {
           created_at?: string | null
-          destination_country: string
+          destination: string
           id?: string
           image_url?: string | null
           is_published?: boolean | null
           student_name: string
           testimonial?: string | null
-          university_name?: string | null
+          company_name?: string | null
         }
         Update: {
           created_at?: string | null
-          destination_country?: string
+          destination?: string
           id?: string
           image_url?: string | null
           is_published?: boolean | null
           student_name?: string
           testimonial?: string | null
-          university_name?: string | null
+          company_name?: string | null
         }
         Relationships: []
       }
       success_story_translations: {
         Row: {
           created_at: string | null
-          destination_country: string
+          destination: string
           id: string
           locale: string
           student_name: string
           success_story_id: string
           testimonial: string | null
-          university_name: string | null
+          company_name: string | null
         }
         Insert: {
           created_at?: string | null
-          destination_country: string
+          destination: string
           id?: string
           locale: string
           student_name: string
           success_story_id: string
           testimonial?: string | null
-          university_name?: string | null
+          company_name?: string | null
         }
         Update: {
           created_at?: string | null
-          destination_country?: string
+          destination?: string
           id?: string
           locale?: string
           student_name?: string
           success_story_id?: string
           testimonial?: string | null
-          university_name?: string | null
+          company_name?: string | null
         }
         Relationships: [
           {

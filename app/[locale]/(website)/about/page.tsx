@@ -63,7 +63,7 @@ export default async function AboutPage({
           <div>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="https://images.unsplash.com/photo-1521791136064-7986c2920216?q=80&w=1000&auto=format&fit=crop"
+              src="/images/about-1.png"
               alt="Our Team"
               className="w-full h-auto rounded-3xl shadow-lg"
             />

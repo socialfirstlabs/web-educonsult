@@ -5,6 +5,7 @@ import CtaBand from "@/components/website/CtaBand";
 import ApplyButton from "@/components/website/ApplyButton";
 import { getT, type Locale } from "@/lib/i18n";
 import { getBlogPosts } from "@/lib/actions/blog.action";
+import { getPublishedSuccessStories } from "@/lib/actions/success-story.action";
 
 export const metadata = {
   title: "J&N Caregiver Training | Your Pathway to Japan",
@@ -74,26 +75,14 @@ export default async function HomePage({
     },
   ];
 
-  const testimonials = [
-    {
-      initials: "ST",
-      name: t("home.testimonials.t1.name"),
-      role: t("home.testimonials.t1.role"),
-      quote: t("home.testimonials.t1.quote"),
-    },
-    {
-      initials: "RB",
-      name: t("home.testimonials.t2.name"),
-      role: t("home.testimonials.t2.role"),
-      quote: t("home.testimonials.t2.quote"),
-    },
-    {
-      initials: "AS",
-      name: t("home.testimonials.t3.name"),
-      role: t("home.testimonials.t3.role"),
-      quote: t("home.testimonials.t3.quote"),
-    },
-  ];
+  const dbStories = await getPublishedSuccessStories(l);
+  const testimonials = dbStories.slice(0, 3).map((s) => ({
+    initials: s.student_name.split(" ").map((w: string) => w[0]).slice(0, 2).join("").toUpperCase(),
+    name: s.student_name,
+    role: [s.company_name, s.destination].filter(Boolean).join(" · "),
+    quote: s.testimonial ?? "",
+    image_url: s.image_url ?? null,
+  }));
 
   const latestPosts = await getBlogPosts(true, 3);
   const blogPosts = latestPosts.map((post) => {
@@ -204,7 +193,7 @@ export default async function HomePage({
             <div>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src="https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?q=80&w=1000&auto=format&fit=crop"
+                src="/images/home-2.png"
                 alt="Beautiful Japan scenery"
                 className="w-full h-auto rounded-3xl shadow-lg"
               />
@@ -306,12 +295,28 @@ export default async function HomePage({
             <p className="jn-body-text">{t("home.testimonials.body")}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-            {testimonials.map((item) => (
+            {testimonials.length === 0 ? (
+              <p className="col-span-3 text-center text-jn-text-muted py-10 italic">
+                {t("successStories.empty")}
+              </p>
+            ) : testimonials.map((item) => (
               <div key={item.name} className="bg-white p-8 rounded-[24px] shadow-sm border border-jn-border flex flex-col">
-                <div className="text-jn-accent text-xl mb-4">★★★★★</div>
-                <p className="text-[1.05rem] text-jn-text-dark italic mb-6 flex-grow">&ldquo;{item.quote}&rdquo;</p>
+                {/* <div className="text-jn-accent text-xl mb-4">★★★★★</div> */}
+                <p className="text-[1.05rem] text-jn-text-dark italic mb-6 flex-grow line-clamp-5">&ldquo;{item.quote}&rdquo;</p>
                 <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 rounded-full bg-jn-primary-light text-jn-primary flex items-center justify-center font-[family-name:var(--font-poppins)] font-semibold text-xl">{item.initials}</div>
+                  {item.image_url ? (
+                    <Image
+                      src={item.image_url}
+                      alt={item.name}
+                      width={48}
+                      height={48}
+                      className="w-12 h-12 rounded-full object-cover border border-jn-border"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-jn-primary-light text-jn-primary flex items-center justify-center font-[family-name:var(--font-poppins)] font-semibold text-base shrink-0">
+                      {item.initials}
+                    </div>
+                  )}
                   <div>
                     <h4 className="text-base font-semibold font-[family-name:var(--font-poppins)] text-jn-text-dark">{item.name}</h4>
                     <p className="text-[0.85rem] text-jn-text-muted">{item.role}</p>
