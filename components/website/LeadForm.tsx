@@ -94,18 +94,38 @@ export function LeadForm({ locale = "en" }: LeadFormProps) {
           </div>
         )}
 
-        {/* Row 1: Name + Email */}
+        {/* Row 1: Full Name */}
+        <FormField
+          control={form.control}
+          name="name"
+          render={({ field, fieldState }) => (
+            <FormItem>
+              <label className={labelCls}>{t("form.fullName")}</label>
+              <FormControl>
+                <input
+                  type="text"
+                  placeholder={t("form.fullNamePlaceholder")}
+                  className={`${baseCls} ${fieldState.invalid ? errCls : ""}`}
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage className="text-xs text-red-500 mt-1.5" />
+            </FormItem>
+          )}
+        />
+
+        {/* Row 2: Phone + Email */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <FormField
             control={form.control}
-            name="name"
+            name="phone"
             render={({ field, fieldState }) => (
               <FormItem>
-                <label className={labelCls}>{t("form.fullName")}</label>
+                <label className={labelCls}>{t("form.phone")}</label>
                 <FormControl>
                   <input
-                    type="text"
-                    placeholder={t("form.fullNamePlaceholder")}
+                    type="tel"
+                    placeholder={t("form.phonePlaceholder")}
                     className={`${baseCls} ${fieldState.invalid ? errCls : ""}`}
                     {...field}
                   />
@@ -133,26 +153,6 @@ export function LeadForm({ locale = "en" }: LeadFormProps) {
             )}
           />
         </div>
-
-        {/* Phone */}
-        <FormField
-          control={form.control}
-          name="phone"
-          render={({ field, fieldState }) => (
-            <FormItem>
-              <label className={labelCls}>{t("form.phone")}</label>
-              <FormControl>
-                <input
-                  type="tel"
-                  placeholder={t("form.phonePlaceholder")}
-                  className={`${baseCls} ${fieldState.invalid ? errCls : ""}`}
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage className="text-xs text-red-500 mt-1.5" />
-            </FormItem>
-          )}
-        />
 
         {/* Message */}
         <FormField

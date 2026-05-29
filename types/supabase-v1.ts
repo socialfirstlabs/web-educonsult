@@ -415,6 +415,68 @@ export type Database = {
           },
         ]
       }
+      team_members: {
+        Row: {
+          id: string
+          name: string
+          position: string
+          image_url: string
+          order_index: number
+          is_active: boolean
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          position: string
+          image_url?: string
+          order_index?: number
+          is_active?: boolean
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          position?: string
+          image_url?: string
+          order_index?: number
+          is_active?: boolean
+          created_at?: string | null
+        }
+        Relationships: []
+      }
+      team_member_translations: {
+        Row: {
+          id: string
+          team_member_id: string
+          locale: string
+          name: string
+          position: string
+        }
+        Insert: {
+          id?: string
+          team_member_id: string
+          locale: string
+          name?: string
+          position?: string
+        }
+        Update: {
+          id?: string
+          team_member_id?: string
+          locale?: string
+          name?: string
+          position?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "team_member_translations_team_member_id_fkey"
+            columns: ["team_member_id"]
+            isOneToOne: false
+            referencedRelation: "team_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

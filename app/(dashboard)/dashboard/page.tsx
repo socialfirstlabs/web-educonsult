@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, GraduationCap, BookOpen, FileText, Briefcase, Trophy, ClipboardList } from "lucide-react";
+import { Users, GraduationCap, BookOpen, FileText, Briefcase, Trophy, ClipboardList, UserCircle } from "lucide-react";
 import { FEATURE_FLAGS } from "@/lib/constants";
 import Link from "next/link";
 
@@ -20,6 +20,7 @@ export default async function DashboardPage() {
     { count: servicesCount },
     { count: postsCount },
     { count: successCount },
+    { count: teamCount },
   ] = await Promise.all([
     supabase.from('enrollments').select('*', { count: 'exact', head: true }),
     supabase.from('contacts').select('*', { count: 'exact', head: true }),
@@ -27,6 +28,7 @@ export default async function DashboardPage() {
     supabase.from('services').select('*', { count: 'exact', head: true }),
     supabase.from('blog_posts').select('*', { count: 'exact', head: true }),
     supabase.from('success_stories').select('*', { count: 'exact', head: true }),
+    supabase.from('team_members').select('*', { count: 'exact', head: true }),
   ]);
 
   const stats = [
@@ -35,6 +37,7 @@ export default async function DashboardPage() {
     { title: "Services", value: servicesCount ?? 0, icon: Briefcase, color: "text-indigo-600", href: "/dashboard/services" },
     { title: "Courses", value: coursesCount ?? 0, icon: BookOpen, color: "text-green-600", href: "/dashboard/courses" },
     { title: "Success Stories", value: successCount ?? 0, icon: Trophy, color: "text-orange-600", href: "/dashboard/success-stories" },
+    { title: "Team Members", value: teamCount ?? 0, icon: UserCircle, color: "text-teal-600", href: "/dashboard/team" },
     ...(FEATURE_FLAGS.ENABLE_BLOG
       ? [{ title: "Blog Posts", value: postsCount ?? 0, icon: FileText, color: "text-purple-600", href: "/dashboard/blog" }]
       : []),
@@ -46,6 +49,7 @@ export default async function DashboardPage() {
     { label: "Add Service", desc: "Create a new service listing", href: "/dashboard/services", icon: Briefcase },
     { label: "Add Course", desc: "Create a new language class", href: "/dashboard/courses", icon: BookOpen },
     { label: "Add Success Story", desc: "Publish a student testimonial", href: "/dashboard/success-stories", icon: GraduationCap },
+    { label: "Manage Team", desc: "Update team members on About page", href: "/dashboard/team", icon: UserCircle },
     ...(FEATURE_FLAGS.ENABLE_BLOG
       ? [{ label: "Write Blog Post", desc: "Publish a new SEO article", href: "/dashboard/blog", icon: FileText }]
       : []),

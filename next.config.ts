@@ -81,8 +81,8 @@ const SECURITY_HEADERS = [
       "img-src 'self' data: blob: https://*.supabase.co https://*.supabase.in",
       // Fonts: Google Fonts.
       "font-src 'self' https://fonts.gstatic.com",
-      // Iframes: only privacy-safe YouTube and Vimeo (matches sanitize-html allowlist).
-      "frame-src https://www.youtube-nocookie.com https://player.vimeo.com",
+      // Iframes: privacy-safe YouTube, Vimeo, and Google Maps embed.
+      "frame-src https://www.youtube-nocookie.com https://player.vimeo.com https://www.google.com",
       // API calls: self + Supabase project URL only.
       `connect-src 'self' https://*.supabase.co wss://*.supabase.co`,
       // No plugins (Flash etc.).

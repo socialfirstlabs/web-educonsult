@@ -1,5 +1,6 @@
 import CtaBand from "@/components/website/CtaBand";
 import { getT, type Locale } from "@/lib/i18n";
+import { getTeamMembers } from "@/lib/actions/team-member.action";
 
 export const metadata = {
   title: "About Us | J&N Caregiver Training",
@@ -16,23 +17,7 @@ export default async function AboutPage({
   const t = getT(locale);
   const l = locale as Locale;
 
-  const team = [
-    {
-      name: t("about.team.m1.name"),
-      role: t("about.team.m1.role"),
-      img: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=600&auto=format&fit=crop",
-    },
-    {
-      name: t("about.team.m2.name"),
-      role: t("about.team.m2.role"),
-      img: "https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=600&auto=format&fit=crop",
-    },
-    {
-      name: t("about.team.m3.name"),
-      role: t("about.team.m3.role"),
-      img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=600&auto=format&fit=crop",
-    },
-  ];
+  const team = await getTeamMembers(l);
 
   const values = [
     t("about.values.1"),
@@ -102,22 +87,28 @@ export default async function AboutPage({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {team.map((member) => (
               <div
-                key={member.name}
+                key={member.id}
                 className="bg-white rounded-2xl shadow-sm border border-jn-border overflow-hidden group transition-all duration-300 hover:shadow-[var(--shadow-jn-float)] hover:-translate-y-2 hover:border-jn-primary-light"
               >
-                <div className="h-64 overflow-hidden">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src={member.img}
-                    alt={member.name}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
+                <div className="h-64 overflow-hidden bg-jn-bg-off flex items-center justify-center">
+                  {member.image_url ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={member.image_url}
+                      alt={member.name as string}
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    />
+                  ) : (
+                    <svg className="w-24 h-24 text-jn-text-muted/30" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                    </svg>
+                  )}
                 </div>
                 <div className="p-6 text-center">
                   <h3 className="text-xl font-semibold font-[family-name:var(--font-poppins)] text-jn-text-dark mb-1">
-                    {member.name}
+                    {member.name as string}
                   </h3>
-                  <p className="text-jn-text-muted text-[0.95rem]">{member.role}</p>
+                  <p className="text-jn-text-muted text-[0.95rem]">{member.position as string}</p>
                 </div>
               </div>
             ))}

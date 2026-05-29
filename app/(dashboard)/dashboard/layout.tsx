@@ -23,7 +23,7 @@ export default async function DashboardLayout({
       <aside className="w-64 border-r bg-muted/20 hidden md:flex flex-col">
         <div className="h-16 flex items-center px-4 border-b gap-3">
           <Image src="/images/JN_Logo--icon.png" alt="J&N" width={32} height={32} className="object-contain" />
-          <span className="font-bold text-sm leading-tight">J&N Admin Portal</span>
+          <span className="font-bold text-sm leading-tight">J & N</span>
         </div>
         <SidebarNav enableBlog={FEATURE_FLAGS.ENABLE_BLOG} />
         

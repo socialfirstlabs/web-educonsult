@@ -10,6 +10,7 @@ import {
   ImageIcon,
   Briefcase,
   ClipboardList,
+  UserCircle,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ const navItems = [
   { href: "/dashboard/services",    label: "Services",       icon: Briefcase },
   { href: "/dashboard/courses",     label: "Courses",        icon: BookOpen },
   { href: "/dashboard/success-stories", label: "Success Stories", icon: ImageIcon },
+  { href: "/dashboard/team", label: "Team Members", icon: UserCircle },
 ];
 
 export function SidebarNav({ enableBlog }: { enableBlog: boolean }) {

@@ -78,15 +78,16 @@ export default async function ContactPage({
             </div>
 
             {/* Map */}
-            <div className="aspect-video rounded-2xl overflow-hidden border border-jn-border shadow-sm">
+            <div className="rounded-2xl overflow-hidden border border-jn-border shadow-sm">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d56502.18050881408!2d85.3144914!3d27.7362292!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x666f85d4555c2d43%3A0xe068e8cb2a545cc3!2sJLCC%2C%20Kathmandu%20(Japanese%20Language%20%26%20Culture%20Centre%2C%20Kathmandu)!5e0!3m2!1sen!2snp!4v1773389899650!5m2!1sen!2snp"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d220.71557218303042!2d85.30582621916733!3d27.7342891161583!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19001a0b9b2f%3A0x3ff2bf6519e05c39!2sPacific%20Spa%20%26%20Health%20Club!5e0!3m2!1sen!2snp!4v1780047325538!5m2!1sen!2snp"
                 width="100%"
-                height="100%"
+                height="360"
                 style={{ border: 0 }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
+                title="J&N Caregiver Training location"
               />
             </div>
           </div>
