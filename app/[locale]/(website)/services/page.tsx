@@ -4,11 +4,19 @@ import { ServiceCard } from "@/components/website/ServiceCard";
 import { getServices } from "@/lib/actions/service.action";
 import { getT, type Locale } from "@/lib/i18n";
 
-export const metadata = {
-  title: "Our Services | J&N Caregiver Training",
-  description:
-    "Professional services for every stage — career counseling, language coaching, visa support, employer matching, and post-arrival assistance.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const isJa = (await params).locale === "ja";
+  return {
+    title: isJa ? "サービス | J&N介護士研修" : "Our Services | J&N Caregiver Training",
+    description: isJa
+      ? "キャリアカウンセリング・語学指導・ビザサポート・雇用主マッチング・到着後サポートまで全段階をカバー。"
+      : "Professional services for every stage — career counseling, language coaching, visa support, employer matching, and post-arrival assistance.",
+  };
+}
 
 export default async function ServicesPage({
   params,

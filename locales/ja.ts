@@ -454,4 +454,25 @@ export const ja: Record<TranslationKey, string> = {
   "footer.adminLogin": "管理者ログイン",
   "footer.servicesFallback1": "キャリアカウンセリング",
   "footer.servicesFallback2": "ビザ案内",
+
+  // APPLY MODAL — VALIDATION ERRORS
+  "apply.err.firstName": "名（ファーストネーム）を入力してください",
+  "apply.err.firstNameMax": "名が長すぎます",
+  "apply.err.lastName": "姓（ファミリーネーム）を入力してください",
+  "apply.err.lastNameMax": "姓が長すぎます",
+  "apply.err.email": "メールアドレスを入力してください",
+  "apply.err.emailFormat": "有効なメールアドレスを入力してください",
+  "apply.err.phone": "有効な電話番号を入力してください",
+  "apply.err.phoneMax": "電話番号が長すぎます",
+  "apply.err.langLevel": "日本語レベルを選択してください",
+  "apply.err.program": "プログラムを選択してください",
+
+  // CONTACT PAGE — WHATSAPP
+  "contact.whatsapp.label": "WhatsAppでチャット",
+  "contact.whatsapp.sub": "最も迅速にご連絡いただける方法です — 通常1時間以内にご返信します",
+  "contact.whatsapp.cta": "WhatsAppを開く",
+
+  // SUCCESS STORIES PAGE — HERO
+  "successStories.hero.badge": "実績",
+  "successStories.hero.body": "プログラムを修了し、日本各地でやりがいのある介護キャリアを築いているネパール人専門家の生の体験談をご覧ください。",
 };

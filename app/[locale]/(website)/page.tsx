@@ -8,11 +8,21 @@ import { getBlogPosts } from "@/lib/actions/blog.action";
 import { getPublishedSuccessStories } from "@/lib/actions/success-story.action";
 import { getPublishedCourses } from "@/lib/actions/course.action";
 
-export const metadata = {
-  title: "J&N Caregiver Training | Your Pathway to Japan",
-  description:
-    "Accredited caregiver training for Nepali professionals. Recognized certification, language coaching, and guaranteed employer interviews for Japan.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const isJa = (await params).locale === "ja";
+  return {
+    title: isJa
+      ? "J&N介護士研修 | 日本への道"
+      : "J&N Caregiver Training | Your Pathway to Japan",
+    description: isJa
+      ? "ネパール人専門家のための認定介護士養成コース。認定資格・語学指導・日本の雇用主との面接保証。"
+      : "Accredited caregiver training for Nepali professionals. Recognized certification, language coaching, and guaranteed employer interviews for Japan.",
+  };
+}
 
 export default async function HomePage({
   params,

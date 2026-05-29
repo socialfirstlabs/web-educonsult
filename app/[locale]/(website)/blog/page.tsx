@@ -7,17 +7,24 @@ import { getT, type Locale } from "@/lib/i18n";
 import { FEATURE_FLAGS } from "@/lib/constants";
 import { notFound } from "next/navigation";
 
-export const metadata = {
-  title: "Blog & Insights | J&N Caregiver Training",
-  description:
-    "Discover everything you need to know about starting your caregiver career, life in Japan, and success stories from our graduates.",
-  openGraph: {
-    title: "Blog & Insights | J&N Caregiver Training",
-    description:
-      "Discover everything you need to know about starting your caregiver career, life in Japan, and success stories from our graduates.",
-    type: "website",
-  },
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const isJa = (await params).locale === "ja";
+  const title = isJa
+    ? "ブログ & インサイト | J&N介護士研修"
+    : "Blog & Insights | J&N Caregiver Training";
+  const description = isJa
+    ? "介護キャリアの始め方、日本での生活、修了生の成功事例など役立つ情報を発信しています。"
+    : "Discover everything you need to know about starting your caregiver career, life in Japan, and success stories from our graduates.";
+  return {
+    title,
+    description,
+    openGraph: { title, description, type: "website" },
+  };
+}
 
 export default async function BlogPage({
   params,

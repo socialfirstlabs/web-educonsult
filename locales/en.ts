@@ -452,6 +452,33 @@ export const en = {
   "footer.adminLogin": "Admin Login",
   "footer.servicesFallback1": "Career Counseling",
   "footer.servicesFallback2": "Visa Guidance",
+
+  // ─────────────────────────────────────────────────────────
+  // APPLY MODAL — VALIDATION ERRORS (translated)
+  // ─────────────────────────────────────────────────────────
+  "apply.err.firstName": "First name is required",
+  "apply.err.firstNameMax": "First name is too long",
+  "apply.err.lastName": "Last name is required",
+  "apply.err.lastNameMax": "Last name is too long",
+  "apply.err.email": "Email is required",
+  "apply.err.emailFormat": "Please enter a valid email address",
+  "apply.err.phone": "Please enter a valid phone number",
+  "apply.err.phoneMax": "Phone number is too long",
+  "apply.err.langLevel": "Please select your Japanese level",
+  "apply.err.program": "Please select a program",
+
+  // ─────────────────────────────────────────────────────────
+  // CONTACT PAGE — WHATSAPP
+  // ─────────────────────────────────────────────────────────
+  "contact.whatsapp.label": "Chat on WhatsApp",
+  "contact.whatsapp.sub": "Fastest way to reach us — we usually reply within the hour",
+  "contact.whatsapp.cta": "Open WhatsApp",
+
+  // ─────────────────────────────────────────────────────────
+  // SUCCESS STORIES PAGE — HERO
+  // ─────────────────────────────────────────────────────────
+  "successStories.hero.badge": "Real Results",
+  "successStories.hero.body": "Read first-hand accounts from Nepali professionals who completed our program and are now building rewarding caregiving careers across Japan.",
 } as const;
 
 export type TranslationKey = keyof typeof en;

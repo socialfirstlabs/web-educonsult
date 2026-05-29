@@ -2,11 +2,19 @@ import CtaBand from "@/components/website/CtaBand";
 import { getT, type Locale } from "@/lib/i18n";
 import { getTeamMembers } from "@/lib/actions/team-member.action";
 
-export const metadata = {
-  title: "About Us | J&N Caregiver Training",
-  description:
-    "Learn about J&N Caregiver Training Co. Ltd. — empowering Nepali individuals with the skills to build successful caregiving careers in Japan.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const isJa = (await params).locale === "ja";
+  return {
+    title: isJa ? "私たちについて | J&N介護士研修" : "About Us | J&N Caregiver Training",
+    description: isJa
+      ? "J&N介護士研修株式会社について。ネパール人が日本で介護キャリアを築くためのスキルと自信を提供します。"
+      : "Learn about J&N Caregiver Training Co. Ltd. — empowering Nepali individuals with the skills to build successful caregiving careers in Japan.",
+  };
+}
 
 export default async function AboutPage({
   params,

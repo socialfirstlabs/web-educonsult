@@ -1,15 +1,24 @@
+import Image from "next/image";
 import { getPublishedSuccessStories } from "@/lib/actions/success-story.action";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Quote, Building2, MapPin } from "lucide-react";
-import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getT, type Locale } from "@/lib/i18n";
+import CtaBand from "@/components/website/CtaBand";
 
-export const metadata = {
-  title: "Success Stories | J&N Caregiver Training",
-  description:
-    "Read about our graduates who have successfully built caregiving careers in Japan.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const isJa = locale === "ja";
+  return {
+    title: isJa
+      ? "成功事例 | J&N介護士研修"
+      : "Success Stories | J&N Caregiver Training",
+    description: isJa
+      ? "日本で介護キャリアを成功させた修了生たちの実体験をご覧ください。"
+      : "Read about our graduates who have successfully built caregiving careers in Japan.",
+  };
+}
 
 export default async function SuccessStoriesPage({
   params,
@@ -22,66 +31,101 @@ export default async function SuccessStoriesPage({
   const stories = await getPublishedSuccessStories(safeLocale);
 
   return (
-    <div className="container py-20 px-4">
-      <div className="text-center max-w-3xl mx-auto mb-16">
-        <h1 className="text-4xl font-bold mb-4">{t("successStories.title")}</h1>
-        <p className="text-xl text-muted-foreground">{t("successStories.subtitle")}</p>
-      </div>
-
-      {stories.length === 0 ? (
-        <div className="text-center py-20">
-          <p className="text-muted-foreground italic text-lg">{t("successStories.empty")}</p>
+    <>
+      {/* HERO */}
+      <section className="pb-24 overflow-hidden bg-gradient-to-br from-jn-bg-off to-jn-primary-light">
+        <div className="jn-container text-center pt-12">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white text-jn-primary font-[family-name:var(--font-poppins)] text-[0.85rem] font-semibold rounded-full mb-6 shadow-sm border border-jn-primary-light">
+            {t("successStories.hero.badge")}
+          </span>
+          <h1 className="jn-heading-1 mb-6 max-w-3xl mx-auto">
+            {t("successStories.title")}
+          </h1>
+          <p className="jn-body-text leading-[1.8] max-w-3xl mx-auto">
+            {t("successStories.hero.body")}
+          </p>
         </div>
-      ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {stories.map((story) => (
-            <Card key={story.id} className="h-full flex flex-col border-none shadow-lg hover:shadow-xl transition-shadow bg-card/50">
-              <CardHeader className="pb-4">
-                <div className="flex items-center gap-4">
-                  <Avatar className="h-16 w-16 border-2 border-primary/20">
-                    <AvatarImage src={story.image_url ?? undefined} alt={story.student_name} />
-                    <AvatarFallback className="bg-primary/10 text-primary">
-                      {story.student_name.substring(0, 2).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <h3 className="font-bold text-xl">{story.student_name}</h3>
-                    <div className="flex items-center gap-1 text-sm text-primary font-medium">
-                      <MapPin size={14} />
-                      {story.destination}
+      </section>
+
+      {/* STORIES GRID */}
+      <section className="jn-section bg-jn-bg-off">
+        <div className="jn-container">
+          {stories.length === 0 ? (
+            <div className="py-20 text-center bg-white rounded-2xl border border-jn-border">
+              <p className="text-jn-text-muted text-lg italic">{t("successStories.empty")}</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {stories.map((story) => {
+                const initials = story.student_name
+                  .split(" ")
+                  .map((w: string) => w[0])
+                  .slice(0, 2)
+                  .join("")
+                  .toUpperCase();
+
+                return (
+                  <div
+                    key={story.id}
+                    className="bg-white p-8 rounded-[24px] shadow-sm border border-jn-border flex flex-col transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-jn-float)] hover:border-jn-primary-light"
+                  >
+                    {/* Stars */}
+                    <div className="text-jn-accent text-lg mb-4 tracking-wide">★★★★★</div>
+
+                    {/* Quote */}
+                    <p className="text-[1.02rem] text-jn-text-dark italic mb-6 flex-grow line-clamp-5 leading-relaxed">
+                      &ldquo;{story.testimonial}&rdquo;
+                    </p>
+
+                    {/* Meta: company + destination */}
+                    {(story.company_name || story.destination) && (
+                      <div className="flex flex-wrap gap-2 mb-5">
+                        {story.company_name && (
+                          <span className="px-2.5 py-1 rounded-full text-[0.72rem] font-semibold bg-jn-bg-off border border-jn-border text-jn-text-muted">
+                            🏢 {story.company_name}
+                          </span>
+                        )}
+                        {story.destination && (
+                          <span className="px-2.5 py-1 rounded-full text-[0.72rem] font-semibold bg-jn-primary-light text-jn-primary border border-jn-primary-light">
+                            📍 {story.destination}
+                          </span>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Author */}
+                    <div className="flex items-center gap-4 pt-5 border-t border-jn-border">
+                      {story.image_url ? (
+                        <Image
+                          src={story.image_url}
+                          alt={story.student_name}
+                          width={48}
+                          height={48}
+                          className="w-12 h-12 rounded-full object-cover border border-jn-border shrink-0"
+                        />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-jn-primary-light text-jn-primary flex items-center justify-center font-[family-name:var(--font-poppins)] font-semibold text-base shrink-0">
+                          {initials}
+                        </div>
+                      )}
+                      <div>
+                        <h4 className="text-base font-semibold font-[family-name:var(--font-poppins)] text-jn-text-dark">
+                          {story.student_name}
+                        </h4>
+                        {story.destination && (
+                          <p className="text-[0.85rem] text-jn-text-muted">{story.destination}</p>
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </CardHeader>
-              <CardContent className="flex-1 flex flex-col">
-                {story.company_name && (
-                  <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-                    <Building2 size={16} className="text-primary" />
-                    <span className="italic">{story.company_name}</span>
-                  </div>
-                )}
-                <div className="relative pt-6">
-                  <Quote className="absolute top-0 left-0 text-primary/10 h-10 w-10 -z-10" />
-                  <p className="text-muted-foreground line-clamp-6 leading-relaxed">
-                    {story.testimonial}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                );
+              })}
+            </div>
+          )}
         </div>
-      )}
+      </section>
 
-      <div className="mt-20 p-10 rounded-2xl bg-primary text-primary-foreground text-center">
-        <h2 className="text-3xl font-bold mb-4">{t("cta.readyToWriteStory")}</h2>
-        <p className="text-lg opacity-90 mb-8 max-w-2xl mx-auto">{t("cta.contactForCounseling")}</p>
-        <Link
-          href={`/${safeLocale}/contact`}
-          className="inline-flex items-center justify-center rounded-md text-sm font-medium bg-background text-primary hover:bg-background/90 h-11 px-8"
-        >
-          {t("cta.bookFreeCounseling")}
-        </Link>
-      </div>
-    </div>
+      <CtaBand locale={safeLocale} />
+    </>
   );
 }

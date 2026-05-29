@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -15,30 +16,16 @@ import { z } from "zod";
 import { getT } from "@/lib/i18n";
 import { submitEnrollment } from "@/lib/actions/enrollment.action";
 
-// ─── Client-side form schema (camelCase keys match the form state) ─────────────
+// ─── Form shape (schema is created inside the dialog to support i18n) ─────────
 
-const applySchema = z.object({
-  firstName: z
-    .string()
-    .min(1, "First name is required")
-    .max(50, "First name is too long"),
-  lastName: z
-    .string()
-    .min(1, "Last name is required")
-    .max(50, "Last name is too long"),
-  email: z
-    .string()
-    .min(1, "Email is required")
-    .email("Please enter a valid email address"),
-  phone: z
-    .string()
-    .min(7, "Please enter a valid phone number")
-    .max(20, "Phone number is too long"),
-  langLevel: z.string().min(1, "Please select your Japanese level"),
-  program:   z.string().min(1, "Please select a program"),
-});
-
-type ApplyFormValues = z.infer<typeof applySchema>;
+type ApplyFormValues = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  langLevel: string;
+  program: string;
+};
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
@@ -90,6 +77,22 @@ function ApplyModalDialog({
   programs: string[];
 }) {
   const t = getT(locale);
+
+  // ── Locale-aware schema (rebuilt only when locale changes) ──────────────────
+  const applySchema = useMemo(
+    () =>
+      z.object({
+        firstName: z.string().min(1, t("apply.err.firstName")).max(50, t("apply.err.firstNameMax")),
+        lastName: z.string().min(1, t("apply.err.lastName")).max(50, t("apply.err.lastNameMax")),
+        email: z.string().min(1, t("apply.err.email")).email(t("apply.err.emailFormat")),
+        phone: z.string().min(7, t("apply.err.phone")).max(20, t("apply.err.phoneMax")),
+        langLevel: z.string().min(1, t("apply.err.langLevel")),
+        program: z.string().min(1, t("apply.err.program")),
+      }),
+    // locale is the only stable dep — t() is recreated each render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [locale],
+  );
 
   // mount guard — needed so createPortal only runs client-side
   const [mounted, setMounted] = useState(false);
@@ -165,6 +168,28 @@ function ApplyModalDialog({
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [handleClose]);
+
+  // Focus trap — cycle Tab/Shift+Tab within the dialog
+  useEffect(() => {
+    const el = contentRef.current;
+    if (!el) return;
+    const FOCUSABLE =
+      'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Tab") return;
+      const nodes = [...el.querySelectorAll<HTMLElement>(FOCUSABLE)];
+      if (!nodes.length) return;
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+    el.addEventListener("keydown", onKey);
+    return () => el.removeEventListener("keydown", onKey);
+  }, [submitted]);
 
   async function onSubmit(values: ApplyFormValues) {
     setServerError(null);

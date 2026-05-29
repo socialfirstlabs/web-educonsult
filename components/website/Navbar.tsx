@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -22,6 +22,8 @@ export default function Navbar({ locale, services = [] }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const servicesRef = useRef<HTMLLIElement>(null);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -99,18 +101,51 @@ export default function Navbar({ locale, services = [] }: NavbarProps) {
           </li>
 
           {/* Services mega-menu */}
-          <li className="relative group">
+          <li
+            ref={servicesRef}
+            className="relative"
+            onMouseEnter={() => setIsServicesOpen(true)}
+            onMouseLeave={() => setIsServicesOpen(false)}
+            onBlur={(e) => {
+              if (!servicesRef.current?.contains(e.relatedTarget as Node)) {
+                setIsServicesOpen(false);
+              }
+            }}
+          >
             <Link
               href={`/${l}/services`}
+              aria-expanded={isServicesOpen}
+              aria-haspopup="true"
+              onFocus={() => setIsServicesOpen(true)}
+              onKeyDown={(e) => {
+                if (e.key === "Escape") { setIsServicesOpen(false); }
+                if (e.key === "ArrowDown") {
+                  e.preventDefault();
+                  const first = servicesRef.current?.querySelector<HTMLElement>('[data-megamenu-item]');
+                  first?.focus();
+                }
+              }}
               className="font-[family-name:var(--font-poppins)] text-jn-text-muted font-medium text-[0.95rem] hover:text-jn-primary transition-colors inline-flex items-center gap-1"
             >
               {t("nav.services")}
-              <svg className="w-4 h-4 text-jn-text-light group-hover:text-jn-primary transition-transform duration-300 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+              <svg
+                className={`w-4 h-4 transition-transform duration-300 ${isServicesOpen ? "rotate-180 text-jn-primary" : "text-jn-text-light"}`}
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </Link>
             {/* Mega menu */}
-            <div className="hidden md:block absolute left-1/2 top-full mt-0 pt-5 w-[min(920px,92vw)] -translate-x-1/2 opacity-0 invisible translate-y-2 pointer-events-none transition-all duration-300 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:pointer-events-auto">
+            <div
+              className={`hidden md:block absolute left-1/2 top-full mt-0 pt-5 w-[min(920px,92vw)] -translate-x-1/2 transition-all duration-300 ${
+                isServicesOpen
+                  ? "opacity-100 visible translate-y-0 pointer-events-auto"
+                  : "opacity-0 invisible translate-y-2 pointer-events-none"
+              }`}
+            >
               <div className="bg-white backdrop-blur-xl rounded-3xl border border-jn-primary-light shadow-[0_20px_60px_-20px_rgba(36,62,188,0.35)] p-8">
                 <div className="grid grid-cols-12 gap-8">
                   <div className="col-span-8">
@@ -120,11 +155,14 @@ export default function Navbar({ locale, services = [] }: NavbarProps) {
                         <Link
                           key={item.title}
                           href={`/${l}/services`}
+                          data-megamenu-item
                           className="group/item rounded-xl border border-jn-border bg-jn-bg-off p-4
                                      hover:border-jn-primary hover:bg-jn-primary-light/50
                                      hover:shadow-[0_4px_16px_-4px_rgba(36,62,188,0.15)]
-                                     transition-all duration-200 flex flex-col gap-2.5"
+                                     transition-all duration-200 flex flex-col gap-2.5
+                                     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jn-primary"
                           onClick={close}
+                          onKeyDown={(e) => { if (e.key === "Escape") { setIsServicesOpen(false); } }}
                         >
                           {/* Icon + title row */}
                           <div className="flex items-start gap-2">

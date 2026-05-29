@@ -1,6 +1,7 @@
 import Navbar from "@/components/website/Navbar";
 import Footer from "@/components/website/Footer";
 import { ApplyModalProvider } from "@/components/website/ApplyModal";
+import WhatsAppButton from "@/components/website/WhatsAppButton";
 import { getServices } from "@/lib/actions/service.action";
 import { getCourses } from "@/lib/actions/course.action";
 import type { Locale } from "@/lib/i18n";
@@ -33,6 +34,7 @@ export default async function WebsiteLayout({
         <Navbar locale={safeLocale} services={navServices} />
         <main className="flex-1 pt-20">{children}</main>
         <Footer locale={safeLocale} />
+        <WhatsAppButton />
       </div>
     </ApplyModalProvider>
   );

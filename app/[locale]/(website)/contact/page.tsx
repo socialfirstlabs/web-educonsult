@@ -2,11 +2,19 @@ import CtaBand from "@/components/website/CtaBand";
 import { LeadForm } from "@/components/website/LeadForm";
 import { getT, type Locale } from "@/lib/i18n";
 
-export const metadata = {
-  title: "Contact Us | J&N Caregiver Training",
-  description:
-    "Have questions about our training programs, admissions, or partnerships? We are here to help you every step of the way.",
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const isJa = (await params).locale === "ja";
+  return {
+    title: isJa ? "お問い合わせ | J&N介護士研修" : "Contact Us | J&N Caregiver Training",
+    description: isJa
+      ? "研修プログラム・入学・提携に関するご質問はこちら。すべてのステップでサポートします。"
+      : "Have questions about our training programs, admissions, or partnerships? We are here to help you every step of the way.",
+  };
+}
 
 export default async function ContactPage({
   params,
@@ -57,7 +65,7 @@ export default async function ContactPage({
           {/* Left: contact info */}
           <div>
             <h2 className="jn-heading-2 mb-8">{t("contact.info.title")}</h2>
-            <div className="space-y-8 mb-10">
+            <div className="space-y-8 mb-8">
               {contactDetails.map((item) => (
                 <div key={item.title} className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-jn-primary-light text-jn-primary rounded-xl flex items-center justify-center shrink-0 text-xl">
