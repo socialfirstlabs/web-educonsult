@@ -6,6 +6,7 @@ import ApplyButton from "@/components/website/ApplyButton";
 import { getT, type Locale } from "@/lib/i18n";
 import { getBlogPosts } from "@/lib/actions/blog.action";
 import { getPublishedSuccessStories } from "@/lib/actions/success-story.action";
+import { getPublishedCourses } from "@/lib/actions/course.action";
 
 export const metadata = {
   title: "J&N Caregiver Training | Your Pathway to Japan",
@@ -51,29 +52,7 @@ export default async function HomePage({
     { step: "5", icon: "✈️", title: t("home.pathway.s5.title"), desc: t("home.pathway.s5.desc") },
   ];
 
-  const programs = [
-    {
-      icon: "🛡️",
-      duration: t("home.programs.p1.duration"),
-      title: t("home.programs.p1.title"),
-      desc: t("home.programs.p1.desc"),
-      featured: false,
-    },
-    {
-      icon: "⭐",
-      duration: t("home.programs.p2.duration"),
-      title: t("home.programs.p2.title"),
-      desc: t("home.programs.p2.desc"),
-      featured: true,
-    },
-    {
-      icon: "🧠",
-      duration: t("home.programs.p3.duration"),
-      title: t("home.programs.p3.title"),
-      desc: t("home.programs.p3.desc"),
-      featured: false,
-    },
-  ];
+  const programs = await getPublishedCourses(l);
 
   const dbStories = await getPublishedSuccessStories(l);
   const testimonials = dbStories.slice(0, 3).map((s) => ({
@@ -259,29 +238,48 @@ export default async function HomePage({
             <p className="jn-body-text">{t("home.programs.body")}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
-            {programs.map((p) => (
-              <div
-                key={p.title}
-                className={`bg-white rounded-[24px] shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col group relative ${
-                  p.featured ? "border-2 border-jn-accent" : "border border-jn-border hover:shadow-[0_20px_40px_-10px_rgba(36,62,188,0.1)]"
-                }`}
-              >
-                {p.featured && (
-                  <span className="absolute top-4 right-4 bg-jn-accent text-jn-text-dark text-xs font-[family-name:var(--font-poppins)] font-bold px-3 py-1.5 rounded-full uppercase z-10 shadow-sm">{t("home.programs.badge")}</span>
-                )}
-                <div className={`h-[140px] flex items-center justify-center text-5xl border-b border-jn-border ${p.featured ? "bg-jn-accent-light text-jn-accent-dark" : "bg-jn-bg-off group-hover:bg-jn-primary-light transition-colors duration-300"}`}>
-                  {p.icon}
+            {programs.length === 0 ? (
+              <p className="col-span-3 text-center text-jn-text-muted py-10 italic">
+                {t("courses.empty")}
+              </p>
+            ) : programs.map((p) => {
+              const featured = !!p.badge;
+              return (
+                <div
+                  key={p.id}
+                  className={`bg-white rounded-[24px] shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1.5 flex flex-col group relative ${
+                    featured ? "border-2 border-jn-accent" : "border border-jn-border hover:shadow-[0_20px_40px_-10px_rgba(36,62,188,0.1)]"
+                  }`}
+                >
+                  {featured && (
+                    <span className="absolute top-4 right-4 bg-jn-accent text-jn-text-dark text-xs font-[family-name:var(--font-poppins)] font-bold px-3 py-1.5 rounded-full uppercase z-10 shadow-sm">
+                      {p.badge}
+                    </span>
+                  )}
+                  <div className={`h-[140px] overflow-hidden border-b border-jn-border flex items-center justify-center ${!p.image_url ? (featured ? "bg-jn-accent-light" : "bg-jn-bg-off group-hover:bg-jn-primary-light transition-colors duration-300") : ""}`}>
+                    {p.image_url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={p.image_url as string}
+                        alt={p.title as string}
+                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                      />
+                    ) : (
+                      <span className="text-5xl select-none">{(p.icon as string) || "📚"}</span>
+                    )}
+                  </div>
+                  <div className="p-8 flex-grow flex flex-col">
+                    <div className="text-[0.85rem] font-semibold text-jn-primary uppercase tracking-wider mb-3 font-[family-name:var(--font-poppins)]">{p.duration as string}</div>
+                    <h3 className="jn-heading-3 mb-3">{p.title as string}</h3>
+                    <p className="text-[0.95rem] text-jn-text-muted mb-6 flex-grow">{p.description as string}</p>
+                    <ApplyButton className="inline-flex items-center justify-start gap-1.5 w-full mt-auto text-jn-primary font-[family-name:var(--font-poppins)] font-semibold text-[0.95rem] hover:text-jn-primary-dark transition-colors group/btn">
+                      {t("home.programs.applyNow")}
+                      <span className="group-hover/btn:translate-x-1 transition-transform">→</span>
+                    </ApplyButton>
+                  </div>
                 </div>
-                <div className="p-8 flex-grow flex flex-col">
-                  <div className="text-[0.85rem] font-semibold text-jn-primary uppercase tracking-wider mb-3 font-[family-name:var(--font-poppins)]">{p.duration}</div>
-                  <h3 className="jn-heading-3 mb-3">{p.title}</h3>
-                  <p className="text-[0.95rem] text-jn-text-muted mb-6 flex-grow">{p.desc}</p>
-                  <ApplyButton className="jn-btn jn-btn-primary w-full mt-auto">
-                    {t("home.programs.applyNow")}
-                  </ApplyButton>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>

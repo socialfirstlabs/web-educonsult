@@ -30,14 +30,19 @@ import {
   DialogTitle 
 } from "@/components/ui/dialog";
 import { useState } from "react";
+import Image from "next/image";
 import { CourseForm } from "./CourseForm";
 import { deleteCourse } from "@/lib/actions/course.action";
 import { type CourseValues } from "@/lib/validations/course.schema";
 
-interface Course extends Omit<CourseValues, 'is_published' | 'order_index' | 'badge'> {
+interface Course extends Omit<CourseValues, 'is_published' | 'order_index' | 'badge' | 'duration' | 'fees' | 'schedule' | 'image_url'> {
   id: string;
   is_published: boolean | null;
   order_index: number | null;
+  duration: string | null;
+  fees: string | null;
+  schedule: string | null;
+  image_url: string | null;
   badge?: string | null;
   translations?: {
     locale: string;
@@ -69,7 +74,8 @@ export function CourseList({ courses }: { courses: Course[] }) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[80px]">Order</TableHead>
+              <TableHead className="w-[60px]">Icon</TableHead>
+              <TableHead className="w-[60px]">Order</TableHead>
               <TableHead>Title</TableHead>
               <TableHead>Duration</TableHead>
               <TableHead>Fees</TableHead>
@@ -80,14 +86,23 @@ export function CourseList({ courses }: { courses: Course[] }) {
           <TableBody>
             {courses.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-10 text-muted-foreground">
+                <TableCell colSpan={7} className="text-center py-10 text-muted-foreground">
                   No courses found. Add your first course to get started.
                 </TableCell>
               </TableRow>
             ) : (
               courses.map((course) => (
                 <TableRow key={course.id}>
-                  <TableCell>{course.order_index}</TableCell>
+                  <TableCell>
+                    <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center text-lg overflow-hidden">
+                      {course.image_url ? (
+                        <Image src={course.image_url} alt={course.title} width={40} height={40} className="w-full h-full object-cover" />
+                      ) : (
+                        course.icon || "📚"
+                      )}
+                    </div>
+                  </TableCell>
+                  <TableCell>{course.order_index ?? 0}</TableCell>
                   <TableCell className="font-medium">
                     <div>
                       {course.title}
@@ -101,13 +116,13 @@ export function CourseList({ courses }: { courses: Course[] }) {
                   <TableCell>
                     <div className="flex items-center gap-1 text-xs">
                       <Clock size={12} className="text-muted-foreground" />
-                      {course.duration}
+                      {course.duration || "—"}
                     </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-1 text-xs">
                       <Wallet size={12} className="text-muted-foreground" />
-                      {course.fees}
+                      {course.fees || "—"}
                     </div>
                   </TableCell>
                   <TableCell>
@@ -158,7 +173,11 @@ export function CourseList({ courses }: { courses: Course[] }) {
               ...editingCourse,
               is_published: editingCourse.is_published ?? false,
               order_index: editingCourse.order_index ?? 0,
-              badge: editingCourse.badge ?? undefined,
+              duration: editingCourse.duration ?? "",
+              fees: editingCourse.fees ?? "",
+              schedule: editingCourse.schedule ?? "",
+              image_url: editingCourse.image_url ?? "",
+              badge: editingCourse.badge ?? "",
             }}
             onSuccess={() => setEditingCourse(null)}
           />

@@ -146,36 +146,42 @@ export type Database = {
           badge: string | null
           created_at: string | null
           description: string
-          duration: string
-          fees: string
+          duration: string | null
+          fees: string | null
+          icon: string
+          image_url: string
           id: string
           is_published: boolean | null
           order_index: number | null
-          schedule: string
+          schedule: string | null
           title: string
         }
         Insert: {
           badge?: string | null
           created_at?: string | null
           description: string
-          duration: string
-          fees: string
+          duration?: string | null
+          fees?: string | null
+          icon?: string
+          image_url?: string
           id?: string
           is_published?: boolean | null
           order_index?: number | null
-          schedule: string
+          schedule?: string | null
           title: string
         }
         Update: {
           badge?: string | null
           created_at?: string | null
           description?: string
-          duration?: string
-          fees?: string
+          duration?: string | null
+          fees?: string | null
+          icon?: string
+          image_url?: string
           id?: string
           is_published?: boolean | null
           order_index?: number | null
-          schedule?: string
+          schedule?: string | null
           title?: string
         }
         Relationships: []

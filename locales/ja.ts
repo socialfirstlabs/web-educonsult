@@ -378,6 +378,7 @@ export const ja: Record<TranslationKey, string> = {
   "successStories.title": "成功事例",
   "successStories.subtitle": "ビザ取得に成功し、世界の大学で学ぶ学生たちの声。",
   "successStories.empty": "\"次はあなたの番です。今すぐ一歩踏み出しましょう。\"",
+  "courses.empty": "現在プログラムはございません。近日公開予定です。",
   "studyJapan.heroTitle": "未来を切り開く",
   "studyJapan.heroAccent": "日本留学",
   "studyJapan.heroSubtitle": "日本は世界水準の教育と先端技術、伝統文化が共存する学びの国です。",

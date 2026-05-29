@@ -1,0 +1,2 @@
+ALTER TABLE public.courses ADD COLUMN IF NOT EXISTS icon text NOT NULL DEFAULT '';
+ALTER TABLE public.courses ADD COLUMN IF NOT EXISTS image_url text NOT NULL DEFAULT '';

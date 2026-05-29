@@ -119,6 +119,7 @@ export async function addCourse(values: CourseValues, translation?: CourseTransl
 
   revalidatePath("/dashboard/courses");
   revalidatePath("/language-classes");
+  revalidatePath("/", "layout");
   return { success: true };
 }
 
@@ -175,6 +176,7 @@ export async function updateCourse(
 
   revalidatePath("/dashboard/courses");
   revalidatePath("/language-classes");
+  revalidatePath("/", "layout");
   return { success: true };
 }
 
@@ -195,6 +197,7 @@ export async function deleteCourse(id: string) {
 
   revalidatePath("/dashboard/courses");
   revalidatePath("/language-classes");
+  revalidatePath("/", "layout");
   return { success: true };
 }
 
