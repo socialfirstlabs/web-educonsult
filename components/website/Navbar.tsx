@@ -203,12 +203,6 @@ export default function Navbar({ locale, services = [] }: NavbarProps) {
                               ))}
                             </div>
                           )}
-
-                          {/* CTA */}
-                          <p className="text-[0.75rem] text-jn-primary font-semibold mt-auto flex items-center gap-1
-                                        opacity-0 group-hover/item:opacity-100 transition-opacity duration-150">
-                            {t("nav.menu.openService")}
-                          </p>
                         </Link>
                       ))}
                     </div>
