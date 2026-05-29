@@ -486,4 +486,22 @@ export const ja: Record<TranslationKey, string> = {
   "about.accred.label": "認定資格",
   "about.accred.title": "政府認定機関",
   "about.accred.body": "当社の研修プログラムは正式に認定されています。詳細については、当社チームまでお問い合わせください。",
+
+  // BLOG — DETAIL PAGE
+  "blog.backToBlog": "← ブログ一覧に戻る",
+  "blog.share.label": "この記事をシェア",
+  "blog.share.copy": "リンクをコピー",
+  "blog.share.copied": "コピーしました！",
+  "blog.share.twitter": "Xでシェア",
+  "blog.share.facebook": "Facebookでシェア",
+  "blog.share.whatsapp": "WhatsAppでシェア",
+
+  // BLOG — LISTING FILTER
+  "blog.filter.all": "すべて",
+  "blog.filter.label": "トピックで絞り込む",
+
+  // 404 PAGE
+  "notFound.title": "ページが見つかりません",
+  "notFound.body": "お探しのページは見つかりませんでした。",
+  "notFound.cta": "ホームへ戻る",
 };

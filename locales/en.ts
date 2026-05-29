@@ -496,6 +496,30 @@ export const en = {
   "about.accred.label": "Accreditation",
   "about.accred.title": "Government Accredited Entity",
   "about.accred.body": "Our training programs are officially recognized and accredited. Contact our team for details.",
+
+  // ─────────────────────────────────────────────────────────
+  // BLOG — DETAIL PAGE
+  // ─────────────────────────────────────────────────────────
+  "blog.backToBlog": "← Back to Blog List",
+  "blog.share.label": "Share this article",
+  "blog.share.copy": "Copy link",
+  "blog.share.copied": "Copied!",
+  "blog.share.twitter": "Share on X",
+  "blog.share.facebook": "Share on Facebook",
+  "blog.share.whatsapp": "Share on WhatsApp",
+
+  // ─────────────────────────────────────────────────────────
+  // BLOG — LISTING FILTER
+  // ─────────────────────────────────────────────────────────
+  "blog.filter.all": "All",
+  "blog.filter.label": "Filter by topic",
+
+  // ─────────────────────────────────────────────────────────
+  // 404 PAGE
+  // ─────────────────────────────────────────────────────────
+  "notFound.title": "Page not found",
+  "notFound.body": "Sorry, we could not find the page you were looking for.",
+  "notFound.cta": "Back to Home",
 } as const;
 
 export type TranslationKey = keyof typeof en;

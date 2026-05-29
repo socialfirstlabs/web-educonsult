@@ -1,8 +1,6 @@
 import { getBlogPosts } from "@/lib/actions/blog.action";
-import Link from "next/link";
-import Image from "next/image";
-import { format } from "date-fns";
 import CtaBand from "@/components/website/CtaBand";
+import BlogGrid from "@/components/website/BlogGrid";
 import { getT, type Locale } from "@/lib/i18n";
 import { FEATURE_FLAGS } from "@/lib/constants";
 import { notFound } from "next/navigation";
@@ -72,81 +70,23 @@ export default async function BlogPage({
       {/* BLOG CONTENT */}
       <section className="jn-section bg-jn-bg-off">
         <div className="jn-container">
-          {/* Blog Grid */}
-          {localizedPosts.length === 0 ? (
-            <div className="py-20 text-center bg-white rounded-2xl border border-jn-border">
-              <p className="text-jn-text-muted text-lg">{t("blog.empty")}</p>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {localizedPosts.map((post) => (
-                <Link
-                  href={`/${l}/blog/${post.slug}`}
-                  key={post.id}
-                  className="group"
-                >
-                  <article className="bg-white rounded-2xl shadow-sm border border-jn-border overflow-hidden transition-all duration-300 hover:shadow-[var(--shadow-jn-float)] hover:-translate-y-1 flex flex-col h-full">
-                    {/* Image */}
-                    <div className="h-56 overflow-hidden relative rounded-t-2xl bg-jn-primary-light">
-                      {post.image_url ? (
-                        <Image
-                          src={post.image_url}
-                          alt={post.title}
-                          fill
-                          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                          className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        />
-                      ) : (
-                        <div className="flex items-center justify-center h-full text-jn-text-light italic text-sm">
-                          No Image
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Content */}
-                    <div className="p-6 flex flex-col flex-1">
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="text-sm text-jn-text-muted font-medium">
-                          {format(
-                            new Date(
-                              post.published_at ?? post.created_at ?? new Date(),
-                            ),
-                            "MMM d, yyyy",
-                          )}
-                        </span>
-                        {((post as { tags?: string[] }).tags ?? []).length > 0 && (
-                          <>
-                            <span className="text-jn-border">•</span>
-                            <div className="flex flex-wrap gap-1">
-                              {((post as { tags?: string[] }).tags ?? []).map((tag) => (
-                                <span
-                                  key={tag}
-                                  className="px-2 py-0.5 rounded-full text-[0.7rem] font-semibold bg-jn-primary-light text-jn-primary uppercase tracking-wide"
-                                >
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                          </>
-                        )}
-                      </div>
-                      <h3 className="text-xl font-semibold mb-3 font-[family-name:var(--font-poppins)] text-jn-text-dark group-hover:text-jn-primary transition-colors line-clamp-2">
-                        {post.title}
-                      </h3>
-                      {post.excerpt && (
-                        <p className="text-jn-text-muted text-[0.95rem] mb-6 line-clamp-3 flex-grow">
-                          {post.excerpt}
-                        </p>
-                      )}
-                      <span className="inline-flex items-center gap-1 font-[family-name:var(--font-poppins)] font-semibold text-jn-primary group-hover:gap-2 transition-all mt-auto">
-                        {t("blog.readMore")} <span aria-hidden="true">→</span>
-                      </span>
-                    </div>
-                  </article>
-                </Link>
-              ))}
-            </div>
-          )}
+          <BlogGrid
+            posts={localizedPosts.map((p) => ({
+              id: p.id,
+              slug: p.slug,
+              title: p.title,
+              excerpt: p.excerpt ?? null,
+              image_url: p.image_url ?? null,
+              published_at: p.published_at ?? null,
+              created_at: (p as { created_at?: string }).created_at ?? null,
+              tags: (p as { tags?: string[] }).tags ?? null,
+            }))}
+            locale={l}
+            readMoreLabel={t("blog.readMore")}
+            emptyLabel={t("blog.empty")}
+            filterAllLabel={t("blog.filter.all")}
+            filterLabel={t("blog.filter.label")}
+          />
         </div>
       </section>
 

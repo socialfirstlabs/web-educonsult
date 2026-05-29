@@ -22,7 +22,12 @@ const notoSansJP = Noto_Sans_JP({
   preload: false,
 });
 
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
+  "https://jncaregiver.com";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(siteUrl),
   title: "J & N Caregiver Training — Your Gateway to Japan",
   description:
     "Accredited caregiver training for Nepali professionals — language classes, visa support, and guaranteed employer matching in Japan.",

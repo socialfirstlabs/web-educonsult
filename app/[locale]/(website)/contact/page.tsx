@@ -77,7 +77,23 @@ export default async function ContactPage({
                     </h4>
                     {item.lines.map((line) => (
                       <p key={line} className="text-jn-text-muted">
-                        {line}
+                        {line.includes("@") ? (
+                          <a
+                            href={`mailto:${line.trim()}`}
+                            className="hover:text-jn-primary transition-colors underline underline-offset-2 decoration-jn-border hover:decoration-jn-primary"
+                          >
+                            {line}
+                          </a>
+                        ) : line.match(/^\+[\d\s\-().]+$/) ? (
+                          <a
+                            href={`tel:${line.replace(/\s/g, "")}`}
+                            className="hover:text-jn-primary transition-colors"
+                          >
+                            {line}
+                          </a>
+                        ) : (
+                          line
+                        )}
                       </p>
                     ))}
                   </div>
