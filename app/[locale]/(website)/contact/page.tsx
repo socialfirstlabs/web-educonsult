@@ -1,11 +1,11 @@
+import CtaBand from "@/components/website/CtaBand";
 import { LeadForm } from "@/components/website/LeadForm";
-import { getPublishedCourses } from "@/lib/actions/course.action";
 import { getT, type Locale } from "@/lib/i18n";
 
 export const metadata = {
   title: "Contact Us | J&N Caregiver Training",
   description:
-    "Get free counseling for your study abroad dreams. Contact us for Japanese language classes and visa processing.",
+    "Have questions about our training programs, admissions, or partnerships? We are here to help you every step of the way.",
 };
 
 export default async function ContactPage({
@@ -14,60 +14,71 @@ export default async function ContactPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const safeLocale = locale as Locale;
-  const t = getT(safeLocale);
-  const courses = await getPublishedCourses(safeLocale);
+  const t = getT(locale);
+  const l = locale as Locale;
+  const contactDetails = [
+    {
+      emoji: "📍",
+      title: t("contact.info.visit.title"),
+      lines: [t("contact.info.visit.l1"), t("contact.info.visit.l2")],
+    },
+    {
+      emoji: "📧",
+      title: t("contact.info.email.title"),
+      lines: [t("contact.info.email.l1"), t("contact.info.email.l2")],
+    },
+    {
+      emoji: "☎️",
+      title: t("contact.info.call.title"),
+      lines: [t("contact.info.call.l1"), t("contact.info.call.l2")],
+    },
+  ];
 
   return (
-    <div className="container py-20 px-4">
-      <div className="mx-auto">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">{t("contact.title")}</h1>
-          <p className="text-xl text-muted-foreground">{t("contact.subtitle")}</p>
+    <>
+      {/* CONTACT HERO */}
+      <section className="pb-24 overflow-hidden bg-gradient-to-br from-jn-bg-off to-jn-primary-light">
+        <div className="jn-container text-center pt-12">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white text-jn-primary font-[family-name:var(--font-poppins)] text-[0.85rem] font-semibold rounded-full mb-6 shadow-sm border border-jn-primary-light">
+            {t("contact.hero.badge")}
+          </span>
+          <h1 className="jn-heading-1 mb-6 max-w-3xl mx-auto">
+            {t("contact.hero.title")}
+          </h1>
+          <p className="jn-body-text leading-[1.8] max-w-3xl mx-auto">
+            {t("contact.hero.body")}
+          </p>
         </div>
+      </section>
 
-        <div className="grid md:grid-cols-2 gap-12">
+      {/* CONTACT DETAILS & FORM */}
+      <section className="jn-section bg-white">
+        <div className="jn-container grid grid-cols-1 lg:grid-cols-2 gap-16">
+          {/* Left: contact info */}
           <div>
-            <h2 className="text-2xl font-bold mb-6">{t("contact.freeCounselingTitle")}</h2>
-            <p className="mb-8 text-muted-foreground">{t("contact.freeCounselingDesc")}</p>
-            <LeadForm courses={courses} locale={safeLocale} />
-          </div>
+            <h2 className="jn-heading-2 mb-8">{t("contact.info.title")}</h2>
+            <div className="space-y-8 mb-10">
+              {contactDetails.map((item) => (
+                <div key={item.title} className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-jn-primary-light text-jn-primary rounded-xl flex items-center justify-center shrink-0 text-xl">
+                    {item.emoji}
+                  </div>
+                  <div>
+                    <h4 className="text-lg font-semibold mb-1 text-jn-text-dark font-[family-name:var(--font-poppins)]">
+                      {item.title}
+                    </h4>
+                    {item.lines.map((line) => (
+                      <p key={line} className="text-jn-text-muted">
+                        {line}
+                      </p>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
 
-          <div className="space-y-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">{t("contact.officeTitle")}</h3>
-              <p className="text-muted-foreground">
-                {t("contact.officeAddress").split("\n").map((line) => (
-                  <span key={line}>
-                    {line}
-                    <br />
-                  </span>
-                ))}
-              </p>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">{t("contact.phoneEmailTitle")}</h3>
-              <p className="text-muted-foreground">
-                {t("contact.phoneEmailValue").split("\n").map((line) => (
-                  <span key={line}>
-                    {line}
-                    <br />
-                  </span>
-                ))}
-              </p>
-            </div>
-            <div>
-              <h3 className="text-xl font-bold mb-4">{t("contact.hoursTitle")}</h3>
-              <p className="text-muted-foreground">
-                {t("contact.hoursValue").split("\n").map((line) => (
-                  <span key={line}>
-                    {line}
-                    <br />
-                  </span>
-                ))}
-              </p>
-            </div>
-            <div className="aspect-video bg-muted rounded-lg flex items-center justify-center border">
+            {/* Map */}
+            <div className="aspect-video rounded-2xl overflow-hidden border border-jn-border shadow-sm">
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d56502.18050881408!2d85.3144914!3d27.7362292!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x666f85d4555c2d43%3A0xe068e8cb2a545cc3!2sJLCC%2C%20Kathmandu%20(Japanese%20Language%20%26%20Culture%20Centre%2C%20Kathmandu)!5e0!3m2!1sen!2snp!4v1773389899650!5m2!1sen!2snp"
                 width="100%"
@@ -76,11 +87,23 @@ export default async function ContactPage({
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
+              />
             </div>
           </div>
+
+          {/* Right: lead form */}
+          <div className="bg-jn-bg-off p-8 md:p-10 rounded-[24px] shadow-sm border border-jn-border">
+            <h3 className="jn-heading-3 mb-6">{t("contact.form.title")}</h3>
+            <p className="text-jn-text-muted mb-8">
+              {t("contact.form.sub")}
+            </p>
+            <LeadForm locale={l} />
+          </div>
         </div>
-      </div>
-    </div>
+      </section>
+
+      {/* CTA BAND */}
+      <CtaBand locale={l} />
+    </>
   );
 }

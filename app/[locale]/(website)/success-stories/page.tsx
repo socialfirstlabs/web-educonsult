@@ -7,7 +7,8 @@ import { getT, type Locale } from "@/lib/i18n";
 
 export const metadata = {
   title: "Success Stories | J&N Caregiver Training",
-  description: "Read about our students who have successfully achieved their dreams of studying abroad.",
+  description:
+    "Read about our graduates who have successfully built caregiving careers in Japan.",
 };
 
 export default async function SuccessStoriesPage({

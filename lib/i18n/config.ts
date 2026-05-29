@@ -8,7 +8,7 @@
  *  - Middleware (if added later for redirect-based detection)
  */
 
-/** All locales the application supports. */
+/** All locales the application supports. */  
 export const locales = ["en", "ja"] as const;
 
 /** The fallback locale used when no match is found. */
@@ -25,7 +25,7 @@ export const localeConfig: Record<
   en: {
     label: "English",
     nativeLabel: "English",
-    flag: "🇬🇧",
+    flag: "🇺🇸",
   },
   ja: {
     label: "Japanese",

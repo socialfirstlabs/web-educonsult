@@ -125,5 +125,167 @@
   }
   html {
     @apply font-sans;
+    scroll-behavior: smooth;
+  }
+}
+
+/* ── J&N Brand Colors ──────────────────────────────────────────────── */
+@theme {
+  --color-jn-primary: #243EBC;
+  --color-jn-primary-light: #EEF1FB;
+  --color-jn-primary-mid: #3656D4;
+  --color-jn-primary-dark: #162580;
+  --color-jn-accent: #E1B428;
+  --color-jn-accent-light: #FDF8E6;
+  --color-jn-accent-dark: #B58D14;
+  --color-jn-text-dark: #111827;
+  --color-jn-text-muted: #4B5563;
+  --color-jn-text-light: #9CA3AF;
+  --color-jn-bg-off: #F8FAFC;
+  --color-jn-border: #E2E8F0;
+  --shadow-jn-float: 0 20px 40px -10px rgba(36, 62, 188, 0.1);
+  --font-jn-heading: var(--font-poppins), sans-serif;
+  --font-jn-body: var(--font-roboto), sans-serif;
+}
+
+/* ── J&N Website Component Classes ────────────────────────────────── */
+@layer components {
+  .jn-container {
+    width: 100%;
+    max-width: 80rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+  @media (min-width: 768px) {
+    .jn-container { padding-left: 2.5rem; padding-right: 2.5rem; }
+  }
+
+  .jn-section { padding-top: 6rem; padding-bottom: 6rem; }
+
+  .jn-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.875rem 1.75rem;
+    font-family: var(--font-jn-heading);
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 9999px;
+    transition: all 0.3s;
+    border: 2px solid transparent;
+    text-decoration: none;
+  }
+  .jn-btn-primary {
+    background-color: #243EBC;
+    color: white;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  }
+  .jn-btn-primary:hover {
+    background-color: #3656D4;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  }
+  .jn-btn-outline {
+    background-color: white;
+    color: #243EBC;
+    border-color: #EEF1FB;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  }
+  .jn-btn-outline:hover {
+    background-color: #EEF1FB;
+    border-color: #243EBC;
+    transform: translateY(-2px);
+  }
+  .jn-btn-accent {
+    background-color: #E1B428;
+    color: #111827;
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+  }
+  .jn-btn-accent:hover {
+    background-color: #F0CC55;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+  }
+
+  .jn-section-label {
+    display: inline-block;
+    font-family: var(--font-jn-heading);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #243EBC;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.75rem;
+    background: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    border: 1px solid #EEF1FB;
+  }
+
+  .jn-heading-1 {
+    font-family: var(--font-jn-heading);
+    font-weight: 700;
+    font-size: clamp(2.25rem, 5vw, 4rem);
+    color: #111827;
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+  .jn-heading-2 {
+    font-family: var(--font-jn-heading);
+    font-weight: 600;
+    font-size: clamp(1.875rem, 3vw, 2.75rem);
+    color: #111827;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
+    margin-bottom: 1rem;
+  }
+  .jn-heading-3 {
+    font-family: var(--font-jn-heading);
+    font-weight: 600;
+    font-size: 1.25rem;
+    color: #111827;
+    line-height: 1.3;
+  }
+  .jn-body-text {
+    color: #4B5563;
+    font-size: 1.125rem;
+  }
+
+  .jn-card {
+    background: white;
+    border-radius: 1.5rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border: 1px solid #E2E8F0;
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .jn-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px -10px rgba(36, 62, 188, 0.1);
+  }
+
+  .jn-input {
+    width: 100%;
+    padding: 1rem;
+    border: 1px solid #E2E8F0;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    color: #111827;
+    background-color: white;
+    outline: none;
+    transition: all 0.2s;
+    appearance: auto;
+  }
+  .jn-input::placeholder {
+    color: #9CA3AF;
+  }
+  .jn-input:focus {
+    border-color: #243EBC;
+    background-color: white;
+    box-shadow: 0 0 0 4px #EEF1FB;
   }
 }

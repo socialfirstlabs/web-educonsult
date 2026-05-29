@@ -123,4 +123,4 @@ WHERE email = 'your-admin@email.com';
 
 **Nullable DB fields**: Several fields in `supabase-v1.ts` are `T | null` (e.g. `created_at`, `is_published`, `excerpt`). Dashboard component interfaces use `Omit<ZodValues, 'field'> & { field: T | null }` to override non-nullable Zod types. Edit forms receive null-to-default adapters (`?? ''`, `?? false`) at the call site in `*List.tsx` files.
 
-**Branding**: The nav/UI uses "J&N Caregiver Training" — not "EduNepal" (a legacy placeholder). Logo files are at `public/images/JN_Logo*.png`.
+**Branding**: The nav/UI uses "J & N Caregiver Training" — not "EduNepal" (a legacy placeholder). Logo files are at `public/images/JN_Logo*.png`.

@@ -86,6 +86,7 @@ export async function addService(values: ServiceValues, translation?: ServiceTra
   revalidatePath("/dashboard/services");
   revalidatePath("/services");
   revalidatePath("/", "layout");
+  return { success: true };
 }
 
 export async function updateService(
@@ -139,6 +140,7 @@ export async function updateService(
   revalidatePath("/dashboard/services");
   revalidatePath("/services");
   revalidatePath("/", "layout");
+  return { success: true };
 }
 
 export async function deleteService(id: string) {
@@ -159,6 +161,7 @@ export async function deleteService(id: string) {
   revalidatePath("/dashboard/services");
   revalidatePath("/services");
   revalidatePath("/", "layout");
+  return { success: true };
 }
 
 export async function getServicesForDashboard() {

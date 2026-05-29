@@ -3,7 +3,7 @@
  */
 
 export const SITE_CONFIG = {
-  name: "J&N Caregiver Training",
+  name: "J & N Caregiver Training",
   description: "Your path to global education",
   url: process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   ogImage: "/og-image.jpg",
@@ -30,7 +30,7 @@ export const NAV_LINKS = {
   ],
   dashboard: [
     { label: "Overview", href: "/dashboard" },
-    { label: "Leads", href: "/dashboard/leads" },
+    { label: "Contacts", href: "/dashboard/leads" },
     { label: "Courses", href: "/dashboard/courses" },
     { label: "Blog Posts", href: "/dashboard/blog" },
     { label: "Success Stories", href: "/dashboard/success-stories" },

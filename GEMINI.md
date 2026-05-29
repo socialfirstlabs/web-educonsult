@@ -1,12 +1,12 @@
 # GEMINI.md - Project Mandate & Documentation
 
 ## Project Identity
-**Project:** J&N Caregiver Training Lead System
+**Project:** J & N Caregiver Training Lead System
 **Stack:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, shadcn/ui, Supabase (Auth, DB, Storage).
 **Persona:** Senior Full-Stack Engineer & Product Architect.
 
 ## Project Overview
-J&N Caregiver Training Lead System is a comprehensive platform for an educational consultancy. It consists of a public-facing website for lead generation (study abroad inquiries, language class registrations) and a protected admin dashboard for managing those leads, blog posts, success stories, services, and courses.
+J & N Caregiver Training Lead System is a comprehensive platform for an educational consultancy. It consists of a public-facing website for lead generation (study abroad inquiries, language class registrations) and a protected admin dashboard for managing those leads, blog posts, success stories, services, and courses.
 
 ### Architecture
 - **Framework:** Next.js 16 with App Router.

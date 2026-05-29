@@ -1,6 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, GraduationCap, BookOpen, FileText, Briefcase, Trophy } from "lucide-react";
+import { Users, GraduationCap, BookOpen, FileText, Briefcase, Trophy, ClipboardList } from "lucide-react";
 import { FEATURE_FLAGS } from "@/lib/constants";
 import Link from "next/link";
 
@@ -14,13 +14,15 @@ export default async function DashboardPage() {
   );
 
   const [
-    { count: leadsCount },
+    { count: enrollmentsCount },
+    { count: contactsCount },
     { count: coursesCount },
     { count: servicesCount },
     { count: postsCount },
     { count: successCount },
   ] = await Promise.all([
-    supabase.from('leads').select('*', { count: 'exact', head: true }),
+    supabase.from('enrollments').select('*', { count: 'exact', head: true }),
+    supabase.from('contacts').select('*', { count: 'exact', head: true }),
     supabase.from('courses').select('*', { count: 'exact', head: true }),
     supabase.from('services').select('*', { count: 'exact', head: true }),
     supabase.from('blog_posts').select('*', { count: 'exact', head: true }),
@@ -28,7 +30,8 @@ export default async function DashboardPage() {
   ]);
 
   const stats = [
-    { title: "Total Leads", value: leadsCount ?? 0, icon: Users, color: "text-blue-600", href: "/dashboard/leads" },
+    { title: "Enrollments", value: enrollmentsCount ?? 0, icon: ClipboardList, color: "text-emerald-600", href: "/dashboard/enrollments" },
+    { title: "Contacts", value: contactsCount ?? 0, icon: Users, color: "text-blue-600", href: "/dashboard/leads" },
     { title: "Services", value: servicesCount ?? 0, icon: Briefcase, color: "text-indigo-600", href: "/dashboard/services" },
     { title: "Courses", value: coursesCount ?? 0, icon: BookOpen, color: "text-green-600", href: "/dashboard/courses" },
     { title: "Success Stories", value: successCount ?? 0, icon: Trophy, color: "text-orange-600", href: "/dashboard/success-stories" },
@@ -38,7 +41,8 @@ export default async function DashboardPage() {
   ];
 
   const quickActions = [
-    { label: "Manage Leads", desc: "View and manage student inquiries", href: "/dashboard/leads", icon: Users },
+    { label: "View Enrollments", desc: "Review and manage application forms", href: "/dashboard/enrollments", icon: ClipboardList },
+    { label: "Manage Contacts", desc: "View and manage student inquiries", href: "/dashboard/leads", icon: Users },
     { label: "Add Service", desc: "Create a new service listing", href: "/dashboard/services", icon: Briefcase },
     { label: "Add Course", desc: "Create a new language class", href: "/dashboard/courses", icon: BookOpen },
     { label: "Add Success Story", desc: "Publish a student testimonial", href: "/dashboard/success-stories", icon: GraduationCap },
@@ -50,7 +54,7 @@ export default async function DashboardPage() {
   return (
     <div className="space-y-8">
       {/* Stats */}
-      <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
         {stats.map((stat) => (
           <Link key={stat.title} href={stat.href}>
             <Card className="hover:shadow-md transition-shadow cursor-pointer">

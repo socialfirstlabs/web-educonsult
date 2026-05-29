@@ -1,31 +1,12 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { 
-  CheckCircle2, 
-  Globe, 
-  FileText, 
-  Users, 
-  GraduationCap, 
-  Briefcase, 
-  BookOpen, 
-  ShieldCheck,
-  LucideIcon
-} from "lucide-react";
+import Link from "next/link";
+import CtaBand from "@/components/website/CtaBand";
 import { getServices } from "@/lib/actions/service.action";
 import { getT, type Locale } from "@/lib/i18n";
 
 export const metadata = {
   title: "Our Services | J&N Caregiver Training",
-  description: "Comprehensive study abroad counseling, visa processing, and documentation support.",
-};
-
-const iconMap: Record<string, LucideIcon> = {
-  Briefcase,
-  Globe,
-  GraduationCap,
-  FileText,
-  Users,
-  BookOpen,
-  ShieldCheck,
+  description:
+    "Professional services for every stage — career counseling, language coaching, visa support, employer matching, and post-arrival assistance.",
 };
 
 export default async function ServicesPage({
@@ -34,54 +15,202 @@ export default async function ServicesPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const safeLocale = locale as Locale;
-  const t = getT(safeLocale);
-  const services = await getServices(safeLocale);
-  const activeServices = services.filter(s => s.is_active);
+  const t = getT(locale);
+  const l = locale as Locale;
+
+  const dbServices = await getServices(l);
+  const activeDbServices = dbServices.filter((s) => s.is_active);
+
+  const staticServices = [
+    {
+      id: "counseling",
+      emoji: "🧭",
+      stage: t("services.s1.stage"),
+      title: t("services.s1.title"),
+      description: t("services.s1.desc"),
+      featured: false,
+    },
+    {
+      id: "language-support",
+      emoji: "🗣️",
+      stage: t("services.s2.stage"),
+      title: t("services.s2.title"),
+      description: t("services.s2.desc"),
+      featured: true,
+      badge: t("services.s2.badge"),
+    },
+    {
+      id: "visa-support",
+      emoji: "📄",
+      stage: t("services.s3.stage"),
+      title: t("services.s3.title"),
+      description: t("services.s3.desc"),
+      featured: false,
+    },
+    {
+      id: "placement",
+      emoji: "🤝",
+      stage: t("services.s4.stage"),
+      title: t("services.s4.title"),
+      description: t("services.s4.desc"),
+      featured: false,
+    },
+    {
+      id: "relocation",
+      emoji: "✈️",
+      stage: t("services.s5.stage"),
+      title: t("services.s5.title"),
+      description: t("services.s5.desc"),
+      featured: false,
+    },
+    {
+      id: "post-arrival",
+      emoji: "🧩",
+      stage: t("services.s6.stage"),
+      title: t("services.s6.title"),
+      description: t("services.s6.desc"),
+      featured: false,
+    },
+  ];
+
+  const processSteps = [
+    { step: 1, title: t("services.process.s1.title"), desc: t("services.process.s1.desc") },
+    { step: 2, title: t("services.process.s2.title"), desc: t("services.process.s2.desc") },
+    { step: 3, title: t("services.process.s3.title"), desc: t("services.process.s3.desc") },
+    { step: 4, title: t("services.process.s4.title"), desc: t("services.process.s4.desc") },
+  ];
 
   return (
-    <div className="container py-20 px-4">
-      <div className="text-center max-w-3xl mx-auto mb-16">
-        <h1 className="text-4xl font-bold mb-4">{t("nav.services")}</h1>
-        <p className="text-xl text-muted-foreground">
-          {t("home.heroSubtitle")}
-        </p>
-      </div>
+    <>
+      {/* SERVICES HERO */}
+      <section className="pb-24 overflow-hidden bg-gradient-to-br from-jn-bg-off to-jn-primary-light">
+        <div className="jn-container text-center pt-12">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white text-jn-primary font-[family-name:var(--font-poppins)] text-[0.85rem] font-semibold rounded-full mb-6 shadow-sm border border-jn-primary-light">
+            {t("services.hero.badge")}
+          </span>
+          <h1 className="jn-heading-1 mb-6 max-w-3xl mx-auto">
+            {t("services.hero.title")}
+          </h1>
+          <p className="jn-body-text leading-[1.8] max-w-3xl mx-auto">
+            {t("services.hero.body")}
+          </p>
+        </div>
+      </section>
 
-      {activeServices.length === 0 ? (
-        <div className="text-center py-20">
-          <p className="text-muted-foreground">{t("services.empty")}</p>
-        </div>
-      ) : (
-        <div className="grid md:grid-cols-2 gap-8">
-          {activeServices.map((service) => {
-            const Icon = iconMap[service.icon_name] || Briefcase;
-            return (
-              <Card key={service.id} id={service.id} className="flex flex-col h-full scroll-mt-20">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-primary/10 text-primary rounded-lg flex items-center justify-center mb-4">
-                    <Icon size={24} />
+      {/* SERVICES GRID */}
+      <section id="services" className="jn-section bg-jn-bg-off">
+        <div className="jn-container">
+          <div className="text-center max-w-[760px] mx-auto mb-12">
+            <span className="jn-section-label">{t("services.grid.label")}</span>
+            <h2 className="jn-heading-2">{t("services.grid.title")}</h2>
+            <p className="jn-body-text">{t("services.grid.body")}</p>
+          </div>
+
+          {activeDbServices.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {activeDbServices.map((service) => (
+                <div
+                  key={service.id}
+                  id={service.id}
+                  className="bg-white rounded-[24px] shadow-md border border-jn-border overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-jn-float)] flex flex-col group"
+                >
+                  <div className="h-[140px] bg-jn-bg-off flex items-center justify-center text-5xl border-b border-jn-border group-hover:bg-jn-primary-light transition-colors duration-300">
+                    🎯
                   </div>
-                  <CardTitle className="text-2xl">{service.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-6">{service.description}</p>
-                  {service.features && (
-                    <ul className="space-y-2">
-                      {service.features.split(",").map((feature: string, index: number) => (
-                        <li key={index} className="flex items-center gap-2 text-sm">
-                          <CheckCircle2 className="text-green-500" size={16} />
-                          <span>{feature.trim()}</span>
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="p-6 flex flex-col h-full">
+                    <div className="text-[0.85rem] font-semibold text-jn-primary uppercase tracking-wider mb-3">
+                      {t("services.hero.badge")}
+                    </div>
+                    <h3 className="text-xl font-semibold mb-3 font-[family-name:var(--font-poppins)] text-jn-text-dark">
+                      {service.title}
+                    </h3>
+                    <p className="text-[0.95rem] text-jn-text-muted mb-6 flex-grow">
+                      {service.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {staticServices.map((s) => (
+                <div
+                  key={s.id}
+                  id={s.id}
+                  className={`bg-white rounded-[24px] shadow-md overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-jn-float)] flex flex-col group relative ${
+                    s.featured
+                      ? "border-2 border-jn-accent"
+                      : "border border-jn-border"
+                  }`}
+                >
+                  {s.featured && (
+                    <span className="absolute top-4 right-4 bg-jn-accent text-jn-text-dark text-xs font-[family-name:var(--font-poppins)] font-bold px-3 py-1.5 rounded-full uppercase z-10 shadow-sm">
+                      {(s as typeof s & { badge?: string }).badge}
+                    </span>
                   )}
-                </CardContent>
-              </Card>
-            );
-          })}
+                  <div
+                    className={`h-[140px] flex items-center justify-center text-5xl border-b border-jn-border ${
+                      s.featured
+                        ? "bg-jn-accent-light"
+                        : "bg-jn-bg-off group-hover:bg-jn-primary-light"
+                    } transition-colors duration-300`}
+                  >
+                    {s.emoji}
+                  </div>
+                  <div className="p-6 flex flex-col h-full">
+                    <div className="text-[0.85rem] font-semibold text-jn-primary uppercase tracking-wider mb-3">
+                      {s.stage}
+                    </div>
+                    <h3 className="text-xl font-semibold mb-3 font-[family-name:var(--font-poppins)] text-jn-text-dark">
+                      {s.title}
+                    </h3>
+                    <p className="text-[0.95rem] text-jn-text-muted mb-6 flex-grow">
+                      {s.description}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="text-center mt-12">
+            <Link href={`/${l}/contact`} className="jn-btn jn-btn-primary">
+              {t("services.grid.cta")}
+            </Link>
+          </div>
         </div>
-      )}
-    </div>
+      </section>
+
+      {/* SERVICE PROCESS */}
+      <section className="jn-section bg-white">
+        <div className="jn-container">
+          <div className="text-center max-w-[760px] mx-auto mb-12">
+            <span className="jn-section-label">{t("services.process.label")}</span>
+            <h2 className="jn-heading-2">{t("services.process.title")}</h2>
+            <p className="jn-body-text">{t("services.process.body")}</p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {processSteps.map((p) => (
+              <div
+                key={p.step}
+                className="bg-jn-bg-off border border-jn-border rounded-2xl p-6 text-center"
+              >
+                <div className="w-12 h-12 rounded-full bg-jn-primary text-white flex items-center justify-center font-[family-name:var(--font-poppins)] font-semibold mx-auto mb-4">
+                  {p.step}
+                </div>
+                <h4 className="font-[family-name:var(--font-poppins)] font-semibold text-jn-text-dark mb-2">
+                  {p.title}
+                </h4>
+                <p className="text-jn-text-muted text-[0.95rem]">{p.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* CTA BAND */}
+      <CtaBand locale={l} />
+    </>
   );
 }

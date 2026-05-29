@@ -1,25 +1,20 @@
 import { getBlogPosts } from "@/lib/actions/blog.action";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import Link from "next/link";
-import { format } from "date-fns";
 import Image from "next/image";
+import { format } from "date-fns";
+import CtaBand from "@/components/website/CtaBand";
 import { getT, type Locale } from "@/lib/i18n";
 import { FEATURE_FLAGS } from "@/lib/constants";
 import { notFound } from "next/navigation";
 
 export const metadata = {
-  title: "Blog & Expert Guides | J&N Caregiver Training",
+  title: "Blog & Insights | J&N Caregiver Training",
   description:
-    "Explore our latest expert guides, success stories, and updates about studying in Japan and language learning.",
+    "Discover everything you need to know about starting your caregiver career, life in Japan, and success stories from our graduates.",
   openGraph: {
-    title: "Blog & Expert Guides | J&N Caregiver Training",
-    description: "Expert insights for your international education journey.",
+    title: "Blog & Insights | J&N Caregiver Training",
+    description:
+      "Discover everything you need to know about starting your caregiver career, life in Japan, and success stories from our graduates.",
     type: "website",
   },
 };
@@ -30,8 +25,8 @@ export default async function BlogPage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  const safeLocale = locale as Locale;
-  const t = getT(safeLocale);
+  const t = getT(locale);
+  const l = locale as Locale;
 
   if (!FEATURE_FLAGS.ENABLE_BLOG) {
     notFound();
@@ -40,7 +35,7 @@ export default async function BlogPage({
   const posts = await getBlogPosts(true);
   const localizedPosts = (posts ?? []).map((post) => {
     const translation = post.translations?.find(
-      (item: { locale: string }) => item.locale === safeLocale,
+      (item: { locale: string }) => item.locale === l,
     );
     const { translations: _translations, ...base } = post;
     void _translations;
@@ -51,67 +46,88 @@ export default async function BlogPage({
   });
 
   return (
-    <div className="container py-20 px-4">
-      <div className="text-center max-w-3xl mx-auto mb-16">
-        <h1 className="text-4xl font-bold mb-4">{t("blog.title")}</h1>
-        <p className="text-xl text-muted-foreground">{t("blog.subtitle")}</p>
-      </div>
+    <>
+      {/* BLOG HERO */}
+      <section className="pb-24 overflow-hidden bg-gradient-to-br from-jn-bg-off to-jn-primary-light">
+        <div className="jn-container text-center pt-12">
+          <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white text-jn-primary font-[family-name:var(--font-poppins)] text-[0.85rem] font-semibold rounded-full mb-6 shadow-sm border border-jn-primary-light">
+            {t("blog.hero.badge")}
+          </span>
+          <h1 className="jn-heading-1 mb-6 max-w-3xl mx-auto">
+            {t("blog.hero.title")}
+          </h1>
+          <p className="jn-body-text leading-[1.8] max-w-3xl mx-auto">
+            {t("blog.hero.body")}
+          </p>
+        </div>
+      </section>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {localizedPosts?.map((post) => (
-          <Link
-            href={`/${safeLocale}/blog/${post.slug}`}
-            key={post.id}
-            className="group"
-          >
-            <Card className="h-full overflow-hidden transition-all group-hover:shadow-lg">
-              <div className="aspect-video bg-muted relative overflow-hidden">
-                {post.image_url ? (
-                  <Image
-                    src={post.image_url}
-                    alt={post.title}
-                    fill
-                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-                    className="object-cover transition-transform group-hover:scale-105"
-                  />
-                ) : (
-                  <div className="flex items-center justify-center h-full text-muted-foreground italic">
-                    No Image
-                  </div>
-                )}
-              </div>
-              <CardHeader>
-                <div className="flex items-center gap-2 text-xs text-muted-foreground mb-2">
-                  <span>
-                    {format(
-                      new Date(post.published_at ?? post.created_at ?? new Date()),
-                      "MMM d, yyyy",
-                    )}
-                  </span>
-                </div>
-                <CardTitle className="group-hover:text-primary transition-colors line-clamp-2">
-                  {post.title}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground line-clamp-3">
-                  {post.excerpt}
-                </p>
-              </CardContent>
-              <CardFooter>
-                <span className="text-sm font-bold text-primary">
-                  {t("blog.readMore")}
-                </span>
-              </CardFooter>
-            </Card>
-          </Link>
-        ))}
-        {localizedPosts.length === 0 && (
-          <div className="col-span-full py-20 text-center bg-muted/30 rounded-2xl">
-            <p className="text-muted-foreground">{t("blog.empty")}</p>
-          </div>
-        )}
-      </div>
-    </div>
+      {/* BLOG CONTENT */}
+      <section className="jn-section bg-jn-bg-off">
+        <div className="jn-container">
+          {/* Blog Grid */}
+          {localizedPosts.length === 0 ? (
+            <div className="py-20 text-center bg-white rounded-2xl border border-jn-border">
+              <p className="text-jn-text-muted text-lg">{t("blog.empty")}</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {localizedPosts.map((post) => (
+                <Link
+                  href={`/${l}/blog/${post.slug}`}
+                  key={post.id}
+                  className="group"
+                >
+                  <article className="bg-white rounded-2xl shadow-sm border border-jn-border overflow-hidden transition-all duration-300 hover:shadow-[var(--shadow-jn-float)] hover:-translate-y-1 flex flex-col h-full">
+                    {/* Image */}
+                    <div className="h-56 overflow-hidden relative rounded-t-2xl bg-jn-primary-light">
+                      {post.image_url ? (
+                        <Image
+                          src={post.image_url}
+                          alt={post.title}
+                          fill
+                          sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                          className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="flex items-center justify-center h-full text-jn-text-light italic text-sm">
+                          No Image
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-6 flex flex-col flex-1">
+                      <div className="text-sm text-jn-text-muted mb-3 font-medium">
+                        {format(
+                          new Date(
+                            post.published_at ?? post.created_at ?? new Date(),
+                          ),
+                          "MMM d, yyyy",
+                        )}
+                      </div>
+                      <h3 className="text-xl font-semibold mb-3 font-[family-name:var(--font-poppins)] text-jn-text-dark group-hover:text-jn-primary transition-colors line-clamp-2">
+                        {post.title}
+                      </h3>
+                      {post.excerpt && (
+                        <p className="text-jn-text-muted text-[0.95rem] mb-6 line-clamp-3 flex-grow">
+                          {post.excerpt}
+                        </p>
+                      )}
+                      <span className="inline-flex items-center gap-1 font-[family-name:var(--font-poppins)] font-semibold text-jn-primary group-hover:gap-2 transition-all mt-auto">
+                        {t("blog.readMore")} <span aria-hidden="true">→</span>
+                      </span>
+                    </div>
+                  </article>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* CTA BAND */}
+      <CtaBand locale={l} />
+    </>
   );
 }

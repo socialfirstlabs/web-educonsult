@@ -16,11 +16,11 @@ export default async function LeadsPage() {
   if (!supabase) return <div className="p-4 border border-destructive text-destructive rounded-md bg-destructive/10">Supabase environment variables are missing.</div>;
 
   const { data: leads, error } = await supabase
-    .from('leads')
+    .from('contacts')
     .select('*')
     .order('created_at', { ascending: false });
 
-  if (error) return <div className="p-4 border border-destructive text-destructive rounded-md bg-destructive/10">Error loading leads: {error.message}</div>;
+  if (error) return <div className="p-4 border border-destructive text-destructive rounded-md bg-destructive/10">Error loading contacts: {error.message}</div>;
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -35,8 +35,8 @@ export default async function LeadsPage() {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold">Student Leads</h1>
-        <Badge variant="outline">{leads?.length || 0} Total Leads</Badge>
+        <h1 className="text-2xl font-bold">Contacts</h1>
+        <Badge variant="outline">{leads?.length || 0} Total Contacts</Badge>
       </div>
 
       <div className="rounded-md border bg-background">
@@ -44,9 +44,8 @@ export default async function LeadsPage() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[100px]">Date</TableHead>
-              <TableHead>Student Name</TableHead>
+              <TableHead>Name</TableHead>
               <TableHead>Contact Info</TableHead>
-              <TableHead>Interested In</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="max-w-[200px]">Message</TableHead>
             </TableRow>
@@ -63,10 +62,6 @@ export default async function LeadsPage() {
                   <div className="text-sm text-muted-foreground">{lead.phone}</div>
                 </TableCell>
                 <TableCell>
-                  <div className="text-sm font-medium">{lead.interested_country}</div>
-                  <div className="text-xs text-muted-foreground">{lead.course_interest}</div>
-                </TableCell>
-                <TableCell>
                   <Badge className={`capitalize border-none ${getStatusColor(lead.status ?? 'new')}`}>
                     {lead.status}
                   </Badge>
@@ -78,8 +73,8 @@ export default async function LeadsPage() {
             ))}
             {leads?.length === 0 && (
               <TableRow>
-                <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
-                  No leads found.
+                <TableCell colSpan={5} className="h-24 text-center text-muted-foreground">
+                  No contacts found.
                 </TableCell>
               </TableRow>
             )}

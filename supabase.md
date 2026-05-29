@@ -1,4 +1,4 @@
-# Supabase Setup Guide for J&N Caregiver Training
+# Supabase Setup Guide for J & N Caregiver Training
 
 Follow these steps to configure the Supabase backend for your lead generation and management system.
 

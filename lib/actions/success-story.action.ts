@@ -118,6 +118,7 @@ export async function addSuccessStory(
 
   revalidatePath("/dashboard/success-stories");
   revalidatePath("/success-stories");
+  return { success: true };
 }
 
 export async function updateSuccessStory(
@@ -171,6 +172,7 @@ export async function updateSuccessStory(
 
   revalidatePath("/dashboard/success-stories");
   revalidatePath("/success-stories");
+  return { success: true };
 }
 
 export async function deleteSuccessStory(id: string) {
@@ -190,6 +192,7 @@ export async function deleteSuccessStory(id: string) {
 
   revalidatePath("/dashboard/success-stories");
   revalidatePath("/success-stories");
+  return { success: true };
 }
 
 export async function getSuccessStoriesForDashboard() {

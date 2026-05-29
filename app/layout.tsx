@@ -1,12 +1,23 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins, Roboto } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-poppins",
+});
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700"],
+  variable: "--font-roboto",
+});
 
 export const metadata: Metadata = {
-  title: "Education Consultancy in Nepal | Study Abroad & Japanese Language",
-  description: "Leading education consultancy in Nepal helping students study abroad in Japan and providing quality Japanese language classes (N5, N4, N3).",
+  title: "J & N Caregiver Training — Your Gateway to Japan",
+  description:
+    "Accredited caregiver training for Nepali professionals — language classes, visa support, and guaranteed employer matching in Japan.",
 };
 
 export default function RootLayout({
@@ -16,7 +27,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${poppins.variable} ${roboto.variable} font-[family-name:var(--font-roboto)] bg-white text-jn-text-dark overflow-x-hidden leading-[1.7] antialiased`}>
+        {children}
+      </body>
     </html>
   );
 }

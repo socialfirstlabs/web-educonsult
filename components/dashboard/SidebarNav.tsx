@@ -9,14 +9,16 @@ import {
   FileText,
   ImageIcon,
   Briefcase,
+  ClipboardList,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { href: "/dashboard/leads", label: "Leads", icon: Users },
-  { href: "/dashboard/services", label: "Services", icon: Briefcase },
-  { href: "/dashboard/courses", label: "Courses", icon: BookOpen },
+  { href: "/dashboard",             label: "Dashboard",      icon: LayoutDashboard, exact: true },
+  { href: "/dashboard/enrollments", label: "Enrollments",    icon: ClipboardList },
+  { href: "/dashboard/leads",       label: "Contacts",       icon: Users },
+  { href: "/dashboard/services",    label: "Services",       icon: Briefcase },
+  { href: "/dashboard/courses",     label: "Courses",        icon: BookOpen },
   { href: "/dashboard/success-stories", label: "Success Stories", icon: ImageIcon },
 ];
 

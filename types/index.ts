@@ -2,7 +2,7 @@
  * Custom shared TypeScript types for the EduNepal project.
  *
  * Re-exports Supabase DB types and adds project-specific types.
- * Import from here instead of individual files: `import type { Lead } from "@/types"`.
+ * Import from here instead of individual files: `import type { Contact } from "@/types"`.
  *
  * NOTE: supabase-v1.ts is auto-generated. Do NOT edit it manually.
  * Regenerate with: npx supabase gen types typescript --linked > types/supabase-v1.ts
@@ -16,8 +16,8 @@ export type { Database, Tables, TablesInsert, TablesUpdate, Enums } from "./supa
 
 import type { Tables as T } from "./supabase-v1";
 
-/** A single lead submission from the public contact form */
-export type Lead = T<"leads">;
+/** A single contact submission from the public contact form */
+export type Contact = T<"contacts">;
 
 /** A blog post record (English base content) */
 export type BlogPost = T<"blog_posts">;
@@ -53,8 +53,8 @@ export type SiteConfig = T<"site_config">;
 /** Supported application locales */
 export type Locale = "en" | "ja";
 
-/** Lead status values */
-export type LeadStatus = "new" | "contacted" | "converted" | "archived";
+/** Contact status values */
+export type ContactStatus = "new" | "contacted" | "converted" | "archived";
 
 /** Image upload result returned from storage action */
 export interface UploadResult {
