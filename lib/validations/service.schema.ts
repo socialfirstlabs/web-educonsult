@@ -4,6 +4,8 @@ export const serviceSchema = z.object({
   title: z.string().min(2, "Title must be at least 2 characters"),
   description: z.string().min(10, "Description must be at least 10 characters"),
   features: z.string().optional().or(z.literal("")),
+  tags: z.string().optional().or(z.literal("")),
+  image_url: z.string().optional().or(z.literal("")),
   icon_name: z.string(),
   is_active: z.boolean(),
   order_index: z.number().int(),

@@ -9,6 +9,7 @@ type ServiceTranslationInput = {
   title: string;
   description: string;
   features?: string;
+  tags?: string;
 };
 
 export async function getServices(locale: Locale = "en") {
@@ -17,7 +18,7 @@ export async function getServices(locale: Locale = "en") {
 
   const { data, error } = await supabase
     .from("services")
-    .select("*, translations:service_translations(locale,title,description,features)")
+    .select("*, translations:service_translations(locale,title,description,features,tags)")
     .order("order_index", { ascending: true });
 
   if (error) {
@@ -73,6 +74,7 @@ export async function addService(values: ServiceValues, translation?: ServiceTra
             title: translation.title.trim(),
             description: translation.description.trim(),
             features: translation.features?.trim() || null,
+            tags: translation.tags?.trim() || null,
           },
         ],
         { onConflict: "service_id,locale" }
@@ -127,6 +129,7 @@ export async function updateService(
             title: translation.title.trim(),
             description: translation.description.trim(),
             features: translation.features?.trim() || null,
+            tags: translation.tags?.trim() || null,
           },
         ],
         { onConflict: "service_id,locale" }
@@ -170,7 +173,7 @@ export async function getServicesForDashboard() {
 
   const { data, error } = await supabase
     .from("services")
-    .select("*, translations:service_translations(locale,title,description,features)")
+    .select("*, translations:service_translations(locale,title,description,features,tags)")
     .order("order_index", { ascending: true });
 
   if (error) {

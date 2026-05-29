@@ -14,11 +14,13 @@ import { ServiceForm } from "./ServiceForm";
 import { ServiceList } from "./ServiceList";
 import { type ServiceValues } from "@/lib/validations/service.schema";
 
-interface Service extends Omit<ServiceValues, 'is_active' | 'features'> {
+interface Service extends Omit<ServiceValues, 'is_active' | 'features' | 'tags' | 'image_url'> {
   id: string;
   is_active: boolean | null;
   features?: string | null;
-  translations?: { locale: string; title: string; description: string; features?: string | null }[];
+  tags?: string | null;
+  image_url?: string | null;
+  translations?: { locale: string; title: string; description: string; features?: string | null; tags?: string | null }[];
 }
 
 export function ServiceClient({ services }: { services: Service[] }) {

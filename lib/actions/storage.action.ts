@@ -1,7 +1,6 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { fileTypeFromBuffer } from "file-type";
 
 /** MIME types allowed for upload. Validated server-side via magic bytes — not the client header. */
@@ -46,14 +45,11 @@ export async function uploadImage(formData: FormData) {
     );
   }
 
-  const admin = createAdminClient();
-  if (!admin) throw new Error("Admin client not initialized — check SUPABASE_SERVICE_ROLE_KEY.");
-
   // Use the server-detected extension to prevent extension spoofing
   const fileName = `${crypto.randomUUID()}-${Date.now()}.${detected.ext}`;
   const filePath = `${folder}/${fileName}`;
 
-  const { error } = await admin.storage
+  const { error } = await supabase.storage
     .from("images")
     .upload(filePath, buffer, {
       contentType: detected.mime,
@@ -67,7 +63,7 @@ export async function uploadImage(formData: FormData) {
 
   const {
     data: { publicUrl },
-  } = admin.storage.from("images").getPublicUrl(filePath);
+  } = supabase.storage.from("images").getPublicUrl(filePath);
 
   return publicUrl;
 }

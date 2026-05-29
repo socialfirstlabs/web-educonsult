@@ -8,11 +8,17 @@ import { getT } from "@/lib/i18n";
 import { localeConfig } from "@/lib/i18n/config";
 import { useApplyModal } from "@/components/website/ApplyModal";
 
-interface NavbarProps {
-  locale: string;
+interface NavService {
+  title: string;
+  tags: string | null;
 }
 
-export default function Navbar({ locale }: NavbarProps) {
+interface NavbarProps {
+  locale: string;
+  services?: NavService[];
+}
+
+export default function Navbar({ locale, services = [] }: NavbarProps) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -34,19 +40,33 @@ export default function Navbar({ locale }: NavbarProps) {
   const switchedPath = pathname.replace(new RegExp(`^/${locale}`), `/${altLocale}`);
   const altConfig = localeConfig[altLocale as "en" | "ja"];
 
-  const megaItems = [
-    { icon: "🧭", title: t("nav.menu.item1.title"), desc: t("nav.menu.item1.desc") },
-    { icon: "🗣️", title: t("nav.menu.item2.title"), desc: t("nav.menu.item2.desc") },
-    { icon: "📄", title: t("nav.menu.item3.title"), desc: t("nav.menu.item3.desc") },
-    { icon: "🤝", title: t("nav.menu.item4.title"), desc: t("nav.menu.item4.desc") },
-  ];
+  const fallbackIcons = ["🧭", "🗣️", "📄", "🤝"];
 
-  const mobileServiceItems = [
-    { icon: "🧭", label: t("nav.menu.item1.title"), sub: t("nav.menu.item1.desc") },
-    { icon: "🗣️", label: t("nav.menu.item2.title"), sub: t("nav.menu.item2.desc") },
-    { icon: "📄", label: t("nav.menu.item3.title"), sub: t("nav.menu.item3.desc") },
-    { icon: "🤝", label: t("nav.menu.item4.title"), sub: t("nav.menu.item4.desc") },
-  ];
+  const megaItems = services.length > 0
+    ? services.map((s, i) => ({
+        icon: fallbackIcons[i] ?? "🔹",
+        title: s.title,
+        tags: s.tags ? s.tags.split(",").map((tg) => tg.trim()).filter(Boolean) : [],
+      }))
+    : [
+        { icon: "🧭", title: t("nav.menu.item1.title"), tags: [] },
+        { icon: "🗣️", title: t("nav.menu.item2.title"), tags: [] },
+        { icon: "📄", title: t("nav.menu.item3.title"), tags: [] },
+        { icon: "🤝", title: t("nav.menu.item4.title"), tags: [] },
+      ];
+
+  const mobileServiceItems = services.length > 0
+    ? services.map((s, i) => ({
+        icon: fallbackIcons[i] ?? "🔹",
+        label: s.title,
+        tags: s.tags ? s.tags.split(",").map((tg) => tg.trim()).filter(Boolean) : [],
+      }))
+    : [
+        { icon: "🧭", label: t("nav.menu.item1.title"), tags: [] },
+        { icon: "🗣️", label: t("nav.menu.item2.title"), tags: [] },
+        { icon: "📄", label: t("nav.menu.item3.title"), tags: [] },
+        { icon: "🤝", label: t("nav.menu.item4.title"), tags: [] },
+      ];
 
   return (
     <nav
@@ -95,12 +115,44 @@ export default function Navbar({ locale }: NavbarProps) {
                 <div className="grid grid-cols-12 gap-8">
                   <div className="col-span-8">
                     <p className="text-[0.75rem] uppercase tracking-[0.18em] text-jn-primary font-[family-name:var(--font-poppins)] font-semibold mb-4">{t("nav.menu.serviceNavLabel")}</p>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-3">
                       {megaItems.map((item) => (
-                        <Link key={item.title} href={`/${l}/services`} className="rounded-2xl border border-jn-border bg-jn-bg-off p-4 hover:border-jn-primary-light hover:bg-jn-primary-light/40 transition-all" onClick={close}>
-                          <p className="text-sm font-[family-name:var(--font-poppins)] font-semibold text-jn-text-dark">{item.icon} {item.title}</p>
-                          <p className="text-[0.85rem] text-jn-text-muted mt-1">{item.desc}</p>
-                          <p className="text-[0.8rem] text-jn-primary font-semibold mt-2">{t("nav.menu.openService")}</p>
+                        <Link
+                          key={item.title}
+                          href={`/${l}/services`}
+                          className="group/item rounded-xl border border-jn-border bg-jn-bg-off p-4
+                                     hover:border-jn-primary hover:bg-jn-primary-light/50
+                                     hover:shadow-[0_4px_16px_-4px_rgba(36,62,188,0.15)]
+                                     transition-all duration-200 flex flex-col gap-2.5"
+                          onClick={close}
+                        >
+                          {/* Icon + title row */}
+                          <div className="flex items-start gap-2">
+                            <span className="text-xl leading-none mt-0.5 shrink-0">{item.icon}</span>
+                            <p className="text-[0.88rem] font-[family-name:var(--font-poppins)] font-semibold text-jn-text-dark leading-snug group-hover/item:text-jn-primary transition-colors duration-150">
+                              {item.title}
+                            </p>
+                          </div>
+
+                          {/* Tags */}
+                          {item.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1">
+                              {item.tags.map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="text-[0.65rem] font-semibold text-jn-primary bg-white border border-[#c7d0f5] px-2 py-[2px] rounded-full"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* CTA */}
+                          <p className="text-[0.75rem] text-jn-primary font-semibold mt-auto flex items-center gap-1
+                                        opacity-0 group-hover/item:opacity-100 transition-opacity duration-150">
+                            {t("nav.menu.openService")}
+                          </p>
                         </Link>
                       ))}
                     </div>
@@ -192,9 +244,20 @@ export default function Navbar({ locale }: NavbarProps) {
             {mobileServicesOpen && (
               <div className="flex flex-col gap-3 mt-3 pl-4 border-l border-jn-border">
                 {mobileServiceItems.map((item) => (
-                  <Link key={item.label} href={`/${l}/services`} onClick={close} className="flex flex-col py-2">
+                  <Link key={item.label} href={`/${l}/services`} onClick={close} className="flex flex-col gap-1.5 py-2">
                     <span className="text-[0.95rem] font-semibold text-jn-text-dark">{item.icon} {item.label}</span>
-                    <span className="text-xs text-jn-text-muted">{item.sub}</span>
+                    {item.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {item.tags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-[0.68rem] font-semibold text-jn-primary bg-jn-primary-light border border-[#c7d0f5] px-2 py-[2px] rounded-md"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </Link>
                 ))}
                 <div className="pt-2 mt-2 border-t border-jn-border/50">

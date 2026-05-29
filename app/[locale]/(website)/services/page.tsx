@@ -1,5 +1,6 @@
 import Link from "next/link";
 import CtaBand from "@/components/website/CtaBand";
+import { ServiceCard } from "@/components/website/ServiceCard";
 import { getServices } from "@/lib/actions/service.action";
 import { getT, type Locale } from "@/lib/i18n";
 
@@ -109,26 +110,14 @@ export default async function ServicesPage({
           {activeDbServices.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {activeDbServices.map((service) => (
-                <div
+                <ServiceCard
                   key={service.id}
-                  id={service.id}
-                  className="bg-white rounded-[24px] shadow-md border border-jn-border overflow-hidden transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[var(--shadow-jn-float)] flex flex-col group"
-                >
-                  <div className="h-[140px] bg-jn-bg-off flex items-center justify-center text-5xl border-b border-jn-border group-hover:bg-jn-primary-light transition-colors duration-300">
-                    🎯
-                  </div>
-                  <div className="p-6 flex flex-col h-full">
-                    <div className="text-[0.85rem] font-semibold text-jn-primary uppercase tracking-wider mb-3">
-                      {t("services.hero.badge")}
-                    </div>
-                    <h3 className="text-xl font-semibold mb-3 font-[family-name:var(--font-poppins)] text-jn-text-dark">
-                      {service.title}
-                    </h3>
-                    <p className="text-[0.95rem] text-jn-text-muted mb-6 flex-grow">
-                      {service.description}
-                    </p>
-                  </div>
-                </div>
+                  title={service.title}
+                  description={service.description}
+                  features={service.features}
+                  tags={service.tags}
+                  image_url={service.image_url}
+                />
               ))}
             </div>
           ) : (

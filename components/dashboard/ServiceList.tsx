@@ -15,19 +15,20 @@ import {
   DropdownMenuTrigger 
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { 
-  MoreHorizontal, 
-  Pencil, 
-  Trash, 
-  Briefcase, 
-  Globe, 
-  GraduationCap, 
-  FileText, 
-  Users, 
-  BookOpen, 
+import {
+  MoreHorizontal,
+  Pencil,
+  Trash,
+  Briefcase,
+  Globe,
+  GraduationCap,
+  FileText,
+  Users,
+  BookOpen,
   ShieldCheck,
   LucideIcon
 } from "lucide-react";
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { 
   Dialog, 
@@ -40,11 +41,13 @@ import { ServiceForm } from "./ServiceForm";
 import { deleteService } from "@/lib/actions/service.action";
 import { type ServiceValues } from "@/lib/validations/service.schema";
 
-interface Service extends Omit<ServiceValues, 'is_active' | 'features'> {
+interface Service extends Omit<ServiceValues, 'is_active' | 'features' | 'tags' | 'image_url'> {
   id: string;
   is_active: boolean | null;
   features?: string | null;
-  translations?: { locale: string; title: string; description: string; features?: string | null }[];
+  tags?: string | null;
+  image_url?: string | null;
+  translations?: { locale: string; title: string; description: string; features?: string | null; tags?: string | null }[];
 }
 
 const iconMap: Record<string, LucideIcon> = {
@@ -76,23 +79,53 @@ export function ServiceList({ services }: { services: Service[] }) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[80px]">Order</TableHead>
-              <TableHead>Icon</TableHead>
+              <TableHead className="w-[60px]">Order</TableHead>
+              <TableHead className="w-[80px]">Image</TableHead>
               <TableHead>Title</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>Features</TableHead>
+              <TableHead>Tags</TableHead>
               <TableHead>Status</TableHead>
               <TableHead className="text-right">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {services.map((service) => {
-              const Icon = iconMap[service.icon_name] || Briefcase;
+              const tags = service.tags ? service.tags.split(",").map((t) => t.trim()).filter(Boolean) : [];
+              const features = service.features ? service.features.split(",").map((f) => f.trim()).filter(Boolean) : [];
               return (
                 <TableRow key={service.id}>
                   <TableCell>{service.order_index}</TableCell>
                   <TableCell>
-                    <Icon size={18} />
+                    {service.image_url ? (
+                      <div className="relative w-12 h-12 rounded overflow-hidden border border-border">
+                        <Image src={service.image_url} alt={service.title} fill sizes="80px" className="object-cover" />
+                      </div>
+                    ) : (
+                      <div className="w-12 h-12 rounded bg-muted flex items-center justify-center">
+                        {(() => { const Icon = iconMap[service.icon_name] || Briefcase; return <Icon size={18} className="text-muted-foreground" />; })()}
+                      </div>
+                    )}
                   </TableCell>
                   <TableCell className="font-medium">{service.title}</TableCell>
+                  <TableCell className="max-w-[180px]">
+                    <span className="text-sm text-muted-foreground line-clamp-2">{service.description}</span>
+                  </TableCell>
+                  <TableCell className="max-w-[160px]">
+                    <div className="flex flex-wrap gap-1">
+                      {features.slice(0, 3).map((f) => (
+                        <span key={f} className="text-xs bg-muted px-1.5 py-0.5 rounded">{f}</span>
+                      ))}
+                      {features.length > 3 && <span className="text-xs text-muted-foreground">+{features.length - 3}</span>}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-wrap gap-1">
+                      {tags.map((tag) => (
+                        <Badge key={tag} variant="outline" className="text-xs">{tag}</Badge>
+                      ))}
+                    </div>
+                  </TableCell>
                   <TableCell>
                     <Badge variant={service.is_active ? "default" : "secondary"}>
                       {service.is_active ? "Active" : "Inactive"}
@@ -141,6 +174,8 @@ export function ServiceList({ services }: { services: Service[] }) {
               ...editingService,
               is_active: editingService.is_active ?? false,
               features: editingService.features ?? undefined,
+              tags: editingService.tags ?? undefined,
+              image_url: editingService.image_url ?? undefined,
             }}
             onSuccess={() => setEditingService(null)}
           />

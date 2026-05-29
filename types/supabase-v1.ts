@@ -254,6 +254,7 @@ export type Database = {
           id: string
           locale: string
           service_id: string
+          tags: string | null
           title: string
         }
         Insert: {
@@ -263,6 +264,7 @@ export type Database = {
           id?: string
           locale: string
           service_id: string
+          tags?: string | null
           title: string
         }
         Update: {
@@ -272,6 +274,7 @@ export type Database = {
           id?: string
           locale?: string
           service_id?: string
+          tags?: string | null
           title?: string
         }
         Relationships: [
@@ -291,8 +294,10 @@ export type Database = {
           features: string | null
           icon_name: string
           id: string
+          image_url: string | null
           is_active: boolean | null
           order_index: number
+          tags: string | null
           title: string
         }
         Insert: {
@@ -301,8 +306,10 @@ export type Database = {
           features?: string | null
           icon_name: string
           id?: string
+          image_url?: string | null
           is_active?: boolean | null
           order_index: number
+          tags?: string | null
           title: string
         }
         Update: {
@@ -311,8 +318,10 @@ export type Database = {
           features?: string | null
           icon_name?: string
           id?: string
+          image_url?: string | null
           is_active?: boolean | null
           order_index?: number
+          tags?: string | null
           title?: string
         }
         Relationships: []
