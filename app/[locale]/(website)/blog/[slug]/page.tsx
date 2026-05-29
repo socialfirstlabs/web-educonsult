@@ -106,6 +106,7 @@ export default async function BlogPostPage({
   );
   const { translations: _translations, ...base } = post;
   void _translations;
+  const tags = (post as { tags?: string[] | null }).tags ?? [];
   const localizedPost = translation
     ? (() => {
         const { locale: __locale, ...translatedFields } = translation;
@@ -121,9 +122,9 @@ export default async function BlogPostPage({
         <div className="flex items-center gap-4 text-muted-foreground pb-8 border-b">
             <span>{format(new Date(post.published_at ?? post.created_at ?? new Date()), "MMMM d, yyyy")}</span>
             <span>•</span>
-            {((localizedPost.tags as string[] | null) ?? []).length > 0 && (
+            {tags.length > 0 && (
               <div className="flex flex-wrap gap-2">
-                {((localizedPost.tags as string[]) ?? []).map((tag: string) => (
+                {tags.map((tag: string) => (
                   <span key={tag} className="font-medium text-primary uppercase text-xs tracking-widest">
                     {tag}
                   </span>

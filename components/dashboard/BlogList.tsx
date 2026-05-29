@@ -44,7 +44,7 @@ interface BlogPost extends Omit<BlogValues, 'excerpt' | 'is_published' | 'image_
   is_published: boolean | null;
   image_url: string | null;
   published_at: string | null;
-  tags: string[] | null;
+  tags?: string[] | null;
   translations?: {
     locale: string;
     title: string;
