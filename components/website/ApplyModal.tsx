@@ -315,7 +315,7 @@ function ApplyModalDialog({
               >
                 {t("apply.title")}
               </h3>
-              <p id="applyModalDesc" className="text-jn-text-muted mb-8">
+              <p id="applyModalDesc" className="text-jn-text-muted mb-6">
                 {t("apply.desc")}
               </p>
 

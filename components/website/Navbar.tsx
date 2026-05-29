@@ -23,6 +23,7 @@ export default function Navbar({ locale, services = [] }: NavbarProps) {
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
+  const [hash, setHash] = useState("");
   const servicesRef = useRef<HTMLLIElement>(null);
   const pathname = usePathname();
 
@@ -32,9 +33,29 @@ export default function Navbar({ locale, services = [] }: NavbarProps) {
     return () => window.removeEventListener("scroll", handler);
   }, []);
 
+  useEffect(() => {
+    const updateHash = () => setHash(window.location.hash);
+    // rAF lets Next.js finish updating the URL before we read the hash
+    const id = requestAnimationFrame(updateHash);
+    window.addEventListener("hashchange", updateHash);
+    return () => {
+      cancelAnimationFrame(id);
+      window.removeEventListener("hashchange", updateHash);
+    };
+  }, [pathname]);
+
   const t = getT(locale);
   const l = locale;
   const close = () => { setMobileOpen(false); setMobileServicesOpen(false); };
+
+  const isActive = (href: string) => pathname.startsWith(href);
+  const isProgramsActive = pathname === `/${l}` && hash === "#programs";
+  const navCls = (active: boolean) =>
+    `font-[family-name:var(--font-poppins)] text-[0.95rem] transition-colors ${
+      active
+        ? "text-jn-primary font-semibold"
+        : "text-jn-text-muted font-medium hover:text-jn-primary"
+    }`;
   const { openModal } = useApplyModal();
 
   // Language toggle: compute switched path
@@ -78,7 +99,7 @@ export default function Navbar({ locale, services = [] }: NavbarProps) {
     >
       <div className="jn-container flex items-center justify-between h-20">
         {/* Logo */}
-        <Link href={`/${l}`} className="flex items-center" onClick={close}>
+        <Link href={`/${l}`} className="flex items-center" onClick={() => { close(); setHash(""); }}>
           <Image
             src="/images/JN_Logo.png"
             alt="J & N Caregiver Training"
@@ -92,10 +113,7 @@ export default function Navbar({ locale, services = [] }: NavbarProps) {
         {/* Desktop Nav */}
         <ul className="hidden md:flex items-center gap-8 list-none m-0 p-0">
           <li>
-            <Link
-              href={`/${l}#programs`}
-              className="font-[family-name:var(--font-poppins)] text-jn-text-muted font-medium text-[0.95rem] hover:text-jn-primary transition-colors"
-            >
+            <Link href={`/${l}#programs`} className={navCls(isProgramsActive)} onClick={() => setHash("#programs")}>
               {t("nav.programs")}
             </Link>
           </li>
@@ -125,7 +143,7 @@ export default function Navbar({ locale, services = [] }: NavbarProps) {
                   first?.focus();
                 }
               }}
-              className="font-[family-name:var(--font-poppins)] text-jn-text-muted font-medium text-[0.95rem] hover:text-jn-primary transition-colors inline-flex items-center gap-1"
+              className={`${navCls(isActive(`/${l}/services`))} inline-flex items-center gap-1`}
             >
               {t("nav.services")}
               <svg
@@ -208,13 +226,13 @@ export default function Navbar({ locale, services = [] }: NavbarProps) {
           </li>
 
           <li>
-            <Link href={`/${l}/about`} className="font-[family-name:var(--font-poppins)] text-jn-text-muted font-medium text-[0.95rem] hover:text-jn-primary transition-colors">{t("nav.aboutUs")}</Link>
+            <Link href={`/${l}/about`} className={navCls(isActive(`/${l}/about`))}>{t("nav.aboutUs")}</Link>
           </li>
           <li>
-            <Link href={`/${l}/blog`} className="font-[family-name:var(--font-poppins)] text-jn-text-muted font-medium text-[0.95rem] hover:text-jn-primary transition-colors">{t("nav.blog")}</Link>
+            <Link href={`/${l}/blog`} className={navCls(isActive(`/${l}/blog`))}>{t("nav.blog")}</Link>
           </li>
           <li>
-            <Link href={`/${l}/contact`} className="font-[family-name:var(--font-poppins)] text-jn-text-muted font-medium text-[0.95rem] hover:text-jn-primary transition-colors">{t("nav.contact")}</Link>
+            <Link href={`/${l}/contact`} className={navCls(isActive(`/${l}/contact`))}>{t("nav.contact")}</Link>
           </li>
 
           {/* Language Toggle */}

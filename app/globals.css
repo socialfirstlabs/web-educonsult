@@ -127,6 +127,18 @@
     @apply font-sans;
     scroll-behavior: smooth;
   }
+  /* Page entry animation — applies to the <main> wrapper in the website layout */
+  main {
+    animation: jn-page-in 220ms cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+  @keyframes jn-page-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: none; }
+  }
+  /* Japanese locale font override — activates after LocaleSetter sets html[lang="ja"] */
+  html[lang="ja"] body {
+    font-family: var(--font-noto-jp), var(--font-roboto), sans-serif;
+  }
 }
 
 /* ── J&N Brand Colors ──────────────────────────────────────────────── */
@@ -144,8 +156,8 @@
   --color-jn-bg-off: #F8FAFC;
   --color-jn-border: #E2E8F0;
   --shadow-jn-float: 0 20px 40px -10px rgba(36, 62, 188, 0.1);
-  --font-jn-heading: var(--font-poppins), sans-serif;
-  --font-jn-body: var(--font-roboto), sans-serif;
+  --font-jn-heading: var(--font-poppins), var(--font-noto-jp), sans-serif;
+  --font-jn-body: var(--font-roboto), var(--font-noto-jp), sans-serif;
 }
 
 /* ── J&N Website Component Classes ────────────────────────────────── */

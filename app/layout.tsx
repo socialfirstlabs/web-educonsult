@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Poppins, Roboto } from "next/font/google";
+import { Poppins, Roboto, Noto_Sans_JP } from "next/font/google";
 import "./globals.css";
 
 const poppins = Poppins({
@@ -12,6 +12,14 @@ const roboto = Roboto({
   subsets: ["latin"],
   weight: ["300", "400", "500", "700"],
   variable: "--font-roboto",
+});
+
+// Loaded with preload:false — only downloads when a Japanese page is visited
+const notoSansJP = Noto_Sans_JP({
+  weight: ["400", "500", "700"],
+  variable: "--font-noto-jp",
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -27,7 +35,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${poppins.variable} ${roboto.variable} font-[family-name:var(--font-roboto)] bg-white text-jn-text-dark overflow-x-hidden leading-[1.7] antialiased`}>
+      <body className={`${poppins.variable} ${roboto.variable} ${notoSansJP.variable} font-[family-name:var(--font-roboto)] bg-white text-jn-text-dark overflow-x-hidden leading-[1.7] antialiased`}>
         {children}
       </body>
     </html>

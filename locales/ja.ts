@@ -475,4 +475,15 @@ export const ja: Record<TranslationKey, string> = {
   // SUCCESS STORIES PAGE — HERO
   "successStories.hero.badge": "実績",
   "successStories.hero.body": "プログラムを修了し、日本各地でやりがいのある介護キャリアを築いているネパール人専門家の生の体験談をご覧ください。",
+
+  // LEAD FORM — SUCCESS STATE
+  "form.successTitle": "メッセージを送信しました！",
+
+  // APPLY MODAL — SOCIAL PROOF
+  "apply.socialProof": "日本で働く500人以上のネパール人修了生の仲間に加わりましょう",
+
+  // ABOUT PAGE — ACCREDITATION
+  "about.accred.label": "認定資格",
+  "about.accred.title": "政府認定機関",
+  "about.accred.body": "当社の研修プログラムは正式に認定されています。詳細については、当社チームまでお問い合わせください。",
 };

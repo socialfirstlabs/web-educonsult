@@ -66,7 +66,7 @@ export function LeadForm({ locale = "en" }: LeadFormProps) {
           <CheckCircle2 className="w-8 h-8 text-green-500" />
         </div>
         <h4 className="text-xl font-semibold font-[family-name:var(--font-poppins)] text-jn-text-dark mb-2">
-          Message Sent!
+          {t("form.successTitle")}
         </h4>
         <p className="text-jn-text-muted mb-6">{t("form.success")}</p>
         <button
@@ -100,9 +100,10 @@ export function LeadForm({ locale = "en" }: LeadFormProps) {
           name="name"
           render={({ field, fieldState }) => (
             <FormItem>
-              <label className={labelCls}>{t("form.fullName")}</label>
+              <label htmlFor="lead-name" className={labelCls}>{t("form.fullName")}</label>
               <FormControl>
                 <input
+                  id="lead-name"
                   type="text"
                   placeholder={t("form.fullNamePlaceholder")}
                   className={`${baseCls} ${fieldState.invalid ? errCls : ""}`}
@@ -121,9 +122,10 @@ export function LeadForm({ locale = "en" }: LeadFormProps) {
             name="phone"
             render={({ field, fieldState }) => (
               <FormItem>
-                <label className={labelCls}>{t("form.phone")}</label>
+                <label htmlFor="lead-phone" className={labelCls}>{t("form.phone")}</label>
                 <FormControl>
                   <input
+                    id="lead-phone"
                     type="tel"
                     placeholder={t("form.phonePlaceholder")}
                     className={`${baseCls} ${fieldState.invalid ? errCls : ""}`}
@@ -139,9 +141,10 @@ export function LeadForm({ locale = "en" }: LeadFormProps) {
             name="email"
             render={({ field, fieldState }) => (
               <FormItem>
-                <label className={labelCls}>{t("form.email")}</label>
+                <label htmlFor="lead-email" className={labelCls}>{t("form.email")}</label>
                 <FormControl>
                   <input
+                    id="lead-email"
                     type="email"
                     placeholder={t("form.emailPlaceholder")}
                     className={`${baseCls} ${fieldState.invalid ? errCls : ""}`}
@@ -160,9 +163,10 @@ export function LeadForm({ locale = "en" }: LeadFormProps) {
           name="message"
           render={({ field, fieldState }) => (
             <FormItem>
-              <label className={labelCls}>{t("form.message")}</label>
+              <label htmlFor="lead-message" className={labelCls}>{t("form.message")}</label>
               <FormControl>
                 <textarea
+                  id="lead-message"
                   placeholder={t("form.messagePlaceholder")}
                   rows={4}
                   className={`${baseCls} resize-none ${fieldState.invalid ? errCls : ""}`}

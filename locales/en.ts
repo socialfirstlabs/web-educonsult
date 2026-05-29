@@ -479,6 +479,23 @@ export const en = {
   // ─────────────────────────────────────────────────────────
   "successStories.hero.badge": "Real Results",
   "successStories.hero.body": "Read first-hand accounts from Nepali professionals who completed our program and are now building rewarding caregiving careers across Japan.",
+
+  // ─────────────────────────────────────────────────────────
+  // LEAD FORM — SUCCESS STATE
+  // ─────────────────────────────────────────────────────────
+  "form.successTitle": "Message Sent!",
+
+  // ─────────────────────────────────────────────────────────
+  // APPLY MODAL — SOCIAL PROOF
+  // ─────────────────────────────────────────────────────────
+  "apply.socialProof": "Join 500+ Nepali graduates now working in Japan",
+
+  // ─────────────────────────────────────────────────────────
+  // ABOUT PAGE — ACCREDITATION
+  // ─────────────────────────────────────────────────────────
+  "about.accred.label": "Accreditation",
+  "about.accred.title": "Government Accredited Entity",
+  "about.accred.body": "Our training programs are officially recognized and accredited. Contact our team for details.",
 } as const;
 
 export type TranslationKey = keyof typeof en;

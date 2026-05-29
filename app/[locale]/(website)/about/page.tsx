@@ -1,3 +1,4 @@
+import Image from "next/image";
 import CtaBand from "@/components/website/CtaBand";
 import { getT, type Locale } from "@/lib/i18n";
 import { getTeamMembers } from "@/lib/actions/team-member.action";
@@ -54,10 +55,11 @@ export default async function AboutPage({
       <section className="jn-section bg-white">
         <div className="jn-container grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
           <div>
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src="/images/about-1.png"
-              alt="Our Team"
+              alt="Our team at J&N Caregiver Training"
+              width={760}
+              height={570}
               className="w-full h-auto rounded-3xl shadow-lg"
             />
           </div>
@@ -67,16 +69,34 @@ export default async function AboutPage({
             <p className="jn-body-text mb-6">
               {t("about.mission.body")}
             </p>
-            <ul className="space-y-4">
+            <ul className="space-y-4 mb-8">
               {values.map((v) => (
                 <li key={v} className="flex items-center gap-3 text-jn-text-dark text-[1.05rem]">
-                  <svg className="w-7 h-7 text-jn-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg aria-hidden="true" className="w-7 h-7 text-jn-primary shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                   {v}
                 </li>
               ))}
             </ul>
+
+            {/* Accreditation badge — update translation key with real registration number */}
+            <div className="flex items-start gap-4 bg-jn-primary-light/60 border border-jn-primary-light rounded-2xl p-5">
+              <div aria-hidden="true" className="w-10 h-10 rounded-xl bg-jn-primary text-white flex items-center justify-center shrink-0 text-lg">
+                🛡️
+              </div>
+              <div>
+                <p className="text-[0.8rem] font-semibold text-jn-primary uppercase tracking-wider font-[family-name:var(--font-poppins)] mb-0.5">
+                  {t("about.accred.label")}
+                </p>
+                <p className="text-[0.95rem] font-semibold text-jn-text-dark font-[family-name:var(--font-poppins)]">
+                  {t("about.accred.title")}
+                </p>
+                <p className="text-[0.88rem] text-jn-text-muted mt-1">
+                  {t("about.accred.body")}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </section>

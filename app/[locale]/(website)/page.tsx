@@ -3,6 +3,7 @@ import Image from "next/image";
 import FaqAccordion from "@/components/website/FaqAccordion";
 import CtaBand from "@/components/website/CtaBand";
 import ApplyButton from "@/components/website/ApplyButton";
+import StatsSection from "@/components/website/StatsSection";
 import { getT, type Locale } from "@/lib/i18n";
 import { getBlogPosts } from "@/lib/actions/blog.action";
 import { getPublishedSuccessStories } from "@/lib/actions/success-story.action";
@@ -110,8 +111,9 @@ export default async function HomePage({
     <>
       {/* HERO */}
       <section className="pb-24 overflow-hidden bg-gradient-to-br from-jn-bg-off to-jn-primary-light">
-        <div className="jn-container grid grid-cols-1 lg:grid-cols-2 gap-16 items-center pt-12">
-          <div className="max-w-[580px]">
+        <div className="jn-container grid grid-cols-1 lg:grid-cols-2 gap-16 gap-y-8 items-center pt-12">
+          {/* Text — DOM-first so it lands in the left column on desktop with no order override needed */}
+          <div className="max-w-[580px] order-2 lg:order-none">
             <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-white text-jn-primary font-[family-name:var(--font-poppins)] text-[0.85rem] font-semibold rounded-full mb-6 shadow-sm border border-jn-primary-light">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
@@ -125,21 +127,22 @@ export default async function HomePage({
             <p className="jn-body-text leading-[1.8] mb-9">
               {t("home.hero.body")}
             </p>
-            <div className="flex gap-4 flex-wrap">
+            <div className="flex gap-4 flex-wrap justify-center lg:justify-start">
               <ApplyButton className="jn-btn jn-btn-primary">{t("home.hero.cta1")}</ApplyButton>
               <Link href="#japan" className="jn-btn jn-btn-outline">{t("home.hero.cta2")}</Link>
             </div>
           </div>
-          <div className="relative hidden lg:block">
+          {/* Image — DOM-second (right column on desktop); order-1 pulls it above text on mobile only */}
+          <div className="relative order-1 lg:order-none">
             <Image
               src="/images/hero-img.png"
               alt="Caregiver assisting elderly"
               width={600}
               height={600}
-              className="w-full h-[600px] object-cover rounded-3xl"
+              className="w-full h-[260px] sm:h-[360px] lg:h-[600px] object-cover rounded-3xl"
               style={{ boxShadow: "0 20px 40px -10px rgba(36,62,188,0.1)" }}
             />
-            <div className="absolute bottom-12 -left-8 bg-white/95 backdrop-blur-sm p-5 px-6 rounded-2xl shadow-xl flex items-center gap-4 border border-jn-border z-10">
+            <div className="absolute bottom-12 -left-8 bg-white/95 backdrop-blur-sm p-5 px-6 rounded-2xl shadow-xl hidden lg:flex items-center gap-4 border border-jn-border z-10">
               <div className="w-12 h-12 bg-jn-accent-light text-jn-accent-dark rounded-full flex items-center justify-center text-2xl">🤝</div>
               <div>
                 <h4 className="text-base font-semibold font-[family-name:var(--font-poppins)]">{t("home.hero.floatTitle")}</h4>
@@ -156,7 +159,7 @@ export default async function HomePage({
           <div className="bg-white/90 backdrop-blur-xl rounded-[2rem] shadow-[0_10px_40px_-10px_rgba(36,62,188,0.12)] border border-white/60 p-6 md:p-8 flex justify-center lg:justify-between items-center flex-wrap gap-x-12 gap-y-8">
             {trustItems.map((item) => (
               <div key={item.title} className="flex items-center gap-4 group cursor-default transition-transform duration-300 hover:-translate-y-1.5">
-                <div className="w-14 h-14 flex items-center justify-center bg-jn-primary-light text-jn-primary rounded-2xl shadow-sm transition-all duration-300 group-hover:bg-jn-primary group-hover:text-white group-hover:shadow-md group-hover:-rotate-3 text-xl font-bold">
+                <div aria-hidden="true" className="w-14 h-14 flex items-center justify-center bg-jn-primary-light text-jn-primary rounded-2xl shadow-sm transition-all duration-300 group-hover:bg-jn-primary group-hover:text-white group-hover:shadow-md group-hover:-rotate-3 text-xl font-bold">
                   {item.icon}
                 </div>
                 <div className="flex flex-col">
@@ -179,17 +182,18 @@ export default async function HomePage({
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-20 items-center">
             <div>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
+              <Image
                 src="/images/home-2.png"
                 alt="Beautiful Japan scenery"
+                width={680}
+                height={510}
                 className="w-full h-auto rounded-3xl shadow-lg"
               />
             </div>
             <div className="grid gap-8">
               {japanItems.map((item) => (
                 <div key={item.title} className="flex gap-5">
-                  <div className="w-14 h-14 bg-white border border-jn-primary-light text-jn-primary shadow-sm rounded-2xl flex items-center justify-center text-2xl shrink-0">{item.icon}</div>
+                  <div aria-hidden="true" className="w-14 h-14 bg-white border border-jn-primary-light text-jn-primary shadow-sm rounded-2xl flex items-center justify-center text-2xl shrink-0">{item.icon}</div>
                   <div>
                     <h4 className="text-xl mb-2 text-jn-text-dark font-[family-name:var(--font-poppins)] font-semibold">{item.title}</h4>
                     <p className="text-[1.05rem] text-jn-text-muted">{item.desc}</p>
@@ -202,18 +206,7 @@ export default async function HomePage({
       </section>
 
       {/* STATS */}
-      <section className="jn-section bg-jn-primary-light">
-        <div className="jn-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {stats.map((stat) => (
-            <div key={stat.label} className="text-center p-10 bg-white rounded-3xl shadow-md border border-jn-border transition-transform duration-300 hover:-translate-y-1.5 hover:border-jn-accent">
-              <div className="font-[family-name:var(--font-poppins)] text-5xl font-bold text-jn-primary mb-2 leading-none">
-                {stat.value}
-              </div>
-              <div className="text-[0.95rem] font-medium text-jn-text-muted">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <StatsSection stats={stats} />
 
       {/* PATHWAY */}
       <section id="process" className="jn-section bg-white">
@@ -227,7 +220,7 @@ export default async function HomePage({
             <div className="hidden lg:block absolute top-10 left-[5%] w-[90%] h-0.5 bg-jn-border z-0" />
             {pathwaySteps.map((s) => (
               <div key={s.step} className="relative z-10 text-center w-full lg:w-[18%] flex flex-col items-center group">
-                <div className="w-20 h-20 bg-white border-2 border-jn-border text-jn-primary rounded-full mb-5 flex items-center justify-center text-[2rem] shadow-sm transition-all duration-300 group-hover:border-jn-accent group-hover:bg-jn-accent-light group-hover:text-jn-accent-dark group-hover:scale-105">
+                <div aria-hidden="true" className="w-20 h-20 bg-white border-2 border-jn-border text-jn-primary rounded-full mb-5 flex items-center justify-center text-[2rem] shadow-sm transition-all duration-300 group-hover:border-jn-accent group-hover:bg-jn-accent-light group-hover:text-jn-accent-dark group-hover:scale-105">
                   {s.icon}
                 </div>
                 <h4 className="text-[1.1rem] font-semibold mb-2 font-[family-name:var(--font-poppins)]">{s.step}. {s.title}</h4>
@@ -308,7 +301,7 @@ export default async function HomePage({
               </p>
             ) : testimonials.map((item) => (
               <div key={item.name} className="bg-white p-8 rounded-[24px] shadow-sm border border-jn-border flex flex-col">
-                {/* <div className="text-jn-accent text-xl mb-4">★★★★★</div> */}
+                <div className="text-jn-accent text-xl mb-4 tracking-wide" aria-label="5 out of 5 stars" role="img">★★★★★</div>
                 <p className="text-[1.05rem] text-jn-text-dark italic mb-6 flex-grow line-clamp-5">&ldquo;{item.quote}&rdquo;</p>
                 <div className="flex items-center gap-4">
                   {item.image_url ? (
