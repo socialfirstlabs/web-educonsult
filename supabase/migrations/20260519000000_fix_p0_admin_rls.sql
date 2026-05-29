@@ -100,18 +100,21 @@ CREATE POLICY "Admins can manage site config"
 
 -- ─── STORAGE — images bucket ──────────────────────────────────────────────────
 -- Public SELECT is already in the initial schema.
--- Only admins may upload, update, or delete files.
-CREATE POLICY "Admins can upload images"
+-- Upload/update/delete require an authenticated session only (not is_admin()).
+-- Rationale: proxy.ts + the uploadImage() server action already enforce auth
+-- at the application layer. Requiring is_admin() here would break uploads for
+-- any admin whose app_metadata hasn't been manually set yet.
+CREATE POLICY "Authenticated users can upload images"
     ON storage.objects FOR INSERT
     TO authenticated
-    WITH CHECK (bucket_id = 'images' AND public.is_admin());
+    WITH CHECK (bucket_id = 'images');
 
-CREATE POLICY "Admins can update images"
+CREATE POLICY "Authenticated users can update images"
     ON storage.objects FOR UPDATE
     TO authenticated
-    USING (bucket_id = 'images' AND public.is_admin());
+    USING (bucket_id = 'images');
 
-CREATE POLICY "Admins can delete images"
+CREATE POLICY "Authenticated users can delete images"
     ON storage.objects FOR DELETE
     TO authenticated
-    USING (bucket_id = 'images' AND public.is_admin());
+    USING (bucket_id = 'images');

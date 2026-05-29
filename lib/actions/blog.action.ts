@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { blogSchema, BlogValues } from "@/lib/validations/blog.schema";
 import { revalidatePath } from "next/cache";
 
@@ -11,7 +12,7 @@ type BlogTranslationInput = {
   content: string;
 };
 
-export async function getBlogPosts(onlyPublished = false) {
+export async function getBlogPosts(onlyPublished = false, limit?: number) {
   const supabase = await createClient();
   if (!supabase) return [];
 
@@ -22,6 +23,10 @@ export async function getBlogPosts(onlyPublished = false) {
 
   if (onlyPublished) {
     query = query.eq("is_published", true);
+  }
+
+  if (limit) {
+    query = query.limit(limit);
   }
 
   const { data, error } = await query;
@@ -62,17 +67,18 @@ export async function createBlogPost(
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
 
-  // --- P1 FIX: Explicit auth guard ---
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
-  // ------------------------------------
 
   const validatedFields = blogSchema.safeParse(values);
   if (!validatedFields.success) {
     throw new Error(validatedFields.error.message);
   }
 
-  const { data, error } = await supabase
+  const admin = createAdminClient();
+  if (!admin) throw new Error("Admin client not initialized — check SUPABASE_SERVICE_ROLE_KEY.");
+
+  const { data, error } = await admin
     .from("blog_posts")
     .insert([{
       ...validatedFields.data,
@@ -93,7 +99,7 @@ export async function createBlogPost(
     translation.content.trim() &&
     data?.id
   ) {
-    const { error: translationError } = await supabase
+    const { error: translationError } = await admin
       .from("blog_translations")
       .upsert(
         [
@@ -127,17 +133,18 @@ export async function updateBlogPost(
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
 
-  // --- P1 FIX: Explicit auth guard ---
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
-  // ------------------------------------
 
   const validatedFields = blogSchema.safeParse(values);
   if (!validatedFields.success) {
     throw new Error(validatedFields.error.message);
   }
 
-  const { error } = await supabase
+  const admin = createAdminClient();
+  if (!admin) throw new Error("Admin client not initialized — check SUPABASE_SERVICE_ROLE_KEY.");
+
+  const { error } = await admin
     .from("blog_posts")
     .update({
       ...validatedFields.data,
@@ -156,7 +163,7 @@ export async function updateBlogPost(
     translation.slug.trim() &&
     translation.content.trim()
   ) {
-    const { error: translationError } = await supabase
+    const { error: translationError } = await admin
       .from("blog_translations")
       .upsert(
         [
@@ -187,12 +194,13 @@ export async function deleteBlogPost(id: string) {
   const supabase = await createClient();
   if (!supabase) throw new Error("Supabase client not initialized");
 
-  // --- P1 FIX: Explicit auth guard ---
   const { data: { user }, error: authError } = await supabase.auth.getUser();
   if (authError || !user) throw new Error("Unauthorized: You must be logged in.");
-  // ------------------------------------
 
-  const { error } = await supabase
+  const admin = createAdminClient();
+  if (!admin) throw new Error("Admin client not initialized — check SUPABASE_SERVICE_ROLE_KEY.");
+
+  const { error } = await admin
     .from("blog_posts")
     .delete()
     .eq("id", id);

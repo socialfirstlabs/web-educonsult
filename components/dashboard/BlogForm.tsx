@@ -49,7 +49,7 @@ export function BlogForm({ initialData, onSuccess, currentUser }: BlogFormProps)
     defaultValues: {
       title: "",
       slug: "",
-      author_name: currentUser?.user_metadata?.full_name || currentUser?.email || "EduNepal Team",
+      author_name: currentUser?.user_metadata?.full_name || currentUser?.email || "J & N Team",
       excerpt: "",
       content: "",
       image_url: "",
@@ -102,31 +102,43 @@ export function BlogForm({ initialData, onSuccess, currentUser }: BlogFormProps)
     const title = form.getValues("title");
     const slug = title
       .toLowerCase()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/\s+/g, "-");
+      .replace(/[^a-z0-9\s-]/g, "") // strip anything not a-z, 0-9, space, or hyphen
+      .trim()
+      .replace(/\s+/g, "-")         // spaces → single hyphen
+      .replace(/-+/g, "-");         // collapse consecutive hyphens
     form.setValue("slug", slug, { shouldValidate: true });
   };
+
+  const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB — matches serverActions.bodySizeLimit
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Client-side guard: give immediate feedback before hitting the server
+    if (file.size > MAX_IMAGE_SIZE) {
+      alert("Image must be 5 MB or smaller. Please choose a smaller file.");
+      e.target.value = ""; // reset input so the same file can be re-selected after compression
+      return;
+    }
 
     setUploading(true);
     try {
       const formData = new FormData();
       formData.append("file", file);
       formData.append("folder", "blog");
-      
+
       const publicUrl = await uploadImage(formData);
-      form.setValue("image_url", publicUrl, { 
-        shouldDirty: true, 
-        shouldValidate: true 
+      form.setValue("image_url", publicUrl, {
+        shouldDirty: true,
+        shouldValidate: true
       });
     } catch (error) {
       console.error("Upload failed:", error);
       alert(error instanceof Error ? error.message : "Failed to upload image.");
     } finally {
       setUploading(false);
+      e.target.value = ""; // always reset so re-uploading the same file triggers onChange
     }
   }
 

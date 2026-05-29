@@ -96,6 +96,7 @@ const SECURITY_HEADERS = [
 ];
 
 const nextConfig: NextConfig = {
+
   async headers() {
     return [
       {
@@ -113,6 +114,14 @@ const nextConfig: NextConfig = {
         hostname: "*.supabase.co",
       },
     ],
+  },
+  experimental: {
+    serverActions: {
+      // Raise the Server Action body limit to 5 MB so blog images can be
+      // uploaded via the dashboard form. The storage action enforces this same
+      // limit server-side via magic-byte inspection before writing to Supabase.
+      bodySizeLimit: "5mb",
+    },
   },
 };
 

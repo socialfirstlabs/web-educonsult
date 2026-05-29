@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { fileTypeFromBuffer } from "file-type";
 
 /** MIME types allowed for upload. Validated server-side via magic bytes — not the client header. */
@@ -36,8 +37,7 @@ export async function uploadImage(formData: FormData) {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
 
-  // --- P1 FIX: Server-side MIME validation via magic bytes ---
-  // Never trust file.type (client-supplied header). Inspect the actual binary signature.
+  // Server-side MIME validation via magic bytes — never trust client-supplied file.type
   const detected = await fileTypeFromBuffer(buffer);
 
   if (!detected || !ALLOWED_MIME_TYPES.has(detected.mime)) {
@@ -45,35 +45,29 @@ export async function uploadImage(formData: FormData) {
       `Invalid file type${detected ? ` (${detected.mime})` : ""}. Only JPEG, PNG, WebP, and GIF images are allowed.`
     );
   }
-  // ----------------------------------------------------------
 
-  // Use the server-detected extension to prevent extension spoofing (e.g. malware.php → malware.jpg)
+  const admin = createAdminClient();
+  if (!admin) throw new Error("Admin client not initialized — check SUPABASE_SERVICE_ROLE_KEY.");
+
+  // Use the server-detected extension to prevent extension spoofing
   const fileName = `${crypto.randomUUID()}-${Date.now()}.${detected.ext}`;
   const filePath = `${folder}/${fileName}`;
 
-  const { error } = await supabase.storage
+  const { error } = await admin.storage
     .from("images")
     .upload(filePath, buffer, {
-      contentType: detected.mime, // Use server-verified MIME, not client's file.type
+      contentType: detected.mime,
       upsert: false,
     });
 
   if (error) {
     console.error("Supabase Storage Error:", error);
-    if (
-      error.message.includes("row-level security") ||
-      ("status" in error && error.status === 403)
-    ) {
-      throw new Error(
-        "Permission denied. Please ensure the 'images' bucket exists and has correct RLS policies."
-      );
-    }
     throw new Error(error.message);
   }
 
   const {
     data: { publicUrl },
-  } = supabase.storage.from("images").getPublicUrl(filePath);
+  } = admin.storage.from("images").getPublicUrl(filePath);
 
   return publicUrl;
 }

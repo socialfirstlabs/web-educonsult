@@ -4,6 +4,7 @@ import FaqAccordion from "@/components/website/FaqAccordion";
 import CtaBand from "@/components/website/CtaBand";
 import ApplyButton from "@/components/website/ApplyButton";
 import { getT, type Locale } from "@/lib/i18n";
+import { getBlogPosts } from "@/lib/actions/blog.action";
 
 export const metadata = {
   title: "J&N Caregiver Training | Your Pathway to Japan",
@@ -94,35 +95,32 @@ export default async function HomePage({
     },
   ];
 
-  const blogPosts = [
-    {
-      img: "https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=600&auto=format&fit=crop",
-      tag: t("home.blog.p1.tag"),
-      date: t("home.blog.p1.date"),
-      read: t("home.blog.p1.read"),
-      title: t("home.blog.p1.title"),
-      desc: t("home.blog.p1.desc"),
-      href: `/${l}/blog`,
-    },
-    {
-      img: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=600&auto=format&fit=crop",
-      tag: t("home.blog.p2.tag"),
-      date: t("home.blog.p2.date"),
-      read: t("home.blog.p2.read"),
-      title: t("home.blog.p2.title"),
-      desc: t("home.blog.p2.desc"),
-      href: `/${l}/blog`,
-    },
-    {
-      img: "https://images.unsplash.com/photo-1528164344705-47542687000d?q=80&w=600&auto=format&fit=crop",
-      tag: t("home.blog.p3.tag"),
-      date: t("home.blog.p3.date"),
-      read: t("home.blog.p3.read"),
-      title: t("home.blog.p3.title"),
-      desc: t("home.blog.p3.desc"),
-      href: `/${l}/blog`,
-    },
-  ];
+  const latestPosts = await getBlogPosts(true, 3);
+  const blogPosts = latestPosts.map((post) => {
+    const jaTranslation = post.translations?.find(
+      (tr: { locale: string }) => tr.locale === "ja"
+    );
+    const localized = l === "ja" && jaTranslation ? jaTranslation : null;
+    const title = localized?.title || post.title;
+    const excerpt = localized?.excerpt || post.excerpt || "";
+    const slug = localized?.slug || post.slug;
+    const date = post.published_at
+      ? new Date(post.published_at).toLocaleDateString(l === "ja" ? "ja-JP" : "en-US", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        })
+      : "";
+    return {
+      img: post.image_url || "https://images.unsplash.com/photo-1542282088-fe8426682b8f?q=80&w=600&auto=format&fit=crop",
+      tag: post.author_name,
+      date,
+      read: "",
+      title,
+      desc: excerpt,
+      href: `/${l}/blog/${slug}`,
+    };
+  });
 
   const faqItems = [
     { question: t("home.faq.q1"), answer: t("home.faq.a1") },
@@ -349,7 +347,7 @@ export default async function HomePage({
                   </div>
                 </div>
                 <div className="p-8 flex flex-col">
-                  <div className="text-sm text-jn-text-muted mb-3 font-medium">{post.date} • {post.read}</div>
+                  <div className="text-sm text-jn-text-muted mb-3 font-medium">{post.date}{post.read ? ` • ${post.read}` : ""}</div>
                   <h3 className="jn-heading-3 mb-4 group-hover:text-jn-primary transition-colors leading-snug">{post.title}</h3>
                   <p className="text-jn-text-muted text-[0.95rem] mb-6 line-clamp-2 flex-grow">{post.desc}</p>
                   <Link href={post.href} className="inline-flex items-center gap-2 font-[family-name:var(--font-poppins)] font-semibold text-jn-primary group-hover:text-jn-primary-dark transition-all mt-auto">
